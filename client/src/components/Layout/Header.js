@@ -28,8 +28,11 @@ const Header = ({ onMenuClick }) => {
             
             <div className="ml-4 lg:ml-0">
               <h1 className="text-xl font-semibold text-gray-900">
-                AutoShop Management
+                Bluez PowerHouse
               </h1>
+              <p className="text-xs text-gray-500">
+                250 W Spazier Ave 101, Burbank, CA 91502
+              </p>
             </div>
           </div>
 

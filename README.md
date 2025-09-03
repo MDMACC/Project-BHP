@@ -1,6 +1,10 @@
-# AutoShop Management Software
+# Bluez PowerHouse Management Software
 
 A comprehensive management system for automotive repair shops, featuring inventory management, order tracking, customer scheduling, and supplier contact management.
+
+**Bluez PowerHouse**  
+250 W Spazier Ave 101  
+Burbank, CA 91502
 
 ## Features
 
@@ -21,27 +25,21 @@ A comprehensive management system for automotive repair shops, featuring invento
 - Contact management interface
 - Responsive design for mobile and desktop
 
-## Backend Setup
+## Quick Start
 
 ### Prerequisites
 - Node.js (v14 or higher)
 - MongoDB (v4.4 or higher)
 - npm or yarn
 
-### Installation
+### Backend Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd Project-BHP
-   ```
-
-2. **Install dependencies**
+1. **Install backend dependencies**
    ```bash
    npm install
    ```
 
-3. **Environment Setup**
+2. **Environment Setup**
    ```bash
    cp env.example .env
    ```
@@ -54,7 +52,7 @@ A comprehensive management system for automotive repair shops, featuring invento
    NODE_ENV=development
    ```
 
-4. **Start MongoDB**
+3. **Start MongoDB**
    ```bash
    # Using MongoDB service
    sudo systemctl start mongod
@@ -63,7 +61,7 @@ A comprehensive management system for automotive repair shops, featuring invento
    docker run -d -p 27017:27017 --name mongodb mongo:latest
    ```
 
-5. **Run the application**
+4. **Start the backend**
    ```bash
    # Development mode
    npm run dev
@@ -73,6 +71,33 @@ A comprehensive management system for automotive repair shops, featuring invento
    ```
 
 The API will be available at `http://localhost:5000`
+
+### Demo Credentials
+
+Use these credentials to test the application:
+
+- **Admin:** admin@autoshop.com / admin123
+- **Manager:** manager@autoshop.com / manager123  
+- **Employee:** employee@autoshop.com / employee123
+
+### Frontend Setup
+
+1. **Navigate to client directory**
+   ```bash
+   cd client
+   ```
+
+2. **Install frontend dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the frontend**
+   ```bash
+   npm start
+   ```
+
+The application will open at `http://localhost:3000`
 
 ## API Endpoints
 
@@ -99,6 +124,10 @@ The API will be available at `http://localhost:5000`
 - `GET /api/orders/shipping/overdue` - Get overdue orders
 - `GET /api/orders/shipping/urgent` - Get urgent orders
 - `POST /api/orders/:id/receive` - Mark order as received
+
+### Shop Management
+- `GET /api/shop` - Get shop information
+- `PUT /api/shop` - Update shop information
 
 ### Contact Management
 - `GET /api/contacts` - Get all contacts
@@ -137,6 +166,7 @@ The API will be available at `http://localhost:5000`
 - Order management with custom countdown timers
 - Shipping tracking
 - Status management (pending, confirmed, shipped, delivered)
+- Progress tracking (not_started, waiting_on_parts, started, finished, waiting_for_pickup)
 
 ### Contact
 - Supplier, customer, and vendor management
@@ -148,6 +178,11 @@ The API will be available at `http://localhost:5000`
 - Technician assignment
 - Customer and vehicle information
 - Parts requirements
+
+### Shop
+- Shop information management
+- Business address and contact details
+- Settings and configuration
 
 ## Key Features
 

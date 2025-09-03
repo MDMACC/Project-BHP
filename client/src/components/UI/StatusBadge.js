@@ -19,6 +19,22 @@ const StatusBadge = ({ status, type = 'default', className = '' }) => {
             return { label: status, className: 'badge-gray' };
         }
       
+      case 'progress':
+        switch (status) {
+          case 'not_started':
+            return { label: 'Not Started', className: 'badge-gray' };
+          case 'waiting_on_parts':
+            return { label: 'Waiting on Parts', className: 'badge-warning' };
+          case 'started':
+            return { label: 'Started', className: 'badge-info' };
+          case 'finished':
+            return { label: 'Finished', className: 'badge-success' };
+          case 'waiting_for_pickup':
+            return { label: 'Waiting for Pickup', className: 'badge-primary' };
+          default:
+            return { label: status, className: 'badge-gray' };
+        }
+      
       case 'schedule':
         switch (status) {
           case 'scheduled':

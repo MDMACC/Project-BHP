@@ -52,7 +52,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <Package className="h-5 w-5 text-white" />
             </div>
             <span className="ml-2 text-lg font-semibold text-gray-900">
-              AutoShop
+              Bluez PowerHouse
             </span>
           </div>
           

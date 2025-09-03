@@ -14,6 +14,7 @@ router.get('/', auth, [
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100'),
   query('status').optional().isIn(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']),
+  query('progress').optional().isIn(['not_started', 'waiting_on_parts', 'started', 'finished', 'waiting_for_pickup']),
   query('supplier').optional().isMongoId()
 ], async (req, res) => {
   try {
@@ -31,6 +32,10 @@ router.get('/', auth, [
     
     if (req.query.status) {
       filter.status = req.query.status;
+    }
+    
+    if (req.query.progress) {
+      filter.progress = req.query.progress;
     }
     
     if (req.query.supplier) {
@@ -154,6 +159,7 @@ router.post('/', adminAuth, [
 // @access  Private (Admin/Manager)
 router.put('/:id', adminAuth, [
   body('status').optional().isIn(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']).withMessage('Invalid status'),
+  body('progress').optional().isIn(['not_started', 'waiting_on_parts', 'started', 'finished', 'waiting_for_pickup']).withMessage('Invalid progress'),
   body('customTimeLimit').optional().isInt({ min: 1, max: 168 }).withMessage('Time limit must be between 1 and 168 hours')
 ], async (req, res) => {
   try {

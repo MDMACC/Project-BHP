@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
         payload: { user, token },
       });
       
-      toast.success(`Welcome to AutoShop Management, ${user.username}!`);
+      toast.success(`Welcome to Bluez PowerHouse, ${user.username}!`);
       return { success: true };
     } catch (error) {
       const message = error.response?.data?.message || 'Registration failed';

@@ -50,7 +50,7 @@ export const partsAPI = {
   create: (data) => api.post('/parts', data),
   update: (id, data) => api.put(`/parts/${id}`, data),
   delete: (id) => api.delete(`/parts/${id}`),
-  getLowStock: () => api.get('/parts/inventory/low-stock'),
+
   restock: (id, quantity) => api.post(`/parts/${id}/restock`, { quantity }),
 };
 
@@ -95,6 +95,12 @@ export const scheduleAPI = {
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
   getRecentActivity: () => api.get('/dashboard/activity'),
+};
+
+// Shop API
+export const shopAPI = {
+  getInfo: () => api.get('/shop'),
+  updateInfo: (data) => api.put('/shop', data),
 };
 
 export default api;
