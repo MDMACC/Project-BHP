@@ -166,7 +166,7 @@ const Shipping = () => {
                           <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
                             <div className="flex items-center text-sm text-gray-600">
                               <Package className="w-4 h-4 mr-2" />
-                              <span>{order.supplier?.name}</span>
+                              <span>{order.supplier?.name || order.customSupplier?.name}</span>
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                               <MapPin className="w-4 h-4 mr-2" />
@@ -280,7 +280,7 @@ const Shipping = () => {
                           <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
                             <div className="flex items-center text-sm text-gray-600">
                               <Package className="w-4 h-4 mr-2" />
-                              <span>{order.supplier?.name}</span>
+                              <span>{order.supplier?.name || order.customSupplier?.name}</span>
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                               <Phone className="w-4 h-4 mr-2" />

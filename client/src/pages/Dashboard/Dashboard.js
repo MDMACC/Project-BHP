@@ -10,7 +10,7 @@ import {
   Clock,
   CheckCircle
 } from 'lucide-react';
-import { ordersAPI, partsAPI, scheduleAPI } from '../../services/api';
+import { ordersAPI, scheduleAPI } from '../../services/api';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import CountdownTimer from '../../components/UI/CountdownTimer';
 import StatusBadge from '../../components/UI/StatusBadge';
@@ -23,11 +23,7 @@ const Dashboard = () => {
     { select: (data) => data.data.orders }
   );
 
-  const { data: lowStockParts, isLoading: lowStockLoading } = useQuery(
-    'low-stock-parts',
-    () => partsAPI.getLowStock(),
-    { select: (data) => data.data }
-  );
+
 
   const { data: urgentOrders, isLoading: urgentLoading } = useQuery(
     'urgent-orders',
@@ -76,7 +72,7 @@ const Dashboard = () => {
     },
   ];
 
-  if (ordersLoading || lowStockLoading || urgentLoading || scheduleLoading) {
+  if (ordersLoading || urgentLoading || scheduleLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner size="lg" />
@@ -135,86 +131,40 @@ const Dashboard = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Urgent Orders */}
-        <div className="card">
-          <div className="card-header">
-            <div className="flex items-center">
-              <AlertTriangle className="w-5 h-5 text-warning-500 mr-2" />
-              <h3 className="text-lg font-medium text-gray-900">Urgent Orders</h3>
-            </div>
-          </div>
-          <div className="card-body">
-            {urgentOrders && urgentOrders.length > 0 ? (
-              <div className="space-y-3">
-                {urgentOrders.slice(0, 5).map((order) => (
-                  <div key={order._id} className="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        Order #{order.orderNumber}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {order.supplier?.name}
-                      </p>
-                    </div>
-                    <CountdownTimer endTime={order.countdownEndTime} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-6">
-                <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No urgent orders</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  All orders are on track for delivery.
-                </p>
-              </div>
-            )}
+      {/* Urgent Orders */}
+      <div className="card">
+        <div className="card-header">
+          <div className="flex items-center">
+            <AlertTriangle className="w-5 h-5 text-warning-500 mr-2" />
+            <h3 className="text-lg font-medium text-gray-900">Urgent Orders</h3>
           </div>
         </div>
-
-        {/* Low Stock Parts */}
-        <div className="card">
-          <div className="card-header">
-            <div className="flex items-center">
-              <Package className="w-5 h-5 text-danger-500 mr-2" />
-              <h3 className="text-lg font-medium text-gray-900">Low Stock Alert</h3>
-            </div>
-          </div>
-          <div className="card-body">
-            {lowStockParts && lowStockParts.length > 0 ? (
-              <div className="space-y-3">
-                {lowStockParts.slice(0, 5).map((part) => (
-                  <div key={part._id} className="flex items-center justify-between p-3 bg-danger-50 rounded-lg">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {part.partNumber}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {part.name}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-danger-600">
-                        {part.quantityInStock} left
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Min: {part.minimumStockLevel}
-                      </p>
-                    </div>
+        <div className="card-body">
+          {urgentOrders && urgentOrders.length > 0 ? (
+            <div className="space-y-3">
+              {urgentOrders.slice(0, 5).map((order) => (
+                <div key={order._id} className="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      Order #{order.orderNumber}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {order.supplier?.name}
+                    </p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-6">
-                <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">All parts in stock</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  No low stock alerts at this time.
-                </p>
-              </div>
-            )}
-          </div>
+                  <CountdownTimer endTime={order.countdownEndTime} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-6">
+              <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No urgent orders</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                All orders are on track for delivery.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

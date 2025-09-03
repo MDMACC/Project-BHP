@@ -93,11 +93,14 @@ router.get('/:id', auth, async (req, res) => {
 // @desc    Create new order
 // @access  Private (Admin/Manager)
 router.post('/', adminAuth, [
-  body('supplier').isMongoId().withMessage('Valid supplier ID is required'),
+  body('supplier').optional().isMongoId().withMessage('Valid supplier ID is required'),
+  body('customSupplier.name').optional().notEmpty().withMessage('Custom supplier name is required if no supplier ID provided'),
   body('parts').isArray({ min: 1 }).withMessage('At least one part is required'),
-  body('parts.*.part').isMongoId().withMessage('Valid part ID is required'),
+  body('parts.*.part').optional().isMongoId().withMessage('Valid part ID is required'),
+  body('parts.*.customPart.name').optional().notEmpty().withMessage('Custom part name is required if no part ID provided'),
   body('parts.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be a positive integer'),
   body('parts.*.unitPrice').isFloat({ min: 0 }).withMessage('Unit price must be a positive number'),
+  body('estimatedArrivalTime').notEmpty().withMessage('Estimated arrival time is required'),
   body('customTimeLimit').optional().isInt({ min: 1, max: 168 }).withMessage('Time limit must be between 1 and 168 hours')
 ], async (req, res) => {
   try {
@@ -106,37 +109,52 @@ router.post('/', adminAuth, [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Verify supplier exists
-    const supplier = await Contact.findById(req.body.supplier);
-    if (!supplier) {
-      return res.status(400).json({ message: 'Supplier not found' });
+    // Verify supplier exists (if provided)
+    let supplier = null;
+    if (req.body.supplier) {
+      supplier = await Contact.findById(req.body.supplier);
+      if (!supplier) {
+        return res.status(400).json({ message: 'Supplier not found' });
+      }
+    } else if (!req.body.customSupplier?.name) {
+      return res.status(400).json({ message: 'Either supplier ID or custom supplier information is required' });
     }
 
-    // Verify all parts exist and calculate totals
+    // Process parts (catalog or custom) and calculate totals
     const parts = [];
     let totalAmount = 0;
 
     for (const orderPart of req.body.parts) {
-      const part = await Part.findById(orderPart.part);
-      if (!part) {
-        return res.status(400).json({ message: `Part with ID ${orderPart.part} not found` });
-      }
-
-      const totalPrice = orderPart.quantity * orderPart.unitPrice;
-      totalAmount += totalPrice;
-
-      parts.push({
-        part: part._id,
+      let partData = {
         quantity: orderPart.quantity,
         unitPrice: orderPart.unitPrice,
-        totalPrice: totalPrice
-      });
+        totalPrice: orderPart.quantity * orderPart.unitPrice
+      };
+
+      if (orderPart.part) {
+        // Catalog part
+        const part = await Part.findById(orderPart.part);
+        if (!part) {
+          return res.status(400).json({ message: `Part with ID ${orderPart.part} not found` });
+        }
+        partData.part = part._id;
+      } else if (orderPart.customPart) {
+        // Custom part
+        partData.customPart = orderPart.customPart;
+      } else {
+        return res.status(400).json({ message: 'Either part ID or custom part information is required' });
+      }
+
+      totalAmount += partData.totalPrice;
+      parts.push(partData);
     }
 
     const order = new Order({
       supplier: req.body.supplier,
+      customSupplier: req.body.customSupplier,
       parts: parts,
       totalAmount: totalAmount,
+      estimatedArrivalTime: req.body.estimatedArrivalTime,
       customTimeLimit: req.body.customTimeLimit || 72,
       expectedDeliveryDate: req.body.expectedDeliveryDate,
       notes: req.body.notes,

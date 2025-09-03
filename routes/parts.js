@@ -203,24 +203,7 @@ router.delete('/:id', adminAuth, async (req, res) => {
   }
 });
 
-// @route   GET /api/parts/low-stock
-// @desc    Get parts with low stock
-// @access  Private
-router.get('/inventory/low-stock', auth, async (req, res) => {
-  try {
-    const parts = await Part.find({
-      isActive: true,
-      $expr: { $lte: ['$quantityInStock', '$minimumStockLevel'] }
-    })
-    .populate('supplier', 'name company contactInfo.email contactInfo.phone')
-    .sort({ quantityInStock: 1 });
 
-    res.json(parts);
-  } catch (error) {
-    console.error('Get low stock parts error:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
 
 // @route   POST /api/parts/:id/restock
 // @desc    Restock a part

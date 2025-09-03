@@ -24,14 +24,9 @@ const Inventory = () => {
     { select: (data) => data.data.parts }
   );
 
-  // Fetch low stock parts
-  const { data: lowStockParts, isLoading: lowStockLoading } = useQuery(
-    'inventory-low-stock',
-    () => partsAPI.getLowStock(),
-    { select: (data) => data.data }
-  );
 
-  if (allPartsLoading || lowStockLoading) {
+
+  if (allPartsLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner size="lg" />
@@ -42,7 +37,6 @@ const Inventory = () => {
   // Calculate inventory statistics
   const totalParts = allParts?.length || 0;
   const totalValue = allParts?.reduce((sum, part) => sum + (part.price * part.quantityInStock), 0) || 0;
-  const lowStockCount = lowStockParts?.length || 0;
   const outOfStockCount = allParts?.filter(part => part.quantityInStock === 0).length || 0;
 
   // Filter parts based on selected filters
@@ -78,7 +72,7 @@ const Inventory = () => {
       </div>
 
       {/* Inventory stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         <div className="card">
           <div className="card-body">
             <div className="flex items-center">
@@ -113,21 +107,7 @@ const Inventory = () => {
           </div>
         </div>
 
-        <div className="card">
-          <div className="card-body">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <div className="ml-5">
-                <p className="text-sm font-medium text-gray-500">Low Stock</p>
-                <p className="text-2xl font-semibold text-gray-900">{lowStockCount}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+
 
         <div className="card">
           <div className="card-body">
@@ -146,48 +126,7 @@ const Inventory = () => {
         </div>
       </div>
 
-      {/* Low stock alert */}
-      {lowStockParts && lowStockParts.length > 0 && (
-        <div className="card border-l-4 border-l-yellow-400 bg-yellow-50">
-          <div className="card-header">
-            <div className="flex items-center">
-              <AlertTriangle className="w-5 h-5 text-yellow-500 mr-2" />
-              <h3 className="text-lg font-medium text-gray-900">Low Stock Alert</h3>
-            </div>
-          </div>
-          <div className="card-body">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {lowStockParts.slice(0, 6).map((part) => (
-                <div key={part._id} className="p-3 bg-white rounded-lg border border-yellow-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {part.partNumber}
-                      </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {part.name}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-yellow-600">
-                        {part.quantityInStock} left
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Min: {part.minimumStockLevel}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {lowStockParts.length > 6 && (
-              <p className="mt-3 text-sm text-gray-600">
-                And {lowStockParts.length - 6} more parts with low stock...
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+
 
       {/* Filters */}
       <div className="card">

@@ -8,6 +8,7 @@ import Parts from './pages/Parts/Parts';
 import PartsForm from './pages/Parts/PartsForm';
 import Orders from './pages/Orders/Orders';
 import OrdersForm from './pages/Orders/OrdersForm';
+import OrderView from './pages/Orders/OrderView';
 import Contacts from './pages/Contacts/Contacts';
 import ContactsForm from './pages/Contacts/ContactsForm';
 import Schedule from './pages/Schedule/Schedule';
@@ -44,9 +45,10 @@ function App() {
         <Route path="/parts" element={<Parts />} />
         <Route path="/parts/new" element={<PartsForm />} />
         <Route path="/parts/:id/edit" element={<PartsForm />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/new" element={<OrdersForm />} />
-        <Route path="/orders/:id/edit" element={<OrdersForm />} />
+                    <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/new" element={<OrdersForm />} />
+            <Route path="/orders/:id" element={<OrderView />} />
+            <Route path="/orders/:id/edit" element={<OrdersForm />} />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/contacts/new" element={<ContactsForm />} />
         <Route path="/contacts/:id/edit" element={<ContactsForm />} />

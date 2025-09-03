@@ -11,6 +11,7 @@ import {
   X
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import Logo from '../UI/Logo';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { isManager } = useAuth();
@@ -43,18 +44,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white/95 backdrop-blur-sm shadow-xl border-r border-metallic-200/50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <Package className="h-5 w-5 text-white" />
-            </div>
-            <span className="ml-2 text-lg font-semibold text-gray-900">
-              Bluez PowerHouse
-            </span>
-          </div>
+        <div className="flex items-center justify-between h-16 px-6 border-b border-metallic-200/50">
+          <Logo size="sm" showText={false} />
           
           <button
             type="button"

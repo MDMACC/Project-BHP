@@ -8,7 +8,8 @@
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gradient-to-br from-metallic-50 to-bluez-50 text-metallic-900;
+    background-attachment: fixed;
   }
 }
 
@@ -18,7 +19,7 @@
   }
   
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply btn bg-gradient-to-r from-bluez-600 to-bluez-700 text-white hover:from-bluez-700 hover:to-bluez-800 focus:ring-bluez-500 shadow-lg hover:shadow-xl transition-all duration-200;
   }
   
   .btn-secondary {
@@ -54,7 +55,7 @@
   }
   
   .card {
-    @apply bg-white shadow rounded-lg;
+    @apply bg-white/90 backdrop-blur-sm shadow-lg border border-metallic-200/50 rounded-lg;
   }
   
   .card-header {
@@ -122,7 +123,7 @@
   }
   
   .sidebar-link-active {
-    @apply sidebar-link bg-primary-100 text-primary-700;
+    @apply sidebar-link bg-gradient-to-r from-bluez-100 to-bluez-200 text-bluez-800 shadow-sm;
   }
   
   .sidebar-link-inactive {

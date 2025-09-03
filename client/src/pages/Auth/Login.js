@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Package, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import Logo from '../../components/UI/Logo';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,23 +33,22 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-metallic-50 to-bluez-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-primary-600 rounded-xl flex items-center justify-center">
-              <Package className="h-8 w-8 text-white" />
-            </div>
+            <Logo size="xl" showText={false} />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-bluez-900">
             Sign in to Bluez PowerHouse
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-metallic-600">
             Manage your automotive repair shop efficiently
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <div className="card">
+          <form className="card-body space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="label">
@@ -125,25 +125,28 @@ const Login = () => {
           </div>
 
           <div className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-metallic-600">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
+                className="font-medium text-bluez-600 hover:text-bluez-500 transition-colors duration-200"
               >
                 Contact your administrator
               </Link>
             </p>
           </div>
-        </form>
+          </form>
+        </div>
 
         {/* Demo credentials */}
-        <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">Demo Credentials:</h3>
-          <div className="text-xs text-gray-600 space-y-1">
-            <p><strong>Admin:</strong> admin@autoshop.com / admin123</p>
-            <p><strong>Manager:</strong> manager@autoshop.com / manager123</p>
-            <p><strong>Employee:</strong> employee@autoshop.com / employee123</p>
+        <div className="mt-8 card">
+          <div className="card-body">
+            <h3 className="text-sm font-medium text-bluez-900 mb-2">Demo Credentials:</h3>
+            <div className="text-xs text-metallic-600 space-y-1">
+              <p><strong>Admin:</strong> admin@autoshop.com / admin123</p>
+              <p><strong>Manager:</strong> manager@autoshop.com / manager123</p>
+              <p><strong>Employee:</strong> employee@autoshop.com / employee123</p>
+            </div>
           </div>
         </div>
       </div>

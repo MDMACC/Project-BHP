@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, Bell, User, LogOut } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../UI/Logo';
 
 const Header = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
@@ -13,7 +14,7 @@ const Header = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-metallic-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side */}
@@ -27,12 +28,7 @@ const Header = ({ onMenuClick }) => {
             </button>
             
             <div className="ml-4 lg:ml-0">
-              <h1 className="text-xl font-semibold text-gray-900">
-                Bluez PowerHouse
-              </h1>
-              <p className="text-xs text-gray-500">
-                250 W Spazier Ave 101, Burbank, CA 91502
-              </p>
+              <Logo size="sm" showText={false} />
             </div>
           </div>
 

@@ -11,7 +11,8 @@ import {
   Truck,
   Package,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  ExternalLink
 } from 'lucide-react';
 import { ordersAPI } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -284,11 +285,16 @@ const Orders = () => {
                   <td className="table-cell">
                     <div>
                       <div className="font-medium text-gray-900">
-                        {order.supplier?.name}
+                        {order.supplier?.name || order.customSupplier?.name}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {order.supplier?.company}
+                        {order.supplier?.company || order.customSupplier?.company}
                       </div>
+                      {order.customSupplier && (
+                        <div className="text-xs text-blue-600">
+                          Custom Supplier
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td className="table-cell">
@@ -297,7 +303,7 @@ const Orders = () => {
                     </div>
                     {order.parts && order.parts.length > 0 && (
                       <div className="text-xs text-gray-500">
-                        {order.parts[0].part?.partNumber}
+                        {order.parts[0].part?.partNumber || order.parts[0].customPart?.partNumber || order.parts[0].customPart?.name}
                         {order.parts.length > 1 && ` +${order.parts.length - 1} more`}
                       </div>
                     )}
@@ -318,6 +324,13 @@ const Orders = () => {
                   </td>
                   <td className="table-cell">
                     <div className="flex items-center space-x-2">
+                      <Link
+                        to={`/orders/${order._id}`}
+                        className="text-bluez-600 hover:text-bluez-900"
+                        title="View Details"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Link>
                       <Link
                         to={`/orders/${order._id}/edit`}
                         className="text-primary-600 hover:text-primary-900"

@@ -11,11 +11,53 @@ const orderSchema = new mongoose.Schema({
     ref: 'Contact',
     required: true
   },
+  // Custom supplier information for non-contact suppliers
+  customSupplier: {
+    name: {
+      type: String,
+      required: function() { return !this.supplier; }
+    },
+    company: String,
+    contactInfo: {
+      email: String,
+      phone: String,
+      address: {
+        street: String,
+        city: String,
+        state: String,
+        zipCode: String,
+        country: { type: String, default: 'USA' }
+      }
+    },
+    website: String,
+    notes: String
+  },
   parts: [{
     part: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Part',
-      required: true
+      ref: 'Part'
+    },
+    // Custom part fields for non-catalog items
+    customPart: {
+      name: {
+        type: String,
+        required: function() { return !this.part; }
+      },
+      description: String,
+      partNumber: String,
+      brand: String,
+      category: String,
+      image: String, // URL to uploaded image
+      specifications: {
+        weight: Number,
+        dimensions: {
+          length: Number,
+          width: Number,
+          height: Number
+        },
+        material: String,
+        color: String
+      }
     },
     quantity: {
       type: Number,
@@ -54,6 +96,10 @@ const orderSchema = new mongoose.Schema({
   },
   expectedDeliveryDate: {
     type: Date
+  },
+  estimatedArrivalTime: {
+    type: String, // e.g., "3-5 business days", "1 week", "2-3 weeks"
+    required: true
   },
   actualDeliveryDate: {
     type: Date

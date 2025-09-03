@@ -15,10 +15,12 @@ Burbank, CA 91502
 - **Shipping Tracking** - Monitor package delivery with real-time countdown
 - **Contact Management** - Manage suppliers, customers, and vendors
 - **Scheduling System** - Book appointments and track technician schedules
-- **Low Stock Alerts** - Automatic notifications for parts running low
 
-### Frontend Features (Coming Soon)
-- Modern React-based dashboard
+
+### Frontend Features
+- Modern React-based dashboard with Bluez PowerHouse branding
+- Custom B.P.H. logo component with automotive styling
+- Dark blue metallic theme matching the shop's visual identity
 - Real-time inventory tracking
 - Interactive scheduling calendar
 - Order tracking with countdown timers
@@ -192,8 +194,7 @@ Orders include custom time limits (default 72 hours) with real-time countdown tr
 - **Urgent**: Less than 24 hours remaining
 - **Overdue**: Past the expected delivery time
 
-### Low Stock Management
-Automatic tracking of parts that fall below minimum stock levels with dedicated API endpoints for inventory alerts.
+
 
 ### Role-Based Access Control
 - **Admin**: Full system access
