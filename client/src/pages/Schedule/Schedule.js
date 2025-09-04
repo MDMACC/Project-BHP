@@ -14,12 +14,18 @@ import {
   Phone,
   Mail,
   Play,
-  CheckCircle
+  CheckCircle,
+  Grid3X3,
+  List,
+  ChevronLeft,
+  ChevronRight,
+  XCircle
 } from 'lucide-react';
 import { scheduleAPI } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import StatusBadge from '../../components/UI/StatusBadge';
+import CalendarView from '../../components/Schedule/CalendarView';
 import toast from 'react-hot-toast';
 
 const Schedule = () => {
@@ -27,6 +33,8 @@ const Schedule = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  const [currentDate, setCurrentDate] = useState(new Date());
   const { isManager } = useAuth();
   const queryClient = useQueryClient();
 
@@ -99,6 +107,15 @@ const Schedule = () => {
     completeAppointmentMutation.mutate({ id, data });
   };
 
+  const handleAppointmentClick = (appointment) => {
+    // You could open a modal or navigate to edit page
+    console.log('Appointment clicked:', appointment);
+  };
+
+  const handleDateChange = (newDate) => {
+    setCurrentDate(newDate);
+  };
+
   const handleCancel = (id, title) => {
     if (window.confirm(`Are you sure you want to cancel "${title}"?`)) {
       cancelAppointmentMutation.mutate(id);
@@ -138,15 +155,43 @@ const Schedule = () => {
             Manage appointments and track technician schedules
           </p>
         </div>
-        {isManager && (
-          <Link
-            to="/schedule/new"
-            className="btn-primary"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            New Appointment
-          </Link>
-        )}
+        <div className="flex items-center space-x-2">
+          {/* View Mode Toggle */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <List className="w-4 h-4 mr-1" />
+              List
+            </button>
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'calendar'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <Grid3X3 className="w-4 h-4 mr-1" />
+              Calendar
+            </button>
+          </div>
+
+          {isManager && (
+            <Link
+              to="/schedule/new"
+              className="btn-primary"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Appointment
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Quick stats */}
@@ -277,8 +322,18 @@ const Schedule = () => {
         </div>
       </div>
 
-      {/* Schedule list */}
-      <div className="space-y-4">
+      {/* Calendar or List View */}
+      {viewMode === 'calendar' ? (
+        <CalendarView
+          appointments={scheduleData || []}
+          currentDate={currentDate}
+          onDateChange={handleDateChange}
+          onAppointmentClick={handleAppointmentClick}
+        />
+      ) : (
+        <>
+          {/* Schedule list */}
+          <div className="space-y-4">
         {scheduleData?.map((appointment) => (
           <div key={appointment._id} className="card">
             <div className="card-body">
@@ -432,27 +487,29 @@ const Schedule = () => {
             </div>
           </div>
         ))}
-      </div>
+          </div>
 
-      {/* Empty state */}
-      {(!scheduleData || scheduleData.length === 0) && (
-        <div className="text-center py-12">
-          <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No appointments found</h3>
-          <p className="mt-1 text-sm text-gray-500">
-            {searchTerm || statusFilter || typeFilter
-              ? 'Try adjusting your search or filter criteria.'
-              : 'Get started by scheduling your first appointment.'}
-          </p>
-          {isManager && !searchTerm && !statusFilter && !typeFilter && (
-            <div className="mt-6">
-              <Link to="/schedule/new" className="btn-primary">
-                <Plus className="w-4 h-4 mr-2" />
-                New Appointment
-              </Link>
+          {/* Empty state */}
+          {(!scheduleData || scheduleData.length === 0) && (
+            <div className="text-center py-12">
+              <Calendar className="mx-auto h-12 w-12 text-gray-400" />
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No appointments found</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                {searchTerm || statusFilter || typeFilter
+                  ? 'Try adjusting your search or filter criteria.'
+                  : 'Get started by scheduling your first appointment.'}
+              </p>
+              {isManager && !searchTerm && !statusFilter && !typeFilter && (
+                <div className="mt-6">
+                  <Link to="/schedule/new" className="btn-primary">
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Appointment
+                  </Link>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );

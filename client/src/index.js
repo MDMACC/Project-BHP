@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import './index.css';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
+import NotificationProvider from './contexts/NotificationContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,9 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
           <Toaster
             position="top-right"
             toastOptions={{

@@ -10,7 +10,7 @@ import {
   Clock,
   CheckCircle
 } from 'lucide-react';
-import { ordersAPI, scheduleAPI } from '../../services/api';
+import { ordersAPI, scheduleAPI, partsAPI, contactsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import CountdownTimer from '../../components/UI/CountdownTimer';
 import StatusBadge from '../../components/UI/StatusBadge';
@@ -31,6 +31,39 @@ const Dashboard = () => {
     { select: (data) => data.data }
   );
 
+  // Fetch parts statistics
+  const { data: partsStats, isLoading: partsStatsLoading } = useQuery(
+    'parts-stats',
+    () => partsAPI.getAll({ limit: 1000 }),
+    { 
+      select: (data) => {
+        const parts = data.data.parts;
+        const totalParts = parts.length;
+        const totalValue = parts.reduce((sum, part) => sum + (part.price * part.quantityInStock), 0);
+        const outOfStock = parts.filter(part => part.quantityInStock === 0).length;
+        const lowStock = parts.filter(part => part.quantityInStock <= part.minimumStockLevel && part.quantityInStock > 0).length;
+        
+        return { totalParts, totalValue, outOfStock, lowStock };
+      }
+    }
+  );
+
+  // Fetch contacts statistics
+  const { data: contactsStats, isLoading: contactsStatsLoading } = useQuery(
+    'contacts-stats',
+    () => contactsAPI.getAll({ limit: 1000 }),
+    { 
+      select: (data) => {
+        const contacts = data.data.contacts;
+        const suppliers = contacts.filter(contact => contact.type === 'supplier').length;
+        const customers = contacts.filter(contact => contact.type === 'customer').length;
+        const vendors = contacts.filter(contact => contact.type === 'vendor').length;
+        
+        return { total: contacts.length, suppliers, customers, vendors };
+      }
+    }
+  );
+
   const { data: todaySchedule, isLoading: scheduleLoading } = useQuery(
     'today-schedule',
     () => scheduleAPI.getByDate(new Date().toISOString().split('T')[0]),
@@ -40,39 +73,39 @@ const Dashboard = () => {
   const stats = [
     {
       name: 'Total Parts',
-      value: '1,234',
-      change: '+12%',
-      changeType: 'positive',
+      value: partsStats?.totalParts || 0,
+      change: `$${partsStats?.totalValue?.toLocaleString() || 0}`,
+      changeType: 'info',
       icon: Package,
-      color: 'bg-blue-500',
+      color: 'bg-gradient-to-r from-bluez-500 to-bluez-600',
     },
     {
       name: 'Active Orders',
-      value: '23',
-      change: '+5%',
-      changeType: 'positive',
+      value: ordersData?.orders?.filter(order => ['pending', 'shipped'].includes(order.status)).length || 0,
+      change: `${ordersData?.orders?.filter(order => order.status === 'pending').length || 0} pending`,
+      changeType: 'neutral',
       icon: ShoppingCart,
-      color: 'bg-green-500',
+      color: 'bg-gradient-to-r from-green-500 to-green-600',
     },
     {
       name: 'Today\'s Appointments',
-      value: '8',
-      change: '-2%',
-      changeType: 'negative',
+      value: todaySchedule?.length || 0,
+      change: `${todaySchedule?.filter(appointment => appointment.status === 'confirmed').length || 0} confirmed`,
+      changeType: 'neutral',
       icon: Calendar,
-      color: 'bg-purple-500',
+      color: 'bg-gradient-to-r from-purple-500 to-purple-600',
     },
     {
       name: 'Total Contacts',
-      value: '156',
-      change: '+8%',
-      changeType: 'positive',
+      value: contactsStats?.total || 0,
+      change: `${contactsStats?.suppliers || 0} suppliers`,
+      changeType: 'info',
       icon: Users,
-      color: 'bg-orange-500',
+      color: 'bg-gradient-to-r from-orange-500 to-orange-600',
     },
   ];
 
-  if (ordersLoading || urgentLoading || scheduleLoading) {
+  if (ordersLoading || urgentLoading || scheduleLoading || partsStatsLoading || contactsStatsLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner size="lg" />
@@ -131,40 +164,96 @@ const Dashboard = () => {
         })}
       </div>
 
-      {/* Urgent Orders */}
-      <div className="card">
-        <div className="card-header">
-          <div className="flex items-center">
-            <AlertTriangle className="w-5 h-5 text-warning-500 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Urgent Orders</h3>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Urgent Orders */}
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center">
+              <AlertTriangle className="w-5 h-5 text-warning-500 mr-2" />
+              <h3 className="text-lg font-medium text-gray-900">Urgent Orders</h3>
+            </div>
+          </div>
+          <div className="card-body">
+            {urgentOrders && urgentOrders.length > 0 ? (
+              <div className="space-y-3">
+                {urgentOrders.slice(0, 5).map((order) => (
+                  <div key={order._id} className="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        Order #{order.orderNumber}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {order.supplier?.name || order.customSupplier?.name}
+                      </p>
+                    </div>
+                    <CountdownTimer endTime={order.countdownEndTime} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No urgent orders</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  All orders are on track for delivery.
+                </p>
+              </div>
+            )}
           </div>
         </div>
-        <div className="card-body">
-          {urgentOrders && urgentOrders.length > 0 ? (
-            <div className="space-y-3">
-              {urgentOrders.slice(0, 5).map((order) => (
-                <div key={order._id} className="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      Order #{order.orderNumber}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {order.supplier?.name}
-                    </p>
+
+        {/* Inventory Alerts */}
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center">
+              <Package className="w-5 h-5 text-danger-500 mr-2" />
+              <h3 className="text-lg font-medium text-gray-900">Inventory Alerts</h3>
+            </div>
+          </div>
+          <div className="card-body">
+            {partsStats && (partsStats.outOfStock > 0 || partsStats.lowStock > 0) ? (
+              <div className="space-y-3">
+                {partsStats.outOfStock > 0 && (
+                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                    <div>
+                      <p className="text-sm font-medium text-red-900">
+                        Out of Stock
+                      </p>
+                      <p className="text-xs text-red-600">
+                        {partsStats.outOfStock} parts need restocking
+                      </p>
+                    </div>
+                    <div className="text-red-600 font-bold">
+                      {partsStats.outOfStock}
+                    </div>
                   </div>
-                  <CountdownTimer endTime={order.countdownEndTime} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-6">
-              <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No urgent orders</h3>
-              <p className="mt-1 text-sm text-gray-500">
-                All orders are on track for delivery.
-              </p>
-            </div>
-          )}
+                )}
+                {partsStats.lowStock > 0 && (
+                  <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div>
+                      <p className="text-sm font-medium text-yellow-900">
+                        Low Stock
+                      </p>
+                      <p className="text-xs text-yellow-600">
+                        {partsStats.lowStock} parts below minimum level
+                      </p>
+                    </div>
+                    <div className="text-yellow-600 font-bold">
+                      {partsStats.lowStock}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <CheckCircle className="mx-auto h-12 w-12 text-green-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">All parts in stock</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  No inventory alerts at this time.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

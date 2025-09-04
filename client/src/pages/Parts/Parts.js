@@ -10,7 +10,14 @@ import {
   Package,
   AlertTriangle,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Download,
+  Upload,
+  CheckSquare,
+  Square,
+  MoreHorizontal,
+  Copy,
+  Archive
 } from 'lucide-react';
 import { partsAPI } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -22,6 +29,8 @@ const Parts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedParts, setSelectedParts] = useState([]);
+  const [showBulkActions, setShowBulkActions] = useState(false);
   const { isManager } = useAuth();
   const queryClient = useQueryClient();
 
@@ -51,10 +60,94 @@ const Parts = () => {
     }
   );
 
+  // Bulk operations
+  const bulkDeleteMutation = useMutation(
+    (ids) => Promise.all(ids.map(id => partsAPI.delete(id))),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('parts');
+        setSelectedParts([]);
+        setShowBulkActions(false);
+        toast.success(`${selectedParts.length} parts deleted successfully`);
+      },
+      onError: (error) => {
+        toast.error('Failed to delete some parts');
+      },
+    }
+  );
+
+  const bulkArchiveMutation = useMutation(
+    (ids) => Promise.all(ids.map(id => partsAPI.update(id, { isActive: false }))),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('parts');
+        setSelectedParts([]);
+        setShowBulkActions(false);
+        toast.success(`${selectedParts.length} parts archived successfully`);
+      },
+      onError: (error) => {
+        toast.error('Failed to archive some parts');
+      },
+    }
+  );
+
   const handleDelete = (id, name) => {
     if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
       deletePartMutation.mutate(id);
     }
+  };
+
+  const handleSelectPart = (partId) => {
+    setSelectedParts(prev => 
+      prev.includes(partId) 
+        ? prev.filter(id => id !== partId)
+        : [...prev, partId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedParts.length === filteredParts.length) {
+      setSelectedParts([]);
+    } else {
+      setSelectedParts(filteredParts.map(part => part._id));
+    }
+  };
+
+  const handleBulkDelete = () => {
+    if (window.confirm(`Are you sure you want to delete ${selectedParts.length} parts?`)) {
+      bulkDeleteMutation.mutate(selectedParts);
+    }
+  };
+
+  const handleBulkArchive = () => {
+    if (window.confirm(`Are you sure you want to archive ${selectedParts.length} parts?`)) {
+      bulkArchiveMutation.mutate(selectedParts);
+    }
+  };
+
+  const handleExportCSV = () => {
+    const csvContent = [
+      ['Part Number', 'Name', 'Brand', 'Category', 'Price', 'Stock', 'Min Stock', 'Status'],
+      ...filteredParts.map(part => [
+        part.partNumber,
+        part.name,
+        part.brand,
+        part.category,
+        part.price,
+        part.quantityInStock,
+        part.minimumStockLevel,
+        part.isActive ? 'Active' : 'Inactive'
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'parts-export.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    toast.success('Parts exported successfully');
   };
 
   const categories = [
@@ -92,15 +185,26 @@ const Parts = () => {
             Manage your automotive parts inventory
           </p>
         </div>
-        {isManager && (
-          <Link
-            to="/parts/new"
-            className="btn-primary"
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={handleExportCSV}
+            className="btn-outline"
+            title="Export to CSV"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Part
-          </Link>
-        )}
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </button>
+          
+          {isManager && (
+            <Link
+              to="/parts/new"
+              className="btn-primary"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Part
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Filters */}
@@ -142,12 +246,62 @@ const Parts = () => {
         </div>
       </div>
 
+      {/* Bulk Actions */}
+      {selectedParts.length > 0 && (
+        <div className="bg-bluez-50 border border-bluez-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-bluez-900">
+                {selectedParts.length} part{selectedParts.length !== 1 ? 's' : ''} selected
+              </span>
+              <button
+                onClick={() => setSelectedParts([])}
+                className="text-sm text-bluez-600 hover:text-bluez-800"
+              >
+                Clear selection
+              </button>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleBulkArchive}
+                disabled={bulkArchiveMutation.isLoading}
+                className="btn-outline text-orange-600 border-orange-300 hover:bg-orange-50"
+              >
+                <Archive className="w-4 h-4 mr-2" />
+                Archive
+              </button>
+              <button
+                onClick={handleBulkDelete}
+                disabled={bulkDeleteMutation.isLoading}
+                className="btn-outline text-red-600 border-red-300 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Parts table */}
       <div className="card">
         <div className="overflow-x-auto">
           <table className="table">
             <thead className="table-header">
               <tr>
+                <th className="table-header-cell w-12">
+                  <button
+                    onClick={handleSelectAll}
+                    className="flex items-center justify-center"
+                  >
+                    {selectedParts.length === filteredParts.length && filteredParts.length > 0 ? (
+                      <CheckSquare className="w-4 h-4 text-bluez-600" />
+                    ) : (
+                      <Square className="w-4 h-4 text-gray-400" />
+                    )}
+                  </button>
+                </th>
                 <th className="table-header-cell">Part Number</th>
                 <th className="table-header-cell">Name</th>
                 <th className="table-header-cell">Category</th>
@@ -161,6 +315,18 @@ const Parts = () => {
             <tbody className="table-body">
               {partsData?.parts?.map((part) => (
                 <tr key={part._id} className="table-row">
+                  <td className="table-cell">
+                    <button
+                      onClick={() => handleSelectPart(part._id)}
+                      className="flex items-center justify-center"
+                    >
+                      {selectedParts.includes(part._id) ? (
+                        <CheckSquare className="w-4 h-4 text-bluez-600" />
+                      ) : (
+                        <Square className="w-4 h-4 text-gray-400" />
+                      )}
+                    </button>
+                  </td>
                   <td className="table-cell">
                     <div className="font-medium text-primary-600">
                       {part.partNumber}
