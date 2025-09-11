@@ -184,3 +184,4 @@ export const NotificationItem = ({ notification, onRemove, onMarkAsRead }) => {
 };
 
 export default NotificationProvider;
+

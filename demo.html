@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluez PowerHouse Management System - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bluez: {
+                            50: '#f0f4ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#1e1b4b',
+                            950: '#0f0b2e',
+                        },
+                        metallic: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        }
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            border-radius: 0.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #4f46e5, #4338ca);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #4338ca, #3730a3);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+        }
+        
+        .countdown-urgent {
+            color: #dc2626;
+            font-weight: 600;
+            animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .countdown-normal {
+            color: #d97706;
+            font-weight: 500;
+        }
+        
+        .countdown-overdue {
+            color: #991b1b;
+            font-weight: 700;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 2s linear infinite;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .sidebar-link-active {
+            background: linear-gradient(to right, #e0e7ff, #c7d2fe);
+            color: #3730a3;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-link-inactive {
+            color: #64748b;
+        }
+        
+        .sidebar-link-inactive:hover {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-metallic-50 to-bluez-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white/90 backdrop-blur-sm shadow-xl border-r border-metallic-200/50">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-12 h-12 relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg">
+                            <div class="absolute inset-1 bg-gradient-to-r from-bluez-600 to-bluez-700 rounded-md">
+                                <div class="absolute top-0 right-0 w-2 h-1 bg-bluez-800 rounded-tr-md"></div>
+                                <div class="absolute top-1 left-1 w-3 h-1 bg-bluez-500 rounded-sm"></div>
+                                <div class="absolute top-2 left-2 w-4 h-2 bg-bluez-400 rounded-sm opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-white font-bold text-xs tracking-wider">B.P.H.</div>
+                            </div>
+                            <div class="absolute bottom-0 left-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                            </div>
+                            <div class="absolute bottom-0 right-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 rounded-lg animate-shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-bold text-bluez-900 text-sm">Bluez PowerHouse</div>
+                        <div class="text-metallic-600 text-xs">250 W Spazier Ave 101, Burbank, CA 91502</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="px-4 space-y-1">
+                <a href="#" class="sidebar-link sidebar-link-active">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Parts
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    Orders
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Contacts
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Schedule
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Inventory
+                </a>
+                <a href="#" class="sidebar-link sidebar-link-inactive">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                    </svg>
+                    Shipping
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white/90 backdrop-blur-sm shadow-sm border-b border-metallic-200/50">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                            <p class="mt-1 text-sm text-gray-500">Welcome back! Here's what's happening at your shop today.</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <div class="w-8 h-8 bg-gradient-to-r from-bluez-500 to-bluez-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-medium">JD</span>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-bluez-500 to-bluez-600 rounded-md flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Total Parts</dt>
+                                        <dd class="flex items-baseline">
+                                            <div class="text-2xl font-semibold text-gray-900">1,247</div>
+                                            <div class="ml-2 flex items-baseline text-sm font-semibold text-blue-600">
+                                                <svg class="self-center flex-shrink-0 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                                </svg>
+                                                <span class="sr-only">Increased by</span>
+                                                $45,230
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-md flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Active Orders</dt>
+                                        <dd class="flex items-baseline">
+                                            <div class="text-2xl font-semibold text-gray-900">23</div>
+                                            <div class="ml-2 flex items-baseline text-sm font-semibold text-gray-600">
+                                                <span class="sr-only">Status</span>
+                                                8 pending
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded-md flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Today's Appointments</dt>
+                                        <dd class="flex items-baseline">
+                                            <div class="text-2xl font-semibold text-gray-900">7</div>
+                                            <div class="ml-2 flex items-baseline text-sm font-semibold text-gray-600">
+                                                <span class="sr-only">Status</span>
+                                                5 confirmed
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-md flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Total Contacts</dt>
+                                        <dd class="flex items-baseline">
+                                            <div class="text-2xl font-semibold text-gray-900">156</div>
+                                            <div class="ml-2 flex items-baseline text-sm font-semibold text-gray-600">
+                                                <span class="sr-only">Status</span>
+                                                42 suppliers
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                    <!-- Urgent Orders -->
+                    <div class="card">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-warning-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900">Urgent Orders</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-001</p>
+                                        <p class="text-xs text-gray-500">AutoZone Supply Co.</p>
+                                    </div>
+                                    <div class="countdown-urgent">2h 15m</div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-003</p>
+                                        <p class="text-xs text-gray-500">NAPA Auto Parts</p>
+                                    </div>
+                                    <div class="countdown-urgent">5h 42m</div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-007</p>
+                                        <p class="text-xs text-gray-500">O'Reilly Auto Parts</p>
+                                    </div>
+                                    <div class="countdown-normal">18h 30m</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Alerts -->
+                    <div class="card">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-danger-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900">Inventory Alerts</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                                    <div>
+                                        <p class="text-sm font-medium text-red-900">Out of Stock</p>
+                                        <p class="text-xs text-red-600">3 parts need restocking</p>
+                                    </div>
+                                    <div class="text-red-600 font-bold">3</div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div>
+                                        <p class="text-sm font-medium text-yellow-900">Low Stock</p>
+                                        <p class="text-xs text-yellow-600">7 parts below minimum level</p>
+                                    </div>
+                                    <div class="text-yellow-600 font-bold">7</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <!-- Recent Orders -->
+                    <div class="card">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900">Recent Orders</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-001</p>
+                                        <p class="text-xs text-gray-500">AutoZone Supply Co. • $1,247.50</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>
+                                        <div class="countdown-urgent">2h 15m</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-002</p>
+                                        <p class="text-xs text-gray-500">NAPA Auto Parts • $892.30</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Shipped</span>
+                                        <div class="countdown-normal">1d 4h</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Order #BHP-2024-003</p>
+                                        <p class="text-xs text-gray-500">O'Reilly Auto Parts • $2,156.80</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Delivered</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Schedule -->
+                    <div class="card">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900">Today's Schedule</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Brake Pad Replacement</p>
+                                        <p class="text-xs text-gray-500">9:00 AM • Sarah Johnson</p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Confirmed</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Oil Change & Filter</p>
+                                        <p class="text-xs text-gray-500">11:30 AM • Mike Rodriguez</p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Confirmed</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Transmission Service</p>
+                                        <p class="text-xs text-gray-500">2:00 PM • Lisa Chen</p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers for navigation
+            const navLinks = document.querySelectorAll('.sidebar-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => {
+                        l.classList.remove('sidebar-link-active');
+                        l.classList.add('sidebar-link-inactive');
+                    });
+                    
+                    // Add active class to clicked link
+                    this.classList.remove('sidebar-link-inactive');
+                    this.classList.add('sidebar-link-active');
+                });
+            });
+
+            // Simulate real-time countdown updates
+            function updateCountdowns() {
+                const countdownElements = document.querySelectorAll('.countdown-urgent, .countdown-normal');
+                countdownElements.forEach(element => {
+                    const currentText = element.textContent;
+                    if (currentText.includes('h') && currentText.includes('m')) {
+                        // Simple countdown simulation - in real app this would be calculated from actual timestamps
+                        const hours = parseInt(currentText.split('h')[0]);
+                        const minutes = parseInt(currentText.split('h')[1].split('m')[0]);
+                        let totalMinutes = hours * 60 + minutes;
+                        
+                        if (totalMinutes > 0) {
+                            totalMinutes--;
+                            const newHours = Math.floor(totalMinutes / 60);
+                            const newMinutes = totalMinutes % 60;
+                            
+                            if (newHours > 0) {
+                                element.textContent = `${newHours}h ${newMinutes}m`;
+                            } else {
+                                element.textContent = `${newMinutes}m`;
+                                element.className = 'countdown-urgent';
+                            }
+                        } else {
+                            element.textContent = 'Overdue';
+                            element.className = 'countdown-overdue';
+                        }
+                    }
+                });
+            }
+
+            // Update countdowns every minute
+            setInterval(updateCountdowns, 60000);
+
+            // Add some interactive hover effects
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.transition = 'transform 0.2s ease-in-out';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
