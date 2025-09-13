@@ -6,6 +6,10 @@ A comprehensive management system for automotive repair shops, featuring invento
 250 W Spazier Ave 101  
 Burbank, CA 91502
 
+**🚀 Now Available in Two Versions:**
+- **Flask/Python Version** (Recommended) - Located in `flask-app/`
+- **Node.js Version** (Archived) - Located in `archive/nodejs-original/`
+
 ## Features
 
 ### Backend Features
@@ -15,7 +19,6 @@ Burbank, CA 91502
 - **Shipping Tracking** - Monitor package delivery with real-time countdown
 - **Contact Management** - Manage suppliers, customers, and vendors
 - **Scheduling System** - Book appointments and track technician schedules
-
 
 ### Frontend Features
 - Modern React-based dashboard with Bluez PowerHouse branding
@@ -27,79 +30,86 @@ Burbank, CA 91502
 - Contact management interface
 - Responsive design for mobile and desktop
 
-## Quick Start
+## 🐍 Flask Version (Recommended)
 
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- npm or yarn
+The Flask version is the current recommended implementation with modern Python technologies.
 
-### Backend Setup
+### Technology Stack
+- **Flask 2.3.3** web framework
+- **SQLAlchemy** ORM with SQLite/PostgreSQL
+- **JWT** authentication with Flask-JWT-Extended
+- **Marshmallow** for API validation
+- **APScheduler** for background tasks
+- **React 18** frontend (unchanged)
 
-1. **Install backend dependencies**
-   ```bash
-   npm install
-   ```
+### Quick Start
+```bash
+cd flask-app
+python start-server.py
+# or for Windows PowerShell
+.\start-server.ps1
+```
 
-2. **Environment Setup**
-   ```bash
-   cp env.example .env
-   ```
-   
-   Edit `.env` file with your configuration:
-   ```
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/autoshop_management
-   JWT_SECRET=your_jwt_secret_key_here
-   NODE_ENV=development
-   ```
+📖 **Full Documentation**: See `flask-app/README.md` for detailed setup instructions.
 
-3. **Start MongoDB**
-   ```bash
-   # Using MongoDB service
-   sudo systemctl start mongod
-   
-   # Or using Docker
-   docker run -d -p 27017:27017 --name mongodb mongo:latest
-   ```
+## 🟢 Node.js Version (Archived)
 
-4. **Start the backend**
-   ```bash
-   # Development mode
-   npm run dev
-   
-   # Production mode
-   npm start
-   ```
+The original Node.js implementation has been moved to `archive/nodejs-original/` for reference.
 
-The API will be available at `http://localhost:5000`
+### Technology Stack (Archived)
+- **Node.js** with Express.js framework
+- **MongoDB** with Mongoose ODM
+- **JWT** authentication
+- **Express-validator** for input validation
+- **Node-cron** for scheduled tasks
 
-### Demo Credentials
+### Access Archived Version
+```bash
+cd archive/nodejs-original
+npm install
+npm start
+```
+
+📖 **Archive Documentation**: See `archive/README.md` for restoration instructions.
+
+## Project Structure
+
+```
+Project-BHP/
+├── flask-app/                    # Flask/Python Implementation (Recommended)
+│   ├── app.py                   # Main Flask application
+│   ├── database.py              # Database configuration
+│   ├── requirements.txt         # Python dependencies
+│   ├── models/                  # SQLAlchemy models
+│   ├── routes/                  # Flask API routes
+│   ├── middleware/              # Authentication middleware
+│   ├── start-server.py          # Python startup script
+│   ├── start-server.ps1         # PowerShell startup script
+│   └── README.md               # Flask documentation
+├── client/                      # React Frontend (Works with both versions)
+│   ├── src/                    # React source code
+│   ├── public/                 # Static assets
+│   └── package.json           # Frontend dependencies
+├── archive/                     # Archived Code
+│   ├── nodejs-original/        # Original Node.js implementation
+│   │   ├── server.js           # Original Express server
+│   │   ├── package.json        # Node.js dependencies
+│   │   ├── models/             # Mongoose models
+│   │   ├── routes/             # Express routes
+│   │   └── middleware/         # Express middleware
+│   └── README.md              # Archive documentation
+├── demo.html                   # Demo page
+├── DEMO-README.md             # Demo instructions
+└── README.md                  # This file
+```
+
+## Demo Credentials
 
 Use these credentials to test the application:
 
 - **Admin:** admin@autoshop.com / admin123
 - **Manager:** manager@autoshop.com / manager123  
 - **Employee:** employee@autoshop.com / employee123
-
-### Frontend Setup
-
-1. **Navigate to client directory**
-   ```bash
-   cd client
-   ```
-
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the frontend**
-   ```bash
-   npm start
-   ```
-
-The application will open at `http://localhost:3000`
 
 ## API Endpoints
 
@@ -114,8 +124,6 @@ The application will open at `http://localhost:3000`
 - `POST /api/parts` - Create new part
 - `PUT /api/parts/:id` - Update part
 - `DELETE /api/parts/:id` - Delete part
-- `GET /api/parts/inventory/low-stock` - Get low stock parts
-- `POST /api/parts/:id/restock` - Restock part
 
 ### Order Management
 - `GET /api/orders` - Get all orders
@@ -123,13 +131,6 @@ The application will open at `http://localhost:3000`
 - `POST /api/orders` - Create new order
 - `PUT /api/orders/:id` - Update order
 - `DELETE /api/orders/:id` - Cancel order
-- `GET /api/orders/shipping/overdue` - Get overdue orders
-- `GET /api/orders/shipping/urgent` - Get urgent orders
-- `POST /api/orders/:id/receive` - Mark order as received
-
-### Shop Management
-- `GET /api/shop` - Get shop information
-- `PUT /api/shop` - Update shop information
 
 ### Contact Management
 - `GET /api/contacts` - Get all contacts
@@ -137,9 +138,6 @@ The application will open at `http://localhost:3000`
 - `POST /api/contacts` - Create new contact
 - `PUT /api/contacts/:id` - Update contact
 - `DELETE /api/contacts/:id` - Delete contact
-- `GET /api/contacts/type/suppliers` - Get suppliers
-- `GET /api/contacts/type/customers` - Get customers
-- `POST /api/contacts/:id/rate` - Rate contact
 
 ### Scheduling
 - `GET /api/schedule` - Get all schedules
@@ -147,44 +145,10 @@ The application will open at `http://localhost:3000`
 - `POST /api/schedule` - Create new schedule
 - `PUT /api/schedule/:id` - Update schedule
 - `DELETE /api/schedule/:id` - Cancel schedule
-- `GET /api/schedule/calendar/:date` - Get schedule for date
-- `GET /api/schedule/technician/:id` - Get technician schedule
-- `POST /api/schedule/:id/start` - Start appointment
-- `POST /api/schedule/:id/complete` - Complete appointment
 
-## Database Models
-
-### User
-- Authentication and authorization
-- Role-based access (admin, manager, employee)
-
-### Part
-- Inventory tracking with stock levels
-- Pricing and cost management
-- Supplier relationships
-- Vehicle compatibility
-
-### Order
-- Order management with custom countdown timers
-- Shipping tracking
-- Status management (pending, confirmed, shipped, delivered)
-- Progress tracking (not_started, waiting_on_parts, started, finished, waiting_for_pickup)
-
-### Contact
-- Supplier, customer, and vendor management
-- Contact information and business details
-- Rating system
-
-### Schedule
-- Appointment scheduling
-- Technician assignment
-- Customer and vehicle information
-- Parts requirements
-
-### Shop
-- Shop information management
-- Business address and contact details
-- Settings and configuration
+### Shop Management
+- `GET /api/shop/info` - Get shop information
+- `PUT /api/shop/info` - Update shop information
 
 ## Key Features
 
@@ -194,8 +158,6 @@ Orders include custom time limits (default 72 hours) with real-time countdown tr
 - **Urgent**: Less than 24 hours remaining
 - **Overdue**: Past the expected delivery time
 
-
-
 ### Role-Based Access Control
 - **Admin**: Full system access
 - **Manager**: Can manage parts, orders, contacts, and schedules
@@ -203,22 +165,26 @@ Orders include custom time limits (default 72 hours) with real-time countdown tr
 
 ## Development
 
-### Project Structure
-```
-Project-BHP/
-├── models/          # Database models
-├── routes/          # API routes
-├── middleware/      # Authentication middleware
-├── server.js        # Main server file
-├── package.json     # Dependencies
-└── README.md        # This file
+### Adding New Features (Flask Version)
+1. Create model in `flask-app/models/` directory
+2. Add routes in `flask-app/routes/` directory
+3. Add validation schemas using Marshmallow
+4. Update API documentation
+
+### Frontend Development
+The React frontend is compatible with both Flask and Node.js versions:
+```bash
+cd client
+npm install
+npm start
 ```
 
-### Adding New Features
-1. Create model in `models/` directory
-2. Add routes in `routes/` directory
-3. Update server.js to include new routes
-4. Add authentication middleware as needed
+## Migration
+
+If you have data in the Node.js/MongoDB version and want to migrate to Flask:
+1. Export your MongoDB data
+2. Transform the data structure to match SQLAlchemy models
+3. Import using Flask-Migrate or custom migration scripts
 
 ## Contributing
 
@@ -231,3 +197,9 @@ Project-BHP/
 ## License
 
 MIT License - see LICENSE file for details
+
+---
+
+**Current Version**: Flask/Python (Recommended)  
+**Legacy Version**: Node.js/Express (Archived)  
+**Frontend**: React 18 (Compatible with both versions)
