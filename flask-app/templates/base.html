@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bluez PowerHouse Management System{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bluez: {
+                            50: '#f0f4ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#1e1b4b',
+                            950: '#0f0b2e',
+                        },
+                        metallic: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        }
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            border-radius: 0.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #4f46e5, #4338ca);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #4338ca, #3730a3);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+        }
+        
+        .countdown-urgent {
+            color: #dc2626;
+            font-weight: 600;
+            animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .countdown-normal {
+            color: #d97706;
+            font-weight: 500;
+        }
+        
+        .countdown-overdue {
+            color: #991b1b;
+            font-weight: 700;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .sidebar-link-active {
+            background: linear-gradient(to right, #e0e7ff, #c7d2fe);
+            color: #3730a3;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-link-inactive {
+            color: #64748b;
+        }
+        
+        .sidebar-link-inactive:hover {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-gradient-to-br from-metallic-50 to-bluez-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white/90 backdrop-blur-sm shadow-xl border-r border-metallic-200/50">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-12 h-12 relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg">
+                            <div class="absolute inset-1 bg-gradient-to-r from-bluez-600 to-bluez-700 rounded-md">
+                                <div class="absolute top-0 right-0 w-2 h-1 bg-bluez-800 rounded-tr-md"></div>
+                                <div class="absolute top-1 left-1 w-3 h-1 bg-bluez-500 rounded-sm"></div>
+                                <div class="absolute top-2 left-2 w-4 h-2 bg-bluez-400 rounded-sm opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-white font-bold text-xs tracking-wider">B.P.H.</div>
+                            </div>
+                            <div class="absolute bottom-0 left-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                            </div>
+                            <div class="absolute bottom-0 right-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-lg font-bold text-bluez-900">Bluez PowerHouse</h1>
+                        <p class="text-xs text-metallic-600">Management System</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="px-6 pb-6">
+                <a href="{{ url_for('dashboard') }}" class="sidebar-link {% if request.endpoint == 'dashboard' %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('parts.list_parts') }}" class="sidebar-link {% if request.endpoint and 'parts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    Parts
+                </a>
+                <a href="{{ url_for('orders.list_orders') }}" class="sidebar-link {% if request.endpoint and 'orders' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Orders
+                </a>
+                <a href="{{ url_for('contacts.list_contacts') }}" class="sidebar-link {% if request.endpoint and 'contacts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Contacts
+                </a>
+                <a href="{{ url_for('schedule.list_schedule') }}" class="sidebar-link {% if request.endpoint and 'schedule' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Schedule
+                </a>
+                <a href="{{ url_for('inventory') }}" class="sidebar-link {% if request.endpoint == 'inventory' %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    Inventory
+                </a>
+                <a href="{{ url_for('shipping') }}" class="sidebar-link {% if request.endpoint == 'shipping' %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Shipping
+                </a>
+            </nav>
+            
+            <!-- User Menu -->
+            <div class="absolute bottom-6 left-6 right-6">
+                <div class="flex items-center p-3 bg-white/50 rounded-lg border border-metallic-200/50">
+                    <div class="w-8 h-8 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">{{ session.user.username[0].upper() if session.user else 'U' }}</span>
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <p class="text-sm font-medium text-gray-900">{{ session.user.username if session.user else 'User' }}</p>
+                        <p class="text-xs text-gray-500">{{ session.user.role.title() if session.user else 'Employee' }}</p>
+                    </div>
+                    <a href="{{ url_for('auth.logout_page') }}" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white/90 backdrop-blur-sm border-b border-metallic-200/50 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">{% block page_title %}Dashboard{% endblock %}</h1>
+                        <p class="mt-1 text-sm text-gray-500">{% block page_description %}Welcome back! Here's what's happening at your shop today.{% endblock %}</p>
+                    </div>
+                    {% block header_actions %}{% endblock %}
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-md {% if category == 'error' %}bg-red-50 text-red-700 border border-red-200{% elif category == 'success' %}bg-green-50 text-green-700 border border-green-200{% elif category == 'warning' %}bg-yellow-50 text-yellow-700 border border-yellow-200{% else %}bg-blue-50 text-blue-700 border border-blue-200{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

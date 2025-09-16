@@ -1,0 +1,122 @@
+2025-09-12 19:42:48,750 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:42:48,877 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:42:48,883 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-12 19:42:48,890 - apscheduler.scheduler - INFO - Added job "update_shipping_statuses" to job store "default"
+2025-09-12 19:42:48,891 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-12 19:42:48,892 - apscheduler.scheduler - DEBUG - Looking for jobs to run
+2025-09-12 19:42:48,893 - apscheduler.scheduler - DEBUG - Next wakeup is due at 2025-09-13 01:42:48.883847-07:00 (in 21599.990027 seconds)
+2025-09-12 19:42:49,738 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-09-12 19:42:49,739 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-12 19:42:53,502 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:42:53] "[32mGET / HTTP/1.1[0m" 302 -
+2025-09-12 19:42:53,531 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:42:53] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:43:02,937 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:43:02,979 - routes.auth - ERROR - Login error for email admin@autoshop.com: Could not determine join condition between parent/child tables on relationship User.schedules - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+2025-09-12 19:43:02,980 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:43:02] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:21,033 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:45:21,156 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:45:21,159 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-12 19:45:21,164 - apscheduler.scheduler - INFO - Added job "update_shipping_statuses" to job store "default"
+2025-09-12 19:45:21,164 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-12 19:45:21,164 - apscheduler.scheduler - DEBUG - Looking for jobs to run
+2025-09-12 19:45:21,165 - apscheduler.scheduler - DEBUG - Next wakeup is due at 2025-09-13 01:45:21.159883-07:00 (in 21599.994016 seconds)
+2025-09-12 19:45:22,021 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-09-12 19:45:22,022 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-12 19:45:24,178 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:24] "[32mGET / HTTP/1.1[0m" 302 -
+2025-09-12 19:45:24,207 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:24] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:30,220 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:45:30,293 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:45:30,294 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:30] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:33,763 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:33] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:35,792 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:45:35,794 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:45:35,795 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:35] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:35,822 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:45:35,823 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:45:35,824 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:35] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:37,860 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:37] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:39,881 - routes.auth - INFO - Login attempt for email: manager@autoshop.com
+2025-09-12 19:45:39,882 - routes.auth - WARNING - Login failed - user not found for email: manager@autoshop.com
+2025-09-12 19:45:39,883 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:39] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:41,899 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:41] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:43,929 - routes.auth - INFO - Login attempt for email: employee@autoshop.com
+2025-09-12 19:45:43,931 - routes.auth - WARNING - Login failed - user not found for email: employee@autoshop.com
+2025-09-12 19:45:43,931 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:43] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:45:56,548 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:45:56] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:47:50,780 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:47:50,869 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:47:50,873 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-12 19:47:50,878 - apscheduler.scheduler - INFO - Added job "update_shipping_statuses" to job store "default"
+2025-09-12 19:47:50,878 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-12 19:47:50,878 - apscheduler.scheduler - DEBUG - Looking for jobs to run
+2025-09-12 19:47:50,879 - apscheduler.scheduler - DEBUG - Next wakeup is due at 2025-09-13 01:47:50.873176-07:00 (in 21599.994014 seconds)
+2025-09-12 19:47:51,733 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-09-12 19:47:51,733 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-12 19:47:54,206 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:47:54] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:48:03,480 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:48:03,534 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:48:03,535 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:48:03] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:12,952 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:49:13,048 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:49:13,052 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-12 19:49:13,061 - apscheduler.scheduler - INFO - Added job "update_shipping_statuses" to job store "default"
+2025-09-12 19:49:13,061 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-12 19:49:13,062 - apscheduler.scheduler - DEBUG - Looking for jobs to run
+2025-09-12 19:49:13,062 - apscheduler.scheduler - DEBUG - Next wakeup is due at 2025-09-13 01:49:13.052859-07:00 (in 21599.990026 seconds)
+2025-09-12 19:49:13,920 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-09-12 19:49:13,920 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-12 19:49:15,729 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:15] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:22,559 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:22] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:23,430 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:49:23,504 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:49:23,505 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:23] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:24,575 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:49:24,576 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:49:24,577 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:24] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:26,622 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:26] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:28,670 - routes.auth - INFO - Login attempt for email: manager@autoshop.com
+2025-09-12 19:49:28,672 - routes.auth - WARNING - Login failed - user not found for email: manager@autoshop.com
+2025-09-12 19:49:28,674 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:28] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:30,706 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:30] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:32,751 - routes.auth - INFO - Login attempt for email: employee@autoshop.com
+2025-09-12 19:49:32,753 - routes.auth - WARNING - Login failed - user not found for email: employee@autoshop.com
+2025-09-12 19:49:32,755 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:32] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:49:54,380 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:49:54,382 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:49:54,383 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:49:54] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:51:26,578 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:51:26,685 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:51:26,687 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-12 19:51:26,691 - apscheduler.scheduler - INFO - Added job "update_shipping_statuses" to job store "default"
+2025-09-12 19:51:26,692 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-12 19:51:26,692 - apscheduler.scheduler - DEBUG - Looking for jobs to run
+2025-09-12 19:51:26,692 - apscheduler.scheduler - DEBUG - Next wakeup is due at 2025-09-13 01:51:26.687996-07:00 (in 21599.995013 seconds)
+2025-09-12 19:51:27,528 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-09-12 19:51:27,529 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-12 19:51:50,409 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:51:50] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:51:56,733 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:51:56,796 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:51:56,797 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:51:56] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:51:58,201 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:51:58] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:52:00,249 - routes.auth - INFO - Login attempt for email: admin@autoshop.com
+2025-09-12 19:52:00,250 - routes.auth - WARNING - Login failed - user not found for email: admin@autoshop.com
+2025-09-12 19:52:00,251 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:52:00] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:52:02,308 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:52:02] "GET /auth/login HTTP/1.1" 200 -
+2025-09-12 19:52:04,340 - routes.auth - INFO - Login attempt for email: manager@autoshop.com
+2025-09-12 19:52:04,342 - routes.auth - WARNING - Login failed - user not found for email: manager@autoshop.com
+2025-09-12 19:52:04,343 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:52:04] "POST /auth/login HTTP/1.1" 200 -
+2025-09-12 19:52:06,368 - werkzeug - INFO - 127.0.0.1 - - [12/Sep/2025 19:52:06] "GET /auth/login HTTP/1.1" 200 -

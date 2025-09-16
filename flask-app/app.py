@@ -1,213 +1,283 @@
-from flask import Flask, jsonify, request, render_template_string
-from flask_cors import CORS
-from flask_jwt_extended import JWTManager
-from flask_migrate import Migrate
-from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import timedelta
-import os
-from dotenv import load_dotenv
-from database import db
+"""
+Simple Flask AutoShop Management System
+"""
 
-# Load environment variables
-load_dotenv()
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
+import logging
+from datetime import datetime, timedelta
 
 # Initialize Flask app
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
 
-# Configuration
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback_secret_key')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///autoshop_management.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'fallback_jwt_secret')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
-
-# Initialize extensions
-db.init_app(app)
-migrate = Migrate(app, db)
-jwt = JWTManager(app)
-CORS(app)
-
-# Import models
-from models.user import User
-from models.contact import Contact
-from models.order import Order
-from models.part import Part
-from models.schedule import Schedule
-from models.shop import Shop
-
-# Import and register blueprints
-from routes.auth import auth_bp
-from routes.contacts import contacts_bp
-from routes.orders import orders_bp
-from routes.parts import parts_bp
-from routes.schedule import schedule_bp
-from routes.shop import shop_bp
-
-app.register_blueprint(auth_bp, url_prefix='/api/auth')
-app.register_blueprint(contacts_bp, url_prefix='/api/contacts')
-app.register_blueprint(orders_bp, url_prefix='/api/orders')
-app.register_blueprint(parts_bp, url_prefix='/api/parts')
-app.register_blueprint(schedule_bp, url_prefix='/api/schedule')
-app.register_blueprint(shop_bp, url_prefix='/api/shop')
-
-# Home page route
-@app.route('/')
-def home():
-    # Check if request wants JSON (API client) or HTML (browser)
-    if request.headers.get('Accept') and 'application/json' in request.headers.get('Accept'):
-        return jsonify({
-            'message': 'Welcome to AutoShop Management API',
-            'version': '1.0.0',
-            'endpoints': {
-                'health': '/api/health',
-                'auth': '/api/auth/*',
-                'contacts': '/api/contacts/*',
-                'orders': '/api/orders/*',
-                'parts': '/api/parts/*',
-                'schedule': '/api/schedule/*',
-                'shop': '/api/shop/*'
-            },
-            'frontend': 'React app should be served separately on port 3000',
-            'documentation': 'See README.md for full API documentation'
-        })
-    
-    # Return HTML for browser requests
-    html_template = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>AutoShop Management API</title>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 2rem;
-                line-height: 1.6;
-                background: #f5f5f5;
-            }
-            .container {
-                background: white;
-                padding: 2rem;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            h1 { color: #2c5282; margin-bottom: 0.5rem; }
-            h2 { color: #2d3748; margin-top: 2rem; }
-            .status { 
-                display: inline-block;
-                background: #48bb78;
-                color: white;
-                padding: 0.25rem 0.75rem;
-                border-radius: 4px;
-                font-size: 0.875rem;
-                margin-left: 1rem;
-            }
-            .endpoint {
-                background: #edf2f7;
-                padding: 0.5rem 1rem;
-                border-radius: 4px;
-                margin: 0.5rem 0;
-                font-family: monospace;
-            }
-            .note {
-                background: #bee3f8;
-                border-left: 4px solid #3182ce;
-                padding: 1rem;
-                margin: 1rem 0;
-            }
-            .button {
-                display: inline-block;
-                background: #3182ce;
-                color: white;
-                padding: 0.75rem 1.5rem;
-                text-decoration: none;
-                border-radius: 4px;
-                margin: 0.5rem 0.5rem 0.5rem 0;
-            }
-            .button:hover { background: #2c5282; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🚗 AutoShop Management API <span class="status">Running</span></h1>
-            <p><strong>Bluez PowerHouse Management System</strong></p>
-            <p>Flask/Python backend API for automotive repair shop management.</p>
-            
-            <h2>📡 Available Endpoints</h2>
-            <div class="endpoint">GET /api/health - Health check</div>
-            <div class="endpoint">POST /api/auth/register - Register user</div>
-            <div class="endpoint">POST /api/auth/login - User login</div>
-            <div class="endpoint">GET /api/contacts - List contacts</div>
-            <div class="endpoint">GET /api/parts - List parts</div>
-            <div class="endpoint">GET /api/orders - List orders</div>
-            <div class="endpoint">GET /api/schedule - List schedules</div>
-            <div class="endpoint">GET /api/shop/info - Shop information</div>
-            
-            <div class="note">
-                <strong>📱 Frontend Application:</strong><br>
-                This is the backend API server. The React frontend should be running separately on port 3000.
-                <br><br>
-                To start the frontend:
-                <code>cd ../client && npm start</code>
-            </div>
-            
-            <h2>🔗 Quick Links</h2>
-            <a href="/api/health" class="button">Health Check</a>
-            <a href="http://localhost:3000" class="button">Frontend App</a>
-            
-            <h2>📚 Documentation</h2>
-            <p>See <code>README.md</code> for complete API documentation and setup instructions.</p>
-        </div>
-    </body>
-    </html>
-    """
-    return render_template_string(html_template)
-
-# Health check endpoint
-@app.route('/api/health')
-def health_check():
-    return jsonify({'status': 'OK', 'message': 'AutoShop Management API is running'})
-
-# Error handlers
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'message': 'Route not found'}), 404
-
-@app.errorhandler(500)
-def internal_error(error):
-    return jsonify({'message': 'Something went wrong!'}), 500
-
-# Initialize scheduler for background tasks
-def update_shipping_statuses():
-    """Background task to update shipping statuses"""
-    with app.app_context():
-        print('Running scheduled task to update shipping statuses...')
-        # This will be implemented in the orders service
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    func=update_shipping_statuses,
-    trigger="interval",
-    hours=6,
-    id='update_shipping_statuses'
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
 )
 
-# Create database tables
-with app.app_context():
-    db.create_all()
+logger = logging.getLogger(__name__)
+
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database
+from models import db, User, Part, Contact, Order, Schedule, Shop
+db.init_app(app)
+
+# Authentication decorator
+def login_required(f):
+    """Decorator to require login"""
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Please log in to access this page.', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
+# Routes
+@app.route('/')
+def home():
+    """Home page - redirect to dashboard or login"""
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login page"""
+    if request.method == 'POST':
+        email = request.form.get('email', '').lower().strip()
+        password = request.form.get('password', '')
+        
+        logger.info(f"Login attempt for email: {email}")
+        
+        if not email or not password:
+            flash('Email and password are required', 'error')
+            return render_template('login.html')
+        
+        try:
+            user = User.query.filter_by(email=email).first()
+            if user and user.is_active and user.check_password(password):
+                session['user_id'] = user.id
+                session['user'] = {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'role': user.role
+                }
+                logger.info(f"Login successful for user: {user.username}")
+                flash(f'Welcome back, {user.username}!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                logger.warning(f"Login failed for email: {email}")
+                flash('Invalid email or password', 'error')
+        except Exception as e:
+            logger.error(f"Login error: {e}")
+            flash('An error occurred during login', 'error')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    """Logout"""
+    user = session.get('user', {})
+    username = user.get('username', 'User')
+    session.clear()
+    flash(f'Goodbye, {username}!', 'success')
+    return redirect(url_for('login'))
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Dashboard page"""
+    try:
+        # Get basic statistics
+        total_parts = Part.query.filter_by(is_active=True).count()
+        total_contacts = Contact.query.filter_by(is_active=True).count()
+        total_orders = Order.query.count()
+        total_schedules = Schedule.query.filter_by(is_active=True).count()
+        
+        # Get inventory alerts
+        out_of_stock = Part.query.filter_by(is_active=True, quantity_in_stock=0).count()
+        low_stock = Part.query.filter(
+            Part.is_active == True,
+            Part.quantity_in_stock > 0,
+            Part.quantity_in_stock <= Part.minimum_stock_level
+        ).count()
+        
+        stats = {
+            'total_parts': total_parts,
+            'total_contacts': total_contacts,
+            'total_orders': total_orders,
+            'total_schedules': total_schedules,
+            'out_of_stock': out_of_stock,
+            'low_stock': low_stock
+        }
+        
+        return render_template('dashboard.html', stats=stats)
+    except Exception as e:
+        logger.error(f"Dashboard error: {e}")
+        flash('Error loading dashboard', 'error')
+        return render_template('dashboard.html', stats={})
+
+@app.route('/parts')
+@login_required
+def parts():
+    """Parts management page"""
+    try:
+        search = request.args.get('search', '')
+        category = request.args.get('category', '')
+        
+        query = Part.query.filter_by(is_active=True)
+        
+        if search:
+            query = query.filter(
+                (Part.name.contains(search)) | 
+                (Part.part_number.contains(search)) |
+                (Part.description.contains(search))
+            )
+        
+        if category:
+            query = query.filter_by(category=category)
+        
+        parts_list = query.order_by(Part.name).all()
+        
+        return render_template('parts.html', parts=parts_list, search=search, category=category)
+    except Exception as e:
+        logger.error(f"Parts page error: {e}")
+        flash('Error loading parts', 'error')
+        return render_template('parts.html', parts=[])
+
+@app.route('/contacts')
+@login_required
+def contacts():
+    """Contacts management page"""
+    try:
+        contacts_list = Contact.query.filter_by(is_active=True).order_by(Contact.name).all()
+        return render_template('contacts.html', contacts=contacts_list)
+    except Exception as e:
+        logger.error(f"Contacts page error: {e}")
+        flash('Error loading contacts', 'error')
+        return render_template('contacts.html', contacts=[])
+
+@app.route('/orders')
+@login_required
+def orders():
+    """Orders management page"""
+    try:
+        orders_list = Order.query.order_by(Order.created_at.desc()).all()
+        return render_template('orders.html', orders=orders_list)
+    except Exception as e:
+        logger.error(f"Orders page error: {e}")
+        flash('Error loading orders', 'error')
+        return render_template('orders.html', orders=[])
+
+@app.route('/schedule')
+@login_required
+def schedule():
+    """Schedule management page"""
+    try:
+        schedules_list = Schedule.query.filter_by(is_active=True).order_by(Schedule.start_date).all()
+        return render_template('schedule.html', schedules=schedules_list)
+    except Exception as e:
+        logger.error(f"Schedule page error: {e}")
+        flash('Error loading schedule', 'error')
+        return render_template('schedule.html', schedules=[])
+
+@app.route('/inventory')
+@login_required
+def inventory():
+    """Inventory management page"""
+    return redirect(url_for('parts'))
+
+@app.route('/shipping')
+@login_required
+def shipping():
+    """Shipping management page"""
+    return redirect(url_for('orders'))
+
+# Initialize database and create demo data
+def init_database():
+    """Initialize database with demo data"""
+    with app.app_context():
+        # Create all tables
+        db.create_all()
+        
+        # Check if we already have data
+        if User.query.count() > 0:
+            logger.info("Database already initialized")
+            return
+        
+        logger.info("Initializing database with demo data...")
+        
+        # Create demo users
+        users = [
+            User('admin', 'admin@autoshop.com', 'admin123', 'admin'),
+            User('manager', 'manager@autoshop.com', 'manager123', 'manager'),
+            User('employee', 'employee@autoshop.com', 'employee123', 'employee')
+        ]
+        
+        for user in users:
+            db.session.add(user)
+        
+        # Create demo contacts
+        contacts = [
+            Contact(name='NAPA Auto Parts', company='NAPA Auto Parts', type='supplier', 
+                   email='orders@napaonline.com', phone='555-0101'),
+            Contact(name="O'Reilly Auto Parts", company="O'Reilly Auto Parts", type='supplier',
+                   email='orders@oreillyauto.com', phone='555-0102'),
+            Contact(name='John Smith', type='customer', email='john.smith@email.com', phone='555-0201'),
+            Contact(name='Jane Doe', company='Doe Enterprises', type='customer',
+                   email='jane@doeenterprises.com', phone='555-0301')
+        ]
+        
+        for contact in contacts:
+            db.session.add(contact)
+        
+        # Create demo parts
+        parts = [
+            Part(part_number='BRK-001', name='Brake Pads - Front', category='Brakes',
+                 price=89.99, cost=45.00, quantity_in_stock=24, minimum_stock_level=10),
+            Part(part_number='ENG-002', name='Oil Filter', category='Engine',
+                 price=12.99, cost=6.50, quantity_in_stock=150, minimum_stock_level=50),
+            Part(part_number='SUS-003', name='Shock Absorber', category='Suspension',
+                 price=159.99, cost=80.00, quantity_in_stock=8, minimum_stock_level=5),
+            Part(part_number='TIR-004', name='All-Season Tire 225/60R16', category='Tires',
+                 price=129.99, cost=75.00, quantity_in_stock=0, minimum_stock_level=8)
+        ]
+        
+        for part in parts:
+            db.session.add(part)
+        
+        # Create shop info
+        shop = Shop(
+            name='Bluez PowerHouse Auto Repair',
+            address='123 Main Street',
+            city='Auto City',
+            state='CA',
+            zip_code='90210',
+            phone='555-AUTO-FIX',
+            email='info@bluezpowerhouse.com',
+            business_hours='Monday-Friday: 8AM-6PM, Saturday: 9AM-4PM'
+        )
+        db.session.add(shop)
+        
+        try:
+            db.session.commit()
+            logger.info("Database initialized successfully!")
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error initializing database: {e}")
 
 if __name__ == '__main__':
-    # Start scheduler
-    scheduler.start()
-    
-    # Run the app
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_ENV') == 'development'
-    
-    try:
-        app.run(host='0.0.0.0', port=port, debug=debug)
-    except (KeyboardInterrupt, SystemExit):
-        scheduler.shutdown() 
+    init_database()
+    logger.info("Starting Bluez PowerHouse Management System")
+    app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bluez PowerHouse Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bluez: {
+                            50: '#f0f4ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#1e1b4b',
+                            950: '#0f0b2e',
+                        },
+                        metallic: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-metallic-50 to-bluez-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <!-- Logo -->
+            <div class="flex justify-center">
+                <div class="w-16 h-16 relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg">
+                        <div class="absolute inset-1 bg-gradient-to-r from-bluez-600 to-bluez-700 rounded-md">
+                            <div class="absolute top-0 right-0 w-3 h-1 bg-bluez-800 rounded-tr-md"></div>
+                            <div class="absolute top-1 left-1 w-4 h-1 bg-bluez-500 rounded-sm"></div>
+                            <div class="absolute top-3 left-2 w-5 h-2 bg-bluez-400 rounded-sm opacity-60"></div>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-white font-bold text-sm tracking-wider">B.P.H.</div>
+                        </div>
+                        <div class="absolute bottom-0 left-1 w-3 h-3 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                            <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                            <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-0 right-1 w-3 h-3 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
+                            <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
+                            <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-bluez-900">
+                Sign in to Bluez PowerHouse
+            </h2>
+            <p class="mt-2 text-center text-sm text-metallic-600">
+                Manage your automotive repair shop efficiently
+            </p>
+        </div>
+        
+        <div class="card">
+            <div class="px-6 py-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-3 rounded-md {% if category == 'error' %}bg-red-50 text-red-700 border border-red-200{% elif category == 'success' %}bg-green-50 text-green-700 border border-green-200{% elif category == 'warning' %}bg-yellow-50 text-yellow-700 border border-yellow-200{% else %}bg-blue-50 text-blue-700 border border-blue-200{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">
+                            Email address
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-bluez-500 focus:border-bluez-500 focus:z-10 sm:text-sm"
+                            placeholder="Enter your email"
+                            value="{{ request.form.email or '' }}"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-bluez-500 focus:border-bluez-500 focus:z-10 sm:text-sm"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-bluez-600 to-bluez-700 hover:from-bluez-700 hover:to-bluez-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bluez-500 transition-all duration-200"
+                        >
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Demo credentials -->
+        <div class="card">
+            <div class="px-6 py-4">
+                <h3 class="text-sm font-medium text-bluez-900 mb-2">Demo Credentials:</h3>
+                <div class="text-xs text-metallic-600 space-y-1">
+                    <p><strong>Admin:</strong> admin@autoshop.com / admin123</p>
+                    <p><strong>Manager:</strong> manager@autoshop.com / manager123</p>
+                    <p><strong>Employee:</strong> employee@autoshop.com / employee123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

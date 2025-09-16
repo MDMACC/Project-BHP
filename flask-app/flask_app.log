@@ -1,0 +1,4 @@
+2025-09-12 19:41:28,218 - app - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:41:47,890 - app - INFO - Starting Bluez PowerHouse Management System
+2025-09-12 19:41:48,013 - tzlocal - DEBUG - Looking up time zone info from registry
+2025-09-12 19:41:48,023 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
