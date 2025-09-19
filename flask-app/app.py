@@ -871,4 +871,4 @@ def init_database():
 if __name__ == '__main__':
     init_database()
     logger.info("Starting Bluez PowerHouse Management System")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
