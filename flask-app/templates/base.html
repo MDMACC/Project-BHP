@@ -149,15 +149,18 @@
             font-size: 0.875rem;
             font-weight: 500;
             border-radius: 0.375rem;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
         
         .sidebar-link-active {
-            background: linear-gradient(to right, #e0e7ff, #c7d2fe);
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
             color: #3730a3;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px 0 rgba(79, 70, 229, 0.2);
+            transform: translateX(4px);
         }
         
         .sidebar-link-inactive {
@@ -165,8 +168,68 @@
         }
         
         .sidebar-link-inactive:hover {
-            background-color: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             color: #0f172a;
+            transform: translateX(6px);
+            box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-link-inactive:hover svg {
+            transform: scale(1.1);
+            color: #4f46e5;
+        }
+        
+        .sidebar-link svg {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .logo-container {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin: -0.5rem;
+        }
+        
+        .logo-container:hover {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px -5px rgba(79, 70, 229, 0.2);
+        }
+        
+        .logo-container:hover .logo-image {
+            transform: scale(1.05);
+        }
+        
+        .logo-container:hover .logo-text {
+            color: #4338ca;
+        }
+        
+        .logo-image {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .logo-text {
+            transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .user-menu {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .user-menu:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logout-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .logout-btn:hover {
+            color: #dc2626 !important;
+            transform: scale(1.1);
         }
     </style>
     {% block extra_head %}{% endblock %}
@@ -177,22 +240,22 @@
         <div class="w-64 bg-white/90 backdrop-blur-sm shadow-xl border-r border-metallic-200/50">
             <div class="p-6">
                 <!-- Logo -->
-                <div class="flex items-center">
+                <div class="flex items-center logo-container" id="logoContainer">
                     <div class="w-14 h-11 relative">
                         <!-- Professional Bluez PowerHouse Logo -->
                         <img src="{{ url_for('static', filename='images/bluez-powerhouse-logo.png') }}" 
                              alt="Bluez PowerHouse Logo" 
-                             class="w-full h-full object-contain"
+                             class="w-full h-full object-contain logo-image"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                         
                         <!-- Fallback logo if image doesn't load -->
-                        <div class="w-full h-full bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg flex items-center justify-center" style="display: none;">
+                        <div class="w-full h-full bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg flex items-center justify-center logo-image" style="display: none;">
                             <div class="text-white font-bold text-xs tracking-wider">B.P.H.</div>
                         </div>
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-lg font-bold text-bluez-900">Bluez PowerHouse</h1>
-                        <p class="text-xs text-metallic-600">Management System</p>
+                        <h1 class="text-lg font-bold text-bluez-900 logo-text">Bluez PowerHouse</h1>
+                        <p class="text-xs text-metallic-600 logo-text">Management System</p>
                     </div>
                 </div>
             </div>
@@ -248,11 +311,17 @@
                     </svg>
                     Accounts
                 </a>
+                <a href="{{ url_for('admin_webhooks') }}" class="sidebar-link {% if request.endpoint == 'admin_webhooks' %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    Webhooks
+                </a>
             </nav>
             
             <!-- User Menu -->
             <div class="absolute bottom-6 left-6 right-6">
-                <div class="flex items-center p-3 bg-white/50 rounded-lg border border-metallic-200/50">
+                <div class="flex items-center p-3 bg-white/50 rounded-lg border border-metallic-200/50 user-menu">
                     <div class="w-8 h-8 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-full flex items-center justify-center">
                         <span class="text-white text-sm font-medium">{{ session.user.username[0].upper() if session.user else 'U' }}</span>
                     </div>
@@ -260,7 +329,7 @@
                         <p class="text-sm font-medium text-gray-900">{{ session.user.username if session.user else 'User' }}</p>
                         <p class="text-xs text-gray-500">{{ session.user.role.title() if session.user else 'Employee' }}</p>
                     </div>
-                    <a href="{{ url_for('logout') }}" class="text-gray-400 hover:text-gray-600">
+                    <a href="{{ url_for('logout') }}" class="text-gray-400 logout-btn" title="Logout">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
@@ -298,6 +367,98 @@
             </main>
         </div>
     </div>
+    
+    <script>
+        // Logo click functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoContainer = document.getElementById('logoContainer');
+            if (logoContainer) {
+                logoContainer.addEventListener('click', function() {
+                    const currentPath = window.location.pathname;
+                    
+                    // Check if we're on the homepage/customer portal
+                    if (currentPath === '/' || currentPath === '/home') {
+                        // Scroll to top with smooth animation
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        // Check if we're in admin area (any path containing admin or logged in)
+                        const isLoggedIn = {{ 'true' if session.user else 'false' }};
+                        if (isLoggedIn) {
+                            // Redirect to admin dashboard
+                            window.location.href = "{{ url_for('dashboard') }}";
+                        } else {
+                            // Redirect to homepage
+                            window.location.href = "{{ url_for('home') }}";
+                        }
+                    }
+                });
+                
+                // Add subtle click animation
+                logoContainer.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                logoContainer.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                logoContainer.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            }
+            
+            // Enhanced navigation link animations
+            const navLinks = document.querySelectorAll('.sidebar-link-inactive');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    // Add a subtle ripple effect
+                    const ripple = document.createElement('div');
+                    ripple.className = 'absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer';
+                    ripple.style.pointerEvents = 'none';
+                    this.appendChild(ripple);
+                    
+                    // Remove ripple after animation
+                    setTimeout(() => {
+                        if (ripple.parentNode) {
+                            ripple.parentNode.removeChild(ripple);
+                        }
+                    }, 2000);
+                });
+            });
+            
+            // Add smooth transitions for page loads
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.3s ease-in-out';
+                document.body.style.opacity = '1';
+            }, 50);
+        });
+        
+        // Add page transition effect for navigation
+        function navigateWithTransition(url) {
+            document.body.style.transition = 'opacity 0.2s ease-in-out';
+            document.body.style.opacity = '0.7';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        }
+        
+        // Apply transition to all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.sidebar-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.href && this.href !== window.location.href) {
+                        e.preventDefault();
+                        navigateWithTransition(this.href);
+                    }
+                });
+            });
+        });
+    </script>
     
     {% block scripts %}{% endblock %}
 </body>

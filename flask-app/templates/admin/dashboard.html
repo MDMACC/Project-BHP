@@ -163,7 +163,7 @@
     <div class="card rounded-xl p-6">
         <h3 class="text-lg font-semibold text-metallic-900 mb-6">Quick Actions</h3>
         
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
             <a href="{{ url_for('parts') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-bluez-50 to-bluez-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
                 <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,6 +198,24 @@
                     </svg>
                 </div>
                 <span class="text-sm font-medium text-metallic-900">View Schedule</span>
+            </a>
+            
+            <a href="{{ url_for('shipping') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-purple-900">Shipping</span>
+            </a>
+            
+            <a href="{{ url_for('admin_webhooks') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-indigo-900">Webhooks</span>
             </a>
         </div>
     </div>

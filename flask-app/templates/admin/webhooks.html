@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Webhook Management - Bluez PowerHouse{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Webhook Management</h1>
+        <a href="{{ url_for('admin_dashboard') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Webhook URLs Section -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Webhook Endpoints</h2>
+        <p class="text-gray-600 mb-4">Configure these URLs in your shipping carrier accounts:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-50 p-4 rounded">
+                <h3 class="font-semibold text-gray-700">FedEx</h3>
+                <code class="text-sm bg-gray-100 p-2 rounded block mt-2">{{ request.url_root }}webhooks/shipping/fedex</code>
+            </div>
+            <div class="bg-gray-50 p-4 rounded">
+                <h3 class="font-semibold text-gray-700">UPS</h3>
+                <code class="text-sm bg-gray-100 p-2 rounded block mt-2">{{ request.url_root }}webhooks/shipping/ups</code>
+            </div>
+            <div class="bg-gray-50 p-4 rounded">
+                <h3 class="font-semibold text-gray-700">USPS</h3>
+                <code class="text-sm bg-gray-100 p-2 rounded block mt-2">{{ request.url_root }}webhooks/shipping/usps</code>
+            </div>
+            <div class="bg-gray-50 p-4 rounded">
+                <h3 class="font-semibold text-gray-700">DHL</h3>
+                <code class="text-sm bg-gray-100 p-2 rounded block mt-2">{{ request.url_root }}webhooks/shipping/dhl</code>
+            </div>
+        </div>
+
+        <!-- Test Webhook Section -->
+        <div class="mt-6 bg-blue-50 p-4 rounded">
+            <h3 class="font-semibold text-blue-800 mb-2">Test Webhook</h3>
+            <p class="text-blue-600 mb-3">Use this endpoint to test webhook functionality:</p>
+            <code class="text-sm bg-blue-100 p-2 rounded block">{{ request.url_root }}webhooks/test</code>
+            <div class="mt-4">
+                <button onclick="testWebhook()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Send Test Webhook
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package Photos Section -->
+    {% if tracking_events %}
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Recent Package Photos</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in tracking_events %}
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="mb-3">
+                    <h3 class="font-semibold text-gray-800">{{ event.shipping_order.tracking_number }}</h3>
+                    <p class="text-sm text-gray-600">{{ event.status }} - {{ event.location or 'Unknown Location' }}</p>
+                    <p class="text-xs text-gray-500">{{ event.event_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                </div>
+                {% if event.photo_filename %}
+                <img src="{{ url_for('static', filename='uploads/photos/' + event.photo_filename) }}" 
+                     alt="Package Photo" 
+                     class="w-full h-48 object-cover rounded cursor-pointer"
+                     onclick="showPhotoModal('{{ url_for('static', filename='uploads/photos/' + event.photo_filename) }}', '{{ event.shipping_order.tracking_number }}')">
+                {% elif event.photo_url %}
+                <img src="{{ event.photo_url }}" 
+                     alt="Package Photo" 
+                     class="w-full h-48 object-cover rounded cursor-pointer"
+                     onclick="showPhotoModal('{{ event.photo_url }}', '{{ event.shipping_order.tracking_number }}')">
+                {% endif %}
+                <p class="text-sm text-gray-700 mt-2">{{ event.description or 'No description' }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Webhook Logs Section -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Recent Webhook Logs</h2>
+        
+        {% if webhook_logs %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-2 px-4 border-b text-left">Timestamp</th>
+                        <th class="py-2 px-4 border-b text-left">Provider</th>
+                        <th class="py-2 px-4 border-b text-left">Endpoint</th>
+                        <th class="py-2 px-4 border-b text-left">Status</th>
+                        <th class="py-2 px-4 border-b text-left">IP Address</th>
+                        <th class="py-2 px-4 border-b text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in webhook_logs %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 border-b text-sm">{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <span class="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800">
+                                {{ log.provider.upper() }}
+                            </span>
+                        </td>
+                        <td class="py-2 px-4 border-b text-sm">{{ log.endpoint }}</td>
+                        <td class="py-2 px-4 border-b">
+                            {% if log.processed %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800">Success</span>
+                            {% elif log.processing_error %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800">Error</span>
+                            {% else %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-2 px-4 border-b text-sm">{{ log.ip_address or 'Unknown' }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <button onclick="showWebhookDetails({{ log.id }})" 
+                                    class="text-blue-600 hover:text-blue-800 text-sm">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">No webhook logs found. Webhooks will appear here once carriers start sending data.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Photo Modal -->
+<div id="photoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" onclick="closePhotoModal()">
+    <div class="flex items-center justify-center h-full p-4">
+        <div class="bg-white rounded-lg max-w-4xl max-h-full overflow-hidden">
+            <div class="p-4 border-b">
+                <h3 id="photoModalTitle" class="text-lg font-semibold"></h3>
+                <button onclick="closePhotoModal()" class="float-right text-gray-600 hover:text-gray-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <img id="photoModalImage" src="" alt="Package Photo" class="max-w-full max-h-96 mx-auto">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function testWebhook() {
+    const testData = {
+        tracking_number: 'TEST' + Date.now(),
+        status: 'in_transit',
+        location: 'Test Distribution Center, CA',
+        estimated_delivery: new Date(Date.now() + 24*60*60*1000).toISOString(),
+        description: 'Test package webhook - Package is in transit'
+    };
+
+    fetch('/webhooks/test', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Test webhook sent successfully! Check the shipping page for the new tracking event.');
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        alert('Network error: ' + error.message);
+    });
+}
+
+function showPhotoModal(imageUrl, trackingNumber) {
+    document.getElementById('photoModalImage').src = imageUrl;
+    document.getElementById('photoModalTitle').textContent = 'Package Photo - ' + trackingNumber;
+    document.getElementById('photoModal').classList.remove('hidden');
+}
+
+function closePhotoModal() {
+    document.getElementById('photoModal').classList.add('hidden');
+}
+
+function showWebhookDetails(logId) {
+    // This could be expanded to show full webhook payload details
+    alert('Webhook details for log ID: ' + logId + '\n\nThis feature can be expanded to show full payload and headers.');
+}
+</script>
+{% endblock %}

@@ -7826,3 +7826,209 @@
 2025-09-18 18:08:26,572 - __main__ - INFO - Starting Bluez PowerHouse Management System
 2025-09-18 18:08:26,582 - werkzeug - WARNING -  * Debugger is active!
 2025-09-18 18:08:26,588 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 20:58:46,191 - __main__ - INFO - Database already initialized
+2025-09-18 20:58:46,191 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 21:05:44,184 - __main__ - INFO - Database already initialized
+2025-09-18 21:05:44,184 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 21:33:38,425 - __main__ - INFO - Database already initialized
+2025-09-18 21:33:38,425 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 21:33:38,442 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.157:5001
+2025-09-18 21:33:38,442 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 21:33:38,443 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 21:33:38,598 - __main__ - INFO - Database already initialized
+2025-09-18 21:33:38,598 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 21:33:38,601 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 21:33:38,612 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-18 21:33:55,785 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-18 21:33:55,827 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 21:33:56,023 - __main__ - INFO - Database already initialized
+2025-09-18 21:33:56,023 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 21:33:56,027 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 21:33:56,037 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-18 21:34:09,418 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 21:34:09] "GET / HTTP/1.1" 200 -
+2025-09-18 21:34:09,444 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 21:34:09] "GET /static/images/bluez-powerhouse-logo.png HTTP/1.1" 200 -
+2025-09-18 21:34:09,444 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 21:34:09] "GET /static/images/TiktokLogo.png HTTP/1.1" 200 -
+2025-09-18 21:34:09,632 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 21:34:09] "GET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1" 200 -
+2025-09-19 08:24:05,440 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/models.py', reloading
+2025-09-19 08:24:05,517 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:24:05,777 - __main__ - INFO - Database already initialized
+2025-09-19 08:24:05,777 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:24:05,782 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:24:05,793 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:24:12,557 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:12] "GET / HTTP/1.1" 200 -
+2025-09-19 08:24:12,608 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:12] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-19 08:24:12,608 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:12] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-19 08:24:12,787 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:12] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-19 08:24:15,880 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:24:15,922 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:24:16,130 - __main__ - INFO - Database already initialized
+2025-09-19 08:24:16,130 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:24:16,135 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:24:16,144 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:24:18,369 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:18] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-09-19 08:24:18,380 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:18] "GET /login HTTP/1.1" 200 -
+2025-09-19 08:24:23,212 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:24:23,254 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:24:23,404 - __main__ - INFO - Database already initialized
+2025-09-19 08:24:23,404 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:24:23,407 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:24:23,414 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:24:26,081 - __main__ - INFO - Login attempt for email: admin@autoshop.com
+2025-09-19 08:24:26,204 - __main__ - INFO - Login successful for user: admin
+2025-09-19 08:24:26,205 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:26] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-09-19 08:24:26,221 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:26] "GET /dashboard HTTP/1.1" 200 -
+2025-09-19 08:24:37,479 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:24:37] "GET /parts HTTP/1.1" 200 -
+2025-09-19 08:24:40,570 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:24:40,634 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:24:40,788 - __main__ - INFO - Database already initialized
+2025-09-19 08:24:40,788 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:24:40,791 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:24:40,799 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:25:01,588 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:01] "GET /orders HTTP/1.1" 200 -
+2025-09-19 08:25:03,245 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:03] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:03,967 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:03] "GET /orders HTTP/1.1" 200 -
+2025-09-19 08:25:04,932 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:04] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:05,787 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:05] "GET /schedule HTTP/1.1" 200 -
+2025-09-19 08:25:06,414 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:06] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:06,774 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:06] "GET /orders HTTP/1.1" 200 -
+2025-09-19 08:25:07,187 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:07] "GET /schedule HTTP/1.1" 200 -
+2025-09-19 08:25:07,823 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:07] "GET /schedule HTTP/1.1" 200 -
+2025-09-19 08:25:08,187 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:08] "GET /orders HTTP/1.1" 200 -
+2025-09-19 08:25:08,654 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:08] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:09,173 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:09] "GET /schedule HTTP/1.1" 200 -
+2025-09-19 08:25:09,563 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:09] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:10,039 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:10] "GET /orders HTTP/1.1" 200 -
+2025-09-19 08:25:10,454 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:10] "GET /schedule HTTP/1.1" 200 -
+2025-09-19 08:25:11,158 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:25:11] "GET /contacts HTTP/1.1" 200 -
+2025-09-19 08:25:12,085 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:25:12,160 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:25:12,373 - __main__ - INFO - Database already initialized
+2025-09-19 08:25:12,374 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:25:12,378 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:25:12,387 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:25:32,554 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:25:32,606 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:25:32,824 - __main__ - INFO - Database already initialized
+2025-09-19 08:25:32,824 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:25:32,829 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:25:32,840 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:27:05,426 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:27:05,427 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:27:05.426498', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:27:05.426996')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:27:05,427 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:27:05] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:27:15,725 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:27:15,788 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:27:16,013 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:27:16,013 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:27:16,019 - __main__ - INFO - Database already initialized
+2025-09-19 08:27:16,019 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:27:16,025 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:27:16,034 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:27:23,265 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:27:23,266 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:27:23.265310', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:27:23.265906')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:27:23,266 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:27:23] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:27:53,899 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:27:53,899 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:27:53,905 - __main__ - INFO - Database already initialized
+2025-09-19 08:27:53,905 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:27:53,916 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.106.20.58:5001
+2025-09-19 08:27:53,917 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-19 08:27:53,917 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:27:54,062 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:27:54,062 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:27:54,067 - __main__ - INFO - Database already initialized
+2025-09-19 08:27:54,067 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:27:54,070 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:27:54,078 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:28:01,577 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:28:01,579 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:28:01.578071', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:28:01.578781')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:28:01,579 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:28:01] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:29:58,656 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:29:58,656 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:29:58.656620', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:29:58.656736')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:29:58,657 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:29:58] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:30:55,778 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:30:55,779 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:30:55.778730', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:30:55.778899')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:30:55,779 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:30:55] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:31:05,411 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:31:05,411 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:31:05,416 - __main__ - INFO - Database already initialized
+2025-09-19 08:31:05,416 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:31:05,426 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.106.20.58:5001
+2025-09-19 08:31:05,426 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-19 08:31:05,427 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:31:05,571 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:31:05,571 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:31:05,576 - __main__ - INFO - Database already initialized
+2025-09-19 08:31:05,576 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:31:05,579 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:31:05,590 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:31:13,162 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:31:13,164 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:31:13.162875', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:31:13.163743')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:31:13,164 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:31:13] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:31:19,706 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:31:19,772 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:32:10,073 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:32:10,073 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:32:10,078 - __main__ - INFO - Database already initialized
+2025-09-19 08:32:10,078 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:32:10,087 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.106.20.58:5001
+2025-09-19 08:32:10,087 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-19 08:32:10,088 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:32:10,231 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:32:10,232 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:32:10,237 - __main__ - INFO - Database already initialized
+2025-09-19 08:32:10,237 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:32:10,240 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:32:10,248 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:32:19,659 - __main__ - ERROR - Error saving package photo: No module named 'requests'
+2025-09-19 08:32:19,661 - __main__ - ERROR - Error processing test webhook: (sqlite3.OperationalError) table tracking_events has no column named photo_url
+[SQL: INSERT INTO tracking_events (shipping_order_id, event_date, status, description, location, latitude, longitude, carrier_event_code, photo_url, photo_filename, webhook_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (1, '2025-09-19 15:32:19.659804', 'delivered', 'Package delivered successfully', 'Customer Doorstep, CA', None, None, None, 'https://via.placeholder.com/400x300.jpg?text=Package+Delivered', None, '{"tracking_number": "TEST123456", "status": "delivered", "location": "Customer Doorstep, CA", "estimated_delivery": "2025-09-19T14:00:00Z", "description": "Package delivered successfully", "photo_url": "https://via.placeholder.com/400x300.jpg?text=Package+Delivered"}', '2025-09-19 15:32:19.660617')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-19 08:32:19,661 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:32:19] "[31m[1mPOST /webhooks/test HTTP/1.1[0m" 400 -
+2025-09-19 08:32:43,557 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/models.py', reloading
+2025-09-19 08:32:43,605 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:32:43,752 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:32:43,752 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:32:43,756 - __main__ - INFO - Database already initialized
+2025-09-19 08:32:43,756 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:32:43,759 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:32:43,766 - werkzeug - INFO -  * Debugger PIN: 996-229-007
+2025-09-19 08:42:01,338 - werkzeug - INFO - 127.0.0.1 - - [19/Sep/2025 08:42:01] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-09-19 08:48:31,584 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-09-19 08:48:31,633 - werkzeug - INFO -  * Restarting with stat
+2025-09-19 08:48:31,856 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-09-19 08:48:31,856 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-09-19 08:48:31,861 - __main__ - INFO - Database already initialized
+2025-09-19 08:48:31,861 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-19 08:48:31,866 - werkzeug - WARNING -  * Debugger is active!
+2025-09-19 08:48:31,875 - werkzeug - INFO -  * Debugger PIN: 996-229-007

@@ -207,10 +207,53 @@ class TrackingEvent(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     carrier_event_code = db.Column(db.String(50))
+    photo_url = db.Column(db.String(500))  # URL to package photo
+    photo_filename = db.Column(db.String(255))  # Local filename if stored locally
+    webhook_data = db.Column(db.Text)  # Raw webhook JSON data
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationship
     shipping_order = db.relationship('ShippingOrder', backref='tracking_events')
     
+    def set_webhook_data(self, data_dict):
+        """Set webhook data as JSON"""
+        self.webhook_data = json.dumps(data_dict)
+    
+    def get_webhook_data(self):
+        """Get webhook data as dict"""
+        if self.webhook_data:
+            return json.loads(self.webhook_data)
+        return {}
+    
     def __repr__(self):
         return f'<TrackingEvent {self.status} at {self.location}>'
+
+class WebhookLog(db.Model):
+    """Log of webhook requests for debugging and security"""
+    __tablename__ = 'webhook_logs'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    provider = db.Column(db.String(50), nullable=False)
+    endpoint = db.Column(db.String(100), nullable=False)
+    method = db.Column(db.String(10), nullable=False)
+    headers = db.Column(db.Text)  # JSON of headers
+    payload = db.Column(db.Text)  # Raw payload
+    signature = db.Column(db.String(255))  # Webhook signature if provided
+    processed = db.Column(db.Boolean, default=False)
+    processing_error = db.Column(db.Text)
+    ip_address = db.Column(db.String(45))  # IPv4 or IPv6
+    user_agent = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def set_headers(self, headers_dict):
+        """Set headers as JSON"""
+        self.headers = json.dumps(dict(headers_dict))
+    
+    def get_headers(self):
+        """Get headers as dict"""
+        if self.headers:
+            return json.loads(self.headers)
+        return {}
+    
+    def __repr__(self):
+        return f'<WebhookLog {self.provider} {self.endpoint}>'

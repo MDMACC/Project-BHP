@@ -2,10 +2,14 @@
 Simple Flask AutoShop Management System
 """
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import os
 import logging
+import hashlib
+import hmac
+import json
 from datetime import datetime, timedelta
+from werkzeug.utils import secure_filename
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -28,8 +32,97 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent
+from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog
 db.init_app(app)
+
+# Configure file upload
+app.config['UPLOAD_FOLDER'] = os.path.join(app.static_folder, 'uploads', 'photos')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+def allowed_file(filename):
+    """Check if file extension is allowed"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def verify_webhook_signature(provider, payload, signature, secret):
+    """Verify webhook signature for security"""
+    if not signature or not secret:
+        return False
+    
+    try:
+        if provider.lower() in ['fedex', 'ups']:
+            # Most carriers use HMAC-SHA256
+            expected_signature = hmac.new(
+                secret.encode('utf-8'), 
+                payload, 
+                hashlib.sha256
+            ).hexdigest()
+            return hmac.compare_digest(signature, expected_signature)
+        elif provider.lower() == 'usps':
+            # USPS might use different signature method
+            expected_signature = hmac.new(
+                secret.encode('utf-8'), 
+                payload, 
+                hashlib.sha1
+            ).hexdigest()
+            return hmac.compare_digest(signature, expected_signature)
+        else:
+            # Generic HMAC-SHA256 for other providers
+            expected_signature = hmac.new(
+                secret.encode('utf-8'), 
+                payload, 
+                hashlib.sha256
+            ).hexdigest()
+            return hmac.compare_digest(signature, expected_signature)
+    except Exception as e:
+        logger.error(f"Signature verification error: {e}")
+        return False
+
+def save_package_photo(photo_url, tracking_number):
+    """Download and save package photo locally"""
+    try:
+        import requests
+        from urllib.parse import urlparse
+        
+        # Create upload directory if it doesn't exist
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        
+        # Download the image
+        response = requests.get(photo_url, timeout=30)
+        response.raise_for_status()
+        
+        # Get file extension from URL or content type
+        parsed_url = urlparse(photo_url)
+        ext = os.path.splitext(parsed_url.path)[1]
+        if not ext:
+            content_type = response.headers.get('content-type', '')
+            if 'jpeg' in content_type or 'jpg' in content_type:
+                ext = '.jpg'
+            elif 'png' in content_type:
+                ext = '.png'
+            elif 'gif' in content_type:
+                ext = '.gif'
+            elif 'webp' in content_type:
+                ext = '.webp'
+            else:
+                ext = '.jpg'  # Default
+        
+        # Create filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"{tracking_number}_{timestamp}{ext}"
+        filename = secure_filename(filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # Save file
+        with open(filepath, 'wb') as f:
+            f.write(response.content)
+        
+        logger.info(f"Saved package photo: {filename}")
+        return filename
+        
+    except Exception as e:
+        logger.error(f"Error saving package photo: {e}")
+        return None
 
 # Authentication decorator
 def login_required(f):
@@ -41,6 +134,210 @@ def login_required(f):
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
     return decorated_function
+
+# Webhook Routes
+@app.route('/webhooks/shipping/<provider>', methods=['POST'])
+def shipping_webhook(provider):
+    """Generic shipping webhook endpoint for all carriers"""
+    try:
+        # Log the webhook request
+        webhook_log = WebhookLog(
+            provider=provider,
+            endpoint=f'/webhooks/shipping/{provider}',
+            method=request.method,
+            payload=request.get_data(as_text=True),
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent', '')
+        )
+        webhook_log.set_headers(request.headers)
+        
+        # Get signature for verification
+        signature = request.headers.get('X-Signature') or request.headers.get('X-Hub-Signature-256')
+        if signature:
+            webhook_log.signature = signature
+        
+        db.session.add(webhook_log)
+        db.session.commit()
+        
+        # Parse JSON payload
+        try:
+            payload_data = request.get_json(force=True)
+        except Exception:
+            webhook_log.processing_error = "Invalid JSON payload"
+            db.session.commit()
+            return jsonify({'error': 'Invalid JSON'}), 400
+        
+        # Process the webhook based on provider
+        result = process_shipping_webhook(provider, payload_data, webhook_log)
+        
+        if result['success']:
+            webhook_log.processed = True
+            db.session.commit()
+            return jsonify({'status': 'success', 'message': 'Webhook processed'}), 200
+        else:
+            webhook_log.processing_error = result.get('error', 'Unknown error')
+            db.session.commit()
+            return jsonify({'error': result.get('error', 'Processing failed')}), 400
+            
+    except Exception as e:
+        logger.error(f"Webhook error for {provider}: {e}")
+        if 'webhook_log' in locals():
+            webhook_log.processing_error = str(e)
+            db.session.commit()
+        return jsonify({'error': 'Internal server error'}), 500
+
+def process_shipping_webhook(provider, data, webhook_log):
+    """Process shipping webhook data based on provider"""
+    try:
+        # Extract common fields based on provider format
+        tracking_number = None
+        order_id = None
+        status = None
+        location = None
+        estimated_delivery = None
+        photo_url = None
+        description = None
+        
+        if provider.lower() == 'fedex':
+            # FedEx webhook format
+            tracking_number = data.get('trackingNumber')
+            order_id = data.get('shipmentId')
+            status = data.get('statusDescription')
+            location = data.get('location', {}).get('city')
+            if data.get('estimatedDeliveryTimestamp'):
+                estimated_delivery = datetime.fromisoformat(data['estimatedDeliveryTimestamp'].replace('Z', '+00:00'))
+            photo_url = data.get('packagePhoto', {}).get('url')
+            description = data.get('statusDescription')
+            
+        elif provider.lower() == 'ups':
+            # UPS webhook format
+            tracking_number = data.get('trackingNumber')
+            order_id = data.get('shipmentReferenceNumber')
+            status = data.get('status', {}).get('description')
+            location_data = data.get('location', {})
+            if location_data:
+                location = f"{location_data.get('city', '')}, {location_data.get('stateProvince', '')}"
+            if data.get('estimatedDelivery'):
+                estimated_delivery = datetime.fromisoformat(data['estimatedDelivery'].replace('Z', '+00:00'))
+            photo_url = data.get('deliveryPhoto', {}).get('imageUrl')
+            description = data.get('activityDescription')
+            
+        elif provider.lower() == 'usps':
+            # USPS webhook format
+            tracking_number = data.get('trackingNumber')
+            order_id = data.get('labelId')
+            status = data.get('eventType')
+            location = data.get('eventLocation')
+            if data.get('expectedDeliveryDate'):
+                estimated_delivery = datetime.strptime(data['expectedDeliveryDate'], '%Y-%m-%d')
+            photo_url = data.get('imageUrl')
+            description = data.get('eventDescription')
+            
+        elif provider.lower() == 'dhl':
+            # DHL webhook format
+            tracking_number = data.get('trackingNumber')
+            order_id = data.get('shipmentId')
+            status = data.get('status')
+            location = data.get('location', {}).get('address', {}).get('addressLocality')
+            if data.get('estimatedTimeOfDelivery'):
+                estimated_delivery = datetime.fromisoformat(data['estimatedTimeOfDelivery'])
+            photo_url = data.get('proofOfDelivery', {}).get('imageUrl')
+            description = data.get('statusDescription')
+            
+        else:
+            # Generic format for other carriers
+            tracking_number = data.get('tracking_number') or data.get('trackingNumber')
+            order_id = data.get('order_id') or data.get('orderId')
+            status = data.get('status') or data.get('event_type')
+            location = data.get('location') or data.get('city')
+            if data.get('estimated_delivery'):
+                try:
+                    estimated_delivery = datetime.fromisoformat(data['estimated_delivery'].replace('Z', '+00:00'))
+                except:
+                    pass
+            photo_url = data.get('photo_url') or data.get('image_url')
+            description = data.get('description') or data.get('event_description')
+        
+        if not tracking_number:
+            return {'success': False, 'error': 'No tracking number found in webhook data'}
+        
+        # Find or create shipping order
+        shipping_order = ShippingOrder.query.filter_by(tracking_number=tracking_number).first()
+        
+        if not shipping_order:
+            # Create new shipping order if not found
+            shipping_order = ShippingOrder(
+                account_id=1,  # Default account - you might want to match by provider
+                order_id=order_id or tracking_number,
+                tracking_number=tracking_number,
+                carrier=provider.upper(),
+                status=status or 'unknown',
+                estimated_delivery=estimated_delivery
+            )
+            db.session.add(shipping_order)
+            db.session.flush()  # Get the ID
+        else:
+            # Update existing order
+            if status:
+                shipping_order.status = status
+            if estimated_delivery:
+                shipping_order.estimated_delivery = estimated_delivery
+            shipping_order.updated_at = datetime.utcnow()
+        
+        # Save package photo if provided
+        photo_filename = None
+        if photo_url:
+            photo_filename = save_package_photo(photo_url, tracking_number)
+        
+        # Create tracking event
+        tracking_event = TrackingEvent(
+            shipping_order_id=shipping_order.id,
+            event_date=datetime.utcnow(),
+            status=status or 'update',
+            description=description or f'Webhook update from {provider}',
+            location=location,
+            photo_url=photo_url,
+            photo_filename=photo_filename
+        )
+        tracking_event.set_webhook_data(data)
+        
+        db.session.add(tracking_event)
+        db.session.commit()
+        
+        logger.info(f"Processed {provider} webhook for tracking {tracking_number}")
+        return {'success': True}
+        
+    except Exception as e:
+        logger.error(f"Error processing {provider} webhook: {e}")
+        db.session.rollback()
+        return {'success': False, 'error': str(e)}
+
+@app.route('/webhooks/test', methods=['POST'])
+def test_webhook():
+    """Test webhook endpoint for development"""
+    try:
+        data = request.get_json() or {}
+        
+        # Create a test tracking event
+        test_data = {
+            'tracking_number': data.get('tracking_number', 'TEST123456'),
+            'status': data.get('status', 'in_transit'),
+            'location': data.get('location', 'Distribution Center, CA'),
+            'estimated_delivery': data.get('estimated_delivery', '2025-09-20T14:00:00Z'),
+            'description': data.get('description', 'Package is in transit'),
+            'photo_url': data.get('photo_url')
+        }
+        
+        result = process_shipping_webhook('test', test_data, None)
+        
+        if result['success']:
+            return jsonify({'status': 'success', 'message': 'Test webhook processed'}), 200
+        else:
+            return jsonify({'error': result.get('error')}), 400
+            
+    except Exception as e:
+        logger.error(f"Test webhook error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 # Routes
 @app.route('/')
@@ -447,12 +744,40 @@ def get_tracking_data(order_id):
                 'description': event.description,
                 'location': event.location,
                 'latitude': event.latitude,
-                'longitude': event.longitude
+                'longitude': event.longitude,
+                'photo_url': event.photo_url,
+                'photo_filename': event.photo_filename
             } for event in tracking_events]
         }
     except Exception as e:
         logger.error(f"Error getting tracking data: {e}")
         return {'error': 'Error loading tracking data'}, 500
+
+@app.route('/admin/webhooks')
+@login_required
+def admin_webhooks():
+    """Admin webhook management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get recent webhook logs
+        webhook_logs = WebhookLog.query.order_by(WebhookLog.created_at.desc()).limit(50).all()
+        
+        # Get recent tracking events with photos
+        tracking_events = TrackingEvent.query.filter(
+            TrackingEvent.photo_filename.isnot(None)
+        ).order_by(TrackingEvent.created_at.desc()).limit(20).all()
+        
+        return render_template('admin/webhooks.html', 
+                             webhook_logs=webhook_logs,
+                             tracking_events=tracking_events)
+    except Exception as e:
+        logger.error(f"Admin webhooks page error: {e}")
+        flash('Error loading webhook data', 'error')
+        return render_template('admin/webhooks.html', webhook_logs=[], tracking_events=[])
 
 # Initialize database and create demo data
 def init_database():
@@ -460,6 +785,23 @@ def init_database():
     with app.app_context():
         # Create all tables
         db.create_all()
+        
+        # Check if we need to add new columns to existing tables
+        try:
+            # Check if photo_url column exists in tracking_events
+            db.session.execute('SELECT photo_url FROM tracking_events LIMIT 1')
+        except Exception:
+            # Add new columns to tracking_events table
+            logger.info("Adding new columns to tracking_events table...")
+            try:
+                db.session.execute('ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)')
+                db.session.execute('ALTER TABLE tracking_events ADD COLUMN photo_filename VARCHAR(255)')
+                db.session.execute('ALTER TABLE tracking_events ADD COLUMN webhook_data TEXT')
+                db.session.commit()
+                logger.info("Successfully added new columns to tracking_events")
+            except Exception as e:
+                logger.error(f"Error adding columns to tracking_events: {e}")
+                db.session.rollback()
         
         # Check if we already have data
         if User.query.count() > 0:
@@ -529,4 +871,4 @@ def init_database():
 if __name__ == '__main__':
     init_database()
     logger.info("Starting Bluez PowerHouse Management System")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
