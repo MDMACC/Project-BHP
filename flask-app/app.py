@@ -45,10 +45,59 @@ def login_required(f):
 # Routes
 @app.route('/')
 def home():
-    """Home page - redirect to dashboard or login"""
+    """Customer portal home page"""
+    return render_template('customer/home.html')
+
+@app.route('/admin')
+def admin_home():
+    """Admin portal - redirect to admin dashboard or login"""
     if 'user_id' in session:
-        return redirect(url_for('dashboard'))
+        user = session.get('user', {})
+        if user.get('role') in ['admin', 'manager']:
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Access denied. Admin privileges required.', 'error')
+            return redirect(url_for('login'))
     return redirect(url_for('login'))
+
+@app.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+    """Admin dashboard page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get basic statistics
+        total_parts = Part.query.filter_by(is_active=True).count()
+        total_contacts = Contact.query.filter_by(is_active=True).count()
+        total_orders = Order.query.count()
+        total_schedules = Schedule.query.filter_by(is_active=True).count()
+        
+        # Get inventory alerts
+        out_of_stock = Part.query.filter_by(is_active=True, quantity_in_stock=0).count()
+        low_stock = Part.query.filter(
+            Part.is_active == True,
+            Part.quantity_in_stock > 0,
+            Part.quantity_in_stock <= Part.minimum_stock_level
+        ).count()
+        
+        stats = {
+            'total_parts': total_parts,
+            'total_contacts': total_contacts,
+            'total_orders': total_orders,
+            'total_schedules': total_schedules,
+            'out_of_stock': out_of_stock,
+            'low_stock': low_stock
+        }
+        
+        return render_template('admin/dashboard.html', stats=stats)
+    except Exception as e:
+        logger.error(f"Admin dashboard error: {e}")
+        flash('Error loading admin dashboard', 'error')
+        return render_template('admin/dashboard.html', stats={})
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -265,8 +314,7 @@ def init_database():
             state='CA',
             zip_code='90210',
             phone='555-AUTO-FIX',
-            email='info@bluezpowerhouse.com',
-            business_hours='Monday-Friday: 8AM-6PM, Saturday: 9AM-4PM'
+            business_hours='Monday-Saturday: 9AM-6PM, Sunday: Closed'
         )
         db.session.add(shop)
         

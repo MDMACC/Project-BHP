@@ -7494,3 +7494,240 @@
 2025-09-13 09:31:45,832 - __main__ - INFO - Starting Bluez PowerHouse Management System
 2025-09-13 09:31:45,849 - werkzeug - WARNING -  * Debugger is active!
 2025-09-13 09:31:45,855 - werkzeug - INFO -  * Debugger PIN: 874-076-256
+2025-09-18 15:06:59,957 - __main__ - INFO - Database already initialized
+2025-09-18 15:06:59,957 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 15:07:00,109 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.15:5000
+2025-09-18 15:07:00,109 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 15:07:00,121 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 15:07:00,829 - __main__ - INFO - Database already initialized
+2025-09-18 15:07:00,829 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 15:07:00,845 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 15:07:00,854 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 15:07:12,608 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:12] "[32mGET / HTTP/1.1[0m" 302 -
+2025-09-18 15:07:12,636 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:12] "GET /login HTTP/1.1" 200 -
+2025-09-18 15:07:13,444 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:13] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-18 15:07:21,241 - __main__ - INFO - Login attempt for email: admin@autoshop.com
+2025-09-18 15:07:21,512 - __main__ - INFO - Login successful for user: admin
+2025-09-18 15:07:21,512 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:21] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-09-18 15:07:21,538 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:21] "GET /dashboard HTTP/1.1" 200 -
+2025-09-18 15:07:37,582 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:37] "GET /parts HTTP/1.1" 200 -
+2025-09-18 15:07:45,896 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:45] "GET /orders HTTP/1.1" 200 -
+2025-09-18 15:07:47,088 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:47] "GET /dashboard HTTP/1.1" 200 -
+2025-09-18 15:07:47,898 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:47] "GET /parts HTTP/1.1" 200 -
+2025-09-18 15:07:48,551 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:48] "GET /contacts HTTP/1.1" 200 -
+2025-09-18 15:07:53,671 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:53] "GET /schedule HTTP/1.1" 200 -
+2025-09-18 15:07:54,908 - werkzeug - INFO - 192.168.1.15 - - [18/Sep/2025 15:07:54] "GET /dashboard HTTP/1.1" 200 -
+2025-09-18 15:30:58,976 - __main__ - INFO - Database already initialized
+2025-09-18 15:30:58,976 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 15:30:58,994 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.15:5000
+2025-09-18 15:30:58,995 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 15:30:58,996 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 15:30:59,445 - __main__ - INFO - Database already initialized
+2025-09-18 15:30:59,446 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 15:30:59,456 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 15:30:59,462 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 15:31:00,343 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:00] "GET / HTTP/1.1" 200 -
+2025-09-18 15:31:01,214 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-18 15:31:13,581 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:13] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-09-18 15:31:13,887 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:13] "GET /login HTTP/1.1" 200 -
+2025-09-18 15:31:26,001 - __main__ - INFO - Login attempt for email: admin@autoshop.com
+2025-09-18 15:31:26,265 - __main__ - INFO - Login successful for user: admin
+2025-09-18 15:31:26,265 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:26] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-09-18 15:31:26,289 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:26] "GET /dashboard HTTP/1.1" 200 -
+2025-09-18 15:31:29,052 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:29] "GET /parts HTTP/1.1" 200 -
+2025-09-18 15:31:30,021 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:30] "GET /orders HTTP/1.1" 200 -
+2025-09-18 15:31:30,873 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:30] "GET /dashboard HTTP/1.1" 200 -
+2025-09-18 15:31:33,506 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:31:33] "GET / HTTP/1.1" 200 -
+2025-09-18 15:39:04,998 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:39:04] "GET / HTTP/1.1" 200 -
+2025-09-18 15:43:33,989 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:43:33] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-09-18 15:43:34,091 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:43:34] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-09-18 15:44:28,544 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:44:28] "GET / HTTP/1.1" 200 -
+2025-09-18 15:51:17,531 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 15:51:17] "GET / HTTP/1.1" 200 -
+2025-09-18 16:02:13,959 - __main__ - INFO - Database already initialized
+2025-09-18 16:02:13,959 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:02:13,978 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.15:5000
+2025-09-18 16:02:13,978 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 16:02:13,979 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:02:14,442 - __main__ - INFO - Database already initialized
+2025-09-18 16:02:14,443 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:02:14,453 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:02:14,459 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:02:18,816 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:02:18] "GET / HTTP/1.1" 200 -
+2025-09-18 16:02:45,473 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:02:45] "GET / HTTP/1.1" 200 -
+2025-09-18 16:04:29,217 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:04:29,285 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:04:29,757 - __main__ - INFO - Database already initialized
+2025-09-18 16:04:29,757 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:04:29,769 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:04:29,776 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:04:42,162 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:04:42,217 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:04:42,671 - __main__ - INFO - Database already initialized
+2025-09-18 16:04:42,671 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:04:42,682 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:04:42,688 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:05:21,834 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:05:21,884 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:05:22,336 - __main__ - INFO - Database already initialized
+2025-09-18 16:05:22,337 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:05:22,347 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:05:22,353 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:05:26,328 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:05:26] "GET / HTTP/1.1" 200 -
+2025-09-18 16:05:52,210 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:05:52,322 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:05:52,837 - __main__ - INFO - Database already initialized
+2025-09-18 16:05:52,837 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:05:52,849 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:05:52,855 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:06:16,574 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:06:16,651 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:06:17,097 - __main__ - INFO - Database already initialized
+2025-09-18 16:06:17,098 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:06:17,108 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:06:17,115 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:06:21,262 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 16:06:21,314 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 16:06:21,770 - __main__ - INFO - Database already initialized
+2025-09-18 16:06:21,771 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 16:06:21,787 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 16:06:21,794 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 16:06:34,524 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:06:34] "GET / HTTP/1.1" 200 -
+2025-09-18 16:07:52,983 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:07:52] "GET / HTTP/1.1" 200 -
+2025-09-18 16:07:54,540 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:07:54] "GET / HTTP/1.1" 200 -
+2025-09-18 16:12:06,003 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:12:06] "GET / HTTP/1.1" 200 -
+2025-09-18 16:12:06,022 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:12:06] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:12:06,253 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:12:06] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:13:06,578 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:06] "GET / HTTP/1.1" 200 -
+2025-09-18 16:13:06,598 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:06] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:13:06,830 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:06] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:13:34,928 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:34] "GET / HTTP/1.1" 200 -
+2025-09-18 16:13:34,946 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:34] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:13:35,169 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:13:35] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:14:50,234 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:14:50] "GET / HTTP/1.1" 200 -
+2025-09-18 16:14:50,254 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:14:50] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:14:50,474 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:14:50] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:16:33,188 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:16:33] "GET / HTTP/1.1" 200 -
+2025-09-18 16:16:33,213 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:16:33] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:16:33,445 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:16:33] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:18:43,842 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:18:43] "GET / HTTP/1.1" 200 -
+2025-09-18 16:18:43,867 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:18:43] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:18:44,078 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:18:44] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:20:28,721 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:20:28] "GET / HTTP/1.1" 200 -
+2025-09-18 16:20:28,743 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:20:28] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:20:28,973 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:20:28] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:48,439 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:48] "GET / HTTP/1.1" 200 -
+2025-09-18 16:22:48,462 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:48] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:48,699 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:48] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:50,036 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:50] "GET / HTTP/1.1" 200 -
+2025-09-18 16:22:50,053 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:50] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:50,278 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:50] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:58,397 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:58] "GET / HTTP/1.1" 200 -
+2025-09-18 16:22:58,415 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:58] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:22:58,644 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:22:58] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:23:03,176 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:23:03] "GET / HTTP/1.1" 200 -
+2025-09-18 16:23:03,193 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:23:03] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:23:03,437 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:23:03] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:24:24,380 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:24:24] "GET / HTTP/1.1" 200 -
+2025-09-18 16:26:12,908 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:26:12] "GET / HTTP/1.1" 200 -
+2025-09-18 16:26:16,894 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:26:16] "GET / HTTP/1.1" 200 -
+2025-09-18 16:26:16,916 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:26:16] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:26:17,426 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:26:17] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:28:02,844 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:28:02] "GET / HTTP/1.1" 200 -
+2025-09-18 16:28:02,865 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:28:02] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:28:03,102 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:28:03] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:31:36,832 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:36] "GET / HTTP/1.1" 200 -
+2025-09-18 16:31:36,851 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:36] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:31:37,091 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:37] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:31:39,629 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:39] "GET / HTTP/1.1" 200 -
+2025-09-18 16:31:39,658 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:39] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:31:39,888 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:31:39] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:34:09,880 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:09] "GET / HTTP/1.1" 200 -
+2025-09-18 16:34:09,904 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:09] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:34:10,118 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:10] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:34:11,615 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:11] "GET / HTTP/1.1" 200 -
+2025-09-18 16:34:11,634 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:11] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:34:11,916 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:34:11] "[33mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 404 -
+2025-09-18 16:37:01,414 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:37:01] "GET / HTTP/1.1" 200 -
+2025-09-18 16:37:01,512 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:37:01] "GET /static/images/bluez-powerhouse-logo.png HTTP/1.1" 200 -
+2025-09-18 16:37:02,196 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:37:02] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-18 16:37:03,156 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:37:03] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:39:30,251 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:39:30] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:39:30,947 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:39:30] "GET / HTTP/1.1" 200 -
+2025-09-18 16:39:31,242 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:39:31] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:42:45,692 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:42:45] "GET / HTTP/1.1" 200 -
+2025-09-18 16:42:45,719 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:42:45] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:42:58,254 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:42:58] "GET / HTTP/1.1" 200 -
+2025-09-18 16:42:58,557 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:42:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:45:48,683 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:45:48] "GET / HTTP/1.1" 200 -
+2025-09-18 16:45:48,704 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:45:48] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:47:40,737 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:47:40] "GET / HTTP/1.1" 200 -
+2025-09-18 16:47:40,766 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:47:40] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:48:43,388 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:48:43] "GET / HTTP/1.1" 200 -
+2025-09-18 16:48:43,389 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:48:43] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:48:43,633 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:48:43] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:48:44,262 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:48:44] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:52:03,841 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:52:03] "GET / HTTP/1.1" 200 -
+2025-09-18 16:52:03,861 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:52:03] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:52:04,095 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:52:04] "GET /static/images/TiktokLogo.png HTTP/1.1" 200 -
+2025-09-18 16:52:05,335 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:52:05] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:52:06,372 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:52:06] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:53:24,040 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:53:24] "GET / HTTP/1.1" 200 -
+2025-09-18 16:53:24,061 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:53:24] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:53:24,296 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:53:24] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:55:21,024 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:55:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:56:50,105 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:56:50] "GET / HTTP/1.1" 200 -
+2025-09-18 16:56:50,131 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:56:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:56:50,361 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:56:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:56:51,698 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:56:51] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:58:23,192 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:23] "GET / HTTP/1.1" 200 -
+2025-09-18 16:58:23,215 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:23] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:58:23,447 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:23] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:58:39,253 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:39] "GET / HTTP/1.1" 200 -
+2025-09-18 16:58:39,273 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:39] "GET /static/images/bluez-powerhouse-logo.png HTTP/1.1" 200 -
+2025-09-18 16:58:39,514 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:39] "GET /static/images/TiktokLogo.png HTTP/1.1" 200 -
+2025-09-18 16:58:40,403 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-18 16:58:40,924 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:58:40] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:21,335 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:21,691 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:21] "GET / HTTP/1.1" 200 -
+2025-09-18 16:59:21,997 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:22,030 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:22] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:22,952 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:22] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:23,788 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:23] "GET / HTTP/1.1" 200 -
+2025-09-18 16:59:24,090 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:24] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:24,120 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:24] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:24,747 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:24] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:59,621 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:59] "GET / HTTP/1.1" 200 -
+2025-09-18 16:59:59,924 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 16:59:59,950 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 16:59:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:01:21,314 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:01:21] "GET / HTTP/1.1" 200 -
+2025-09-18 17:01:21,333 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:01:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:01:21,570 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:01:21] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:01:22,356 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:01:22] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:03:01,963 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:03:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:04:51,729 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:04:51] "GET / HTTP/1.1" 200 -
+2025-09-18 17:04:51,752 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:04:51] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:04:51,973 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:04:51] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:04:52,215 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:04:52] "GET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1" 200 -
+2025-09-18 17:04:57,790 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:04:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:14,672 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:14] "GET / HTTP/1.1" 200 -
+2025-09-18 17:06:14,672 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:14] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:14,911 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:14] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:15,009 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:15] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:15,148 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:15] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:17,541 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:17] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:21,207 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:21] "GET / HTTP/1.1" 200 -
+2025-09-18 17:06:21,514 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:21,531 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:21] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:06:23,239 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:06:23] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:07:41,208 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "GET / HTTP/1.1" 200 -
+2025-09-18 17:07:41,233 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:07:41,466 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -

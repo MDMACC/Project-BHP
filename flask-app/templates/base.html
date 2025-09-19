@@ -178,24 +178,16 @@
             <div class="p-6">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <div class="w-12 h-12 relative">
-                        <div class="absolute inset-0 bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg">
-                            <div class="absolute inset-1 bg-gradient-to-r from-bluez-600 to-bluez-700 rounded-md">
-                                <div class="absolute top-0 right-0 w-2 h-1 bg-bluez-800 rounded-tr-md"></div>
-                                <div class="absolute top-1 left-1 w-3 h-1 bg-bluez-500 rounded-sm"></div>
-                                <div class="absolute top-2 left-2 w-4 h-2 bg-bluez-400 rounded-sm opacity-60"></div>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="text-white font-bold text-xs tracking-wider">B.P.H.</div>
-                            </div>
-                            <div class="absolute bottom-0 left-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
-                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
-                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
-                            </div>
-                            <div class="absolute bottom-0 right-1 w-2 h-2 bg-gradient-to-br from-metallic-600 to-metallic-800 rounded-full border border-metallic-400">
-                                <div class="absolute inset-0.5 bg-metallic-800 rounded-full"></div>
-                                <div class="absolute top-0.5 left-0.5 w-1 h-1 bg-metallic-400 rounded-full"></div>
-                            </div>
+                    <div class="w-14 h-11 relative">
+                        <!-- Professional Bluez PowerHouse Logo -->
+                        <img src="{{ url_for('static', filename='images/bluez-powerhouse-logo.png') }}" 
+                             alt="Bluez PowerHouse Logo" 
+                             class="w-full h-full object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        
+                        <!-- Fallback logo if image doesn't load -->
+                        <div class="w-full h-full bg-gradient-to-br from-bluez-800 to-bluez-900 rounded-lg shadow-lg flex items-center justify-center" style="display: none;">
+                            <div class="text-white font-bold text-xs tracking-wider">B.P.H.</div>
                         </div>
                     </div>
                     <div class="ml-3">
@@ -213,25 +205,25 @@
                     </svg>
                     Dashboard
                 </a>
-                <a href="{{ url_for('parts.list_parts') }}" class="sidebar-link {% if request.endpoint and 'parts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                <a href="{{ url_for('parts') }}" class="sidebar-link {% if request.endpoint and 'parts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                     </svg>
                     Parts
                 </a>
-                <a href="{{ url_for('orders.list_orders') }}" class="sidebar-link {% if request.endpoint and 'orders' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                <a href="{{ url_for('orders') }}" class="sidebar-link {% if request.endpoint and 'orders' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
                     Orders
                 </a>
-                <a href="{{ url_for('contacts.list_contacts') }}" class="sidebar-link {% if request.endpoint and 'contacts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                <a href="{{ url_for('contacts') }}" class="sidebar-link {% if request.endpoint and 'contacts' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                     Contacts
                 </a>
-                <a href="{{ url_for('schedule.list_schedule') }}" class="sidebar-link {% if request.endpoint and 'schedule' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
+                <a href="{{ url_for('schedule') }}" class="sidebar-link {% if request.endpoint and 'schedule' in request.endpoint %}sidebar-link-active{% else %}sidebar-link-inactive{% endif %}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
@@ -261,7 +253,7 @@
                         <p class="text-sm font-medium text-gray-900">{{ session.user.username if session.user else 'User' }}</p>
                         <p class="text-xs text-gray-500">{{ session.user.role.title() if session.user else 'Employee' }}</p>
                     </div>
-                    <a href="{{ url_for('auth.logout_page') }}" class="text-gray-400 hover:text-gray-600">
+                    <a href="{{ url_for('logout') }}" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
