@@ -7731,3 +7731,98 @@
 2025-09-18 17:07:41,208 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "GET / HTTP/1.1" 200 -
 2025-09-18 17:07:41,233 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
 2025-09-18 17:07:41,466 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:07:41] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:20:26,434 - __main__ - INFO - Database already initialized
+2025-09-18 17:20:26,434 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:20:26,455 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.15:5000
+2025-09-18 17:20:26,455 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-18 17:20:26,456 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:20:26,942 - __main__ - INFO - Database already initialized
+2025-09-18 17:20:26,943 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:20:26,954 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:20:26,960 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:20:29,431 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:20:29] "GET / HTTP/1.1" 200 -
+2025-09-18 17:20:29,512 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:20:29] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:20:29,682 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:20:29] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:24:13,012 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:24:13] "GET / HTTP/1.1" 200 -
+2025-09-18 17:24:13,034 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:24:13] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:24:13,262 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:24:13] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:24:13,479 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:24:13] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:24:15,958 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:24:15] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:25:57,463 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:57] "GET / HTTP/1.1" 200 -
+2025-09-18 17:25:57,483 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:25:57,723 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:25:57,937 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:57] "GET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1" 200 -
+2025-09-18 17:25:59,224 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:59] "GET / HTTP/1.1" 200 -
+2025-09-18 17:25:59,243 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:25:59,471 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 17:25:59,655 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 17:25:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 17:39:18,984 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\models.py', reloading
+2025-09-18 17:39:19,045 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:39:19,510 - __main__ - INFO - Database already initialized
+2025-09-18 17:39:19,510 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:39:19,521 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:39:19,527 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:39:41,169 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\models.py', reloading
+2025-09-18 17:39:41,230 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:39:41,727 - __main__ - INFO - Database already initialized
+2025-09-18 17:39:41,728 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:39:41,738 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:39:41,745 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:39:47,952 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 17:39:48,011 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:39:48,506 - __main__ - INFO - Database already initialized
+2025-09-18 17:39:48,507 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:39:48,517 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:39:48,523 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:40:18,329 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 17:40:18,417 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:40:18,893 - __main__ - INFO - Database already initialized
+2025-09-18 17:40:18,894 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:40:18,904 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:40:18,910 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:45:18,132 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 17:45:18,208 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:45:18,699 - __main__ - INFO - Database already initialized
+2025-09-18 17:45:18,699 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:45:18,709 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:45:18,715 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 17:47:39,622 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\shipping_apis.py', reloading
+2025-09-18 17:47:39,691 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 17:47:40,162 - __main__ - INFO - Database already initialized
+2025-09-18 17:47:40,162 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 17:47:40,172 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 17:47:40,178 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 18:05:51,308 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:51] "GET / HTTP/1.1" 200 -
+2025-09-18 18:05:51,402 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:51] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:05:51,562 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:51] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:05:51,789 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-09-18 18:05:56,673 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:56] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-09-18 18:05:56,707 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:56] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-09-18 18:05:56,935 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:56] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:05:59,575 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:59] "GET /admin/accounts HTTP/1.1" 200 -
+2025-09-18 18:05:59,643 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:05:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:06:01,032 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:06:01] "GET /admin/accounts/add HTTP/1.1" 200 -
+2025-09-18 18:06:01,333 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:06:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:06:12,505 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:06:12] "GET /admin/accounts HTTP/1.1" 200 -
+2025-09-18 18:06:12,599 - werkzeug - INFO - 127.0.0.1 - - [18/Sep/2025 18:06:12] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-09-18 18:07:15,774 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\shipping_apis.py', reloading
+2025-09-18 18:07:15,844 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 18:07:16,371 - __main__ - INFO - Database already initialized
+2025-09-18 18:07:16,372 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 18:07:16,382 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 18:07:16,389 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 18:07:32,908 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\shipping_apis.py', reloading
+2025-09-18 18:07:32,968 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 18:07:33,438 - __main__ - INFO - Database already initialized
+2025-09-18 18:07:33,438 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 18:07:33,448 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 18:07:33,455 - werkzeug - INFO -  * Debugger PIN: 114-434-842
+2025-09-18 18:08:25,986 - werkzeug - INFO -  * Detected change in 'c:\\Users\\mrdyl\\Documents\\GitHub\\Project-BHP\\flask-app\\app.py', reloading
+2025-09-18 18:08:26,083 - werkzeug - INFO -  * Restarting with stat
+2025-09-18 18:08:26,572 - __main__ - INFO - Database already initialized
+2025-09-18 18:08:26,572 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-09-18 18:08:26,582 - werkzeug - WARNING -  * Debugger is active!
+2025-09-18 18:08:26,588 - werkzeug - INFO -  * Debugger PIN: 114-434-842

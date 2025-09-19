@@ -5,6 +5,7 @@ Simple models for the AutoShop Management System
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import json
 
 db = SQLAlchemy()
 
@@ -135,3 +136,81 @@ class Shop(db.Model):
     
     def __repr__(self):
         return f'<Shop {self.name}>'
+
+class ShippingAccount(db.Model):
+    """Shipping account model for API integrations"""
+    __tablename__ = 'shipping_accounts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    provider = db.Column(db.String(50), nullable=False)  # fcpeuro, orielly, autozone, harborfreight, amazon
+    account_name = db.Column(db.String(200), nullable=False)
+    username = db.Column(db.String(200))
+    api_key = db.Column(db.Text)  # Encrypted API key
+    api_secret = db.Column(db.Text)  # Encrypted API secret
+    additional_config = db.Column(db.Text)  # JSON for additional config
+    is_active = db.Column(db.Boolean, default=True)
+    last_sync = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def set_config(self, config_dict):
+        """Set additional configuration as JSON"""
+        self.additional_config = json.dumps(config_dict)
+    
+    def get_config(self):
+        """Get additional configuration as dict"""
+        if self.additional_config:
+            return json.loads(self.additional_config)
+        return {}
+    
+    def __repr__(self):
+        return f'<ShippingAccount {self.provider}: {self.account_name}>'
+
+class ShippingOrder(db.Model):
+    """Shipping order model for tracking orders"""
+    __tablename__ = 'shipping_orders'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.Integer, db.ForeignKey('shipping_accounts.id'), nullable=False)
+    order_id = db.Column(db.String(100), nullable=False)  # External order ID
+    order_number = db.Column(db.String(100))  # Our internal order number
+    tracking_number = db.Column(db.String(100))
+    carrier = db.Column(db.String(50))  # UPS, FedEx, USPS, etc.
+    status = db.Column(db.String(50))  # ordered, shipped, in_transit, delivered, etc.
+    order_date = db.Column(db.DateTime)
+    ship_date = db.Column(db.DateTime)
+    estimated_delivery = db.Column(db.DateTime)
+    actual_delivery = db.Column(db.DateTime)
+    total_amount = db.Column(db.Float)
+    items_count = db.Column(db.Integer, default=0)
+    shipping_address = db.Column(db.Text)
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationship
+    account = db.relationship('ShippingAccount', backref='orders')
+    
+    def __repr__(self):
+        return f'<ShippingOrder {self.order_id}>'
+
+class TrackingEvent(db.Model):
+    """Tracking event model for shipping updates"""
+    __tablename__ = 'tracking_events'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    shipping_order_id = db.Column(db.Integer, db.ForeignKey('shipping_orders.id'), nullable=False)
+    event_date = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    location = db.Column(db.String(200))  # City, State or facility name
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    carrier_event_code = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    shipping_order = db.relationship('ShippingOrder', backref='tracking_events')
+    
+    def __repr__(self):
+        return f'<TrackingEvent {self.status} at {self.location}>'

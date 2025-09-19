@@ -28,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-from models import db, User, Part, Contact, Order, Schedule, Shop
+from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent
 db.init_app(app)
 
 # Authentication decorator
@@ -251,7 +251,208 @@ def inventory():
 @login_required
 def shipping():
     """Shipping management page"""
-    return redirect(url_for('orders'))
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get all shipping orders with their tracking events
+        shipping_orders = db.session.query(ShippingOrder).join(ShippingAccount).all()
+        
+        # Get accounts for filtering
+        accounts = ShippingAccount.query.filter_by(is_active=True).all()
+        
+        return render_template('admin/shipping.html', 
+                             shipping_orders=shipping_orders, 
+                             accounts=accounts)
+    except Exception as e:
+        logger.error(f"Shipping page error: {e}")
+        flash('Error loading shipping data', 'error')
+        return render_template('admin/shipping.html', shipping_orders=[], accounts=[])
+
+@app.route('/admin/accounts')
+@login_required
+def admin_accounts():
+    """Admin accounts management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        accounts = ShippingAccount.query.all()
+        return render_template('admin/accounts.html', accounts=accounts)
+    except Exception as e:
+        logger.error(f"Admin accounts page error: {e}")
+        flash('Error loading accounts', 'error')
+        return render_template('admin/accounts.html', accounts=[])
+
+@app.route('/admin/accounts/add', methods=['GET', 'POST'])
+@login_required
+def add_account():
+    """Add new shipping account"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        try:
+            provider = request.form.get('provider')
+            account_name = request.form.get('account_name')
+            username = request.form.get('username')
+            api_key = request.form.get('api_key')
+            api_secret = request.form.get('api_secret')
+            
+            if not provider or not account_name:
+                flash('Provider and account name are required', 'error')
+                return render_template('admin/add_account.html')
+            
+            # Create new account
+            account = ShippingAccount(
+                provider=provider,
+                account_name=account_name,
+                username=username,
+                api_key=api_key,  # TODO: Encrypt this
+                api_secret=api_secret  # TODO: Encrypt this
+            )
+            
+            db.session.add(account)
+            db.session.commit()
+            
+            flash(f'Account {account_name} added successfully!', 'success')
+            return redirect(url_for('admin_accounts'))
+            
+        except Exception as e:
+            logger.error(f"Error adding account: {e}")
+            db.session.rollback()
+            flash('Error adding account', 'error')
+    
+    return render_template('admin/add_account.html')
+
+@app.route('/admin/accounts/<int:account_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_account(account_id):
+    """Edit shipping account"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    account = ShippingAccount.query.get_or_404(account_id)
+    
+    if request.method == 'POST':
+        try:
+            account.account_name = request.form.get('account_name')
+            account.username = request.form.get('username')
+            
+            # Only update API keys if provided
+            api_key = request.form.get('api_key')
+            api_secret = request.form.get('api_secret')
+            if api_key:
+                account.api_key = api_key  # TODO: Encrypt this
+            if api_secret:
+                account.api_secret = api_secret  # TODO: Encrypt this
+            
+            account.is_active = 'is_active' in request.form
+            account.updated_at = datetime.utcnow()
+            
+            db.session.commit()
+            flash('Account updated successfully!', 'success')
+            return redirect(url_for('admin_accounts'))
+            
+        except Exception as e:
+            logger.error(f"Error updating account: {e}")
+            db.session.rollback()
+            flash('Error updating account', 'error')
+    
+    return render_template('admin/edit_account.html', account=account)
+
+@app.route('/admin/accounts/<int:account_id>/sync', methods=['POST'])
+@login_required
+def sync_account(account_id):
+    """Sync shipping account data"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    account = ShippingAccount.query.get_or_404(account_id)
+    
+    try:
+        from shipping_apis import ShippingAPIFactory
+        
+        api = ShippingAPIFactory.create_api(account)
+        if api and api.authenticate():
+            synced_count = api.sync_orders()
+            flash(f'Account {account.account_name} synced successfully! {synced_count} orders processed.', 'success')
+        else:
+            flash(f'Failed to authenticate with {account.account_name}', 'error')
+    except Exception as e:
+        logger.error(f"Error syncing account {account_id}: {e}")
+        flash('Error syncing account', 'error')
+    
+    return redirect(url_for('admin_accounts'))
+
+@app.route('/admin/sync-all', methods=['POST'])
+@login_required
+def sync_all_accounts():
+    """Sync all active shipping accounts"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        from shipping_apis import ShippingAPIFactory
+        
+        results = ShippingAPIFactory.sync_all_accounts()
+        total_synced = sum(results.values())
+        
+        if total_synced > 0:
+            flash(f'Successfully synced {total_synced} orders across all accounts!', 'success')
+        else:
+            flash('No new orders found during sync.', 'info')
+            
+    except Exception as e:
+        logger.error(f"Error syncing all accounts: {e}")
+        flash('Error syncing accounts', 'error')
+    
+    return redirect(url_for('admin_accounts'))
+
+@app.route('/api/shipping/orders/<int:order_id>/tracking')
+@login_required
+def get_tracking_data(order_id):
+    """Get tracking data for an order (API endpoint)"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        return {'error': 'Access denied'}, 403
+    
+    try:
+        order = ShippingOrder.query.get_or_404(order_id)
+        tracking_events = TrackingEvent.query.filter_by(shipping_order_id=order_id).order_by(TrackingEvent.event_date.desc()).all()
+        
+        return {
+            'order': {
+                'id': order.id,
+                'order_id': order.order_id,
+                'tracking_number': order.tracking_number,
+                'status': order.status,
+                'estimated_delivery': order.estimated_delivery.isoformat() if order.estimated_delivery else None
+            },
+            'tracking_events': [{
+                'date': event.event_date.isoformat(),
+                'status': event.status,
+                'description': event.description,
+                'location': event.location,
+                'latitude': event.latitude,
+                'longitude': event.longitude
+            } for event in tracking_events]
+        }
+    except Exception as e:
+        logger.error(f"Error getting tracking data: {e}")
+        return {'error': 'Error loading tracking data'}, 500
 
 # Initialize database and create demo data
 def init_database():
