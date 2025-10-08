@@ -15,11 +15,11 @@
         </button>
     </form>
     {% endif %}
-    <a href="{{ url_for('add_account') }}" class="btn btn-primary">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <a href="{{ url_for('add_account') }}" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
         </svg>
-        Add Account
+        <span>Add Account</span>
     </a>
 </div>
 {% endblock %}
@@ -28,7 +28,7 @@
 <div class="space-y-6">
     <!-- Provider Overview Cards -->
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        {% set providers = ['fcpeuro', 'orielly', 'autozone', 'harborfreight', 'amazon'] %}
+        {% set providers = ['fedex', 'ups', 'usps', 'dhl', 'amazon'] %}
         {% for provider in providers %}
         {% set provider_accounts = accounts|selectattr('provider', 'equalto', provider)|list %}
         <div class="card p-4 text-center">
@@ -112,15 +112,26 @@
                             Never
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <a href="{{ url_for('edit_account', account_id=account.id) }}" class="text-bluez-600 hover:text-bluez-900">
-                                Edit
-                            </a>
-                            <form method="POST" action="{{ url_for('sync_account', account_id=account.id) }}" class="inline">
-                                <button type="submit" class="text-green-600 hover:text-green-900">
-                                    Sync
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex space-x-2">
+                                <button onclick="testConnection({{ account.id }})" class="text-purple-600 hover:text-purple-800 transition-colors" title="Test Connection">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
                                 </button>
-                            </form>
+                                <a href="{{ url_for('edit_account', account_id=account.id) }}" class="text-bluez-600 hover:text-bluez-800 transition-colors" title="Edit Account">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                <form method="POST" action="{{ url_for('sync_account', account_id=account.id) }}" class="inline">
+                                    <button type="submit" class="text-green-600 hover:text-green-800 transition-colors" title="Sync Account">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
@@ -146,4 +157,43 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+    function testConnection(accountId) {
+        const button = event.target.closest('button');
+        const originalContent = button.innerHTML;
+        
+        // Show loading state
+        button.innerHTML = `
+            <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+        `;
+        button.disabled = true;
+        
+        fetch(`/api/accounts/${accountId}/test`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`✓ Connection successful!\n\nProvider: ${data.provider}\nAccount: ${data.account_name}\nAuthentication: ${data.authentication ? 'Success' : 'Failed'}`);
+            } else {
+                alert(`✗ Connection failed!\n\nError: ${data.error || 'Unknown error'}\nProvider: ${data.provider || 'Unknown'}`);
+            }
+        })
+        .catch(error => {
+            console.error('Connection test error:', error);
+            alert('✗ Error testing connection');
+        })
+        .finally(() => {
+            // Restore button
+            button.innerHTML = originalContent;
+            button.disabled = false;
+        });
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Appointment - Bluez PowerHouse Auto Repair</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bluez: {
+                            50: '#f0f4ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#1e1b4b',
+                            950: '#0f0b2e',
+                        },
+                        metallic: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .card-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(203, 213, 225, 0.3);
+        }
+        
+        .calendar-day {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .calendar-day:hover {
+            background: #e0e7ff;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .calendar-day.disabled {
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+        
+        .calendar-day.disabled:hover {
+            background: transparent;
+            transform: none;
+        }
+        
+        .time-slot {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .time-slot:hover {
+            background: #e0e7ff;
+            transform: translateY(-1px);
+        }
+        
+        .time-slot.selected {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .time-slot.unavailable {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+        
+        .time-slot.unavailable:hover {
+            background: #f1f5f9;
+            transform: none;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f0b2e 0%, #1e1b4b 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #4f46e5, #4338ca);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #4338ca, #3730a3);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .logo-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .logo-container:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        .logo-container:hover .logo-image {
+            transform: rotate(5deg) scale(1.1);
+            filter: drop-shadow(0 4px 12px rgba(79, 70, 229, 0.3));
+        }
+        
+        .logo-container:hover .logo-text h1 {
+            color: #4f46e5;
+            text-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+        }
+        
+        .logo-container:hover .logo-text p {
+            color: #6366f1;
+        }
+        
+        .logo-image {
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .logo-text h1 {
+            transition: all 0.3s ease;
+        }
+        
+        .logo-text p {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-metallic-50 to-bluez-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-metallic-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <a href="/" onclick="scrollToTop()" class="logo-container flex items-center">
+                    <div class="logo-image w-20 h-16 mr-3">
+                        <img src="{{ url_for('static', filename='images/bluez-powerhouse-logo.png') }}" 
+                             alt="Bluez PowerHouse Logo" 
+                             class="w-full h-full object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        
+                        <div class="w-full h-full bg-gradient-to-r from-bluez-600 to-bluez-800 rounded-lg flex items-center justify-center text-white font-bold text-lg" style="display: none;">
+                            B.P.H
+                        </div>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="text-xl font-bold text-bluez-900">Bluez PowerHouse</h1>
+                        <p class="text-xs text-metallic-600">Auto Repair</p>
+                    </div>
+                </a>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/#services" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Services</a>
+                    <a href="/#about" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">About</a>
+                    <a href="/#contact" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Contact</a>
+                </nav>
+                
+                <!-- CTA Button -->
+                <div class="flex items-center space-x-4">
+                    <a href="tel:(747) 474-9193" class="text-bluez-600 font-semibold hover:text-bluez-800 transition-all duration-300">(747) 474-9193</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-metallic-900 mb-4">Schedule Your Appointment</h1>
+            <p class="text-xl text-metallic-600 max-w-3xl mx-auto">
+                Choose your preferred date and time for professional automotive service. We'll get your vehicle running like new!
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Calendar Section -->
+            <div class="card-glass rounded-xl p-8">
+                <h2 class="text-2xl font-bold text-metallic-900 mb-6">Select Date</h2>
+                
+                <!-- Calendar Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="previousMonth()" class="p-2 hover:bg-bluez-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-metallic-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h3 class="text-xl font-semibold text-metallic-900" id="currentMonth"></h3>
+                    <button onclick="nextMonth()" class="p-2 hover:bg-bluez-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-metallic-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-2 mb-4">
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Sun</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Mon</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Tue</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Wed</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Thu</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Fri</div>
+                    <div class="text-center text-sm font-medium text-metallic-600 py-2">Sat</div>
+                </div>
+                
+                <div class="grid grid-cols-7 gap-2" id="calendarGrid">
+                    <!-- Calendar days will be populated by JavaScript -->
+                </div>
+
+                <!-- Selected Date Display -->
+                <div class="mt-6 p-4 bg-bluez-50 rounded-lg" id="selectedDateDisplay" style="display: none;">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-bluez-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-bluez-800 font-medium">Selected Date: <span id="selectedDateText"></span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Selection & Form -->
+            <div class="space-y-8">
+                <!-- Time Slots -->
+                <div class="card-glass rounded-xl p-8">
+                    <h2 class="text-2xl font-bold text-metallic-900 mb-6">Select Time</h2>
+                    
+                    <div id="timeSlotContainer" style="display: none;">
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <!-- Morning Slots -->
+                            <div>
+                                <h4 class="text-sm font-medium text-metallic-600 mb-3">Morning</h4>
+                                <div class="space-y-2" id="morningSlots">
+                                    <!-- Time slots will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <!-- Afternoon Slots -->
+                            <div>
+                                <h4 class="text-sm font-medium text-metallic-600 mb-3">Afternoon</h4>
+                                <div class="space-y-2" id="afternoonSlots">
+                                    <!-- Time slots will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Time Display -->
+                        <div class="p-4 bg-bluez-50 rounded-lg" id="selectedTimeDisplay" style="display: none;">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-bluez-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-bluez-800 font-medium">Selected Time: <span id="selectedTimeText"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="selectDateFirst" class="text-center py-8">
+                        <svg class="w-16 h-16 mx-auto text-metallic-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <p class="text-metallic-500">Please select a date first to see available times</p>
+                    </div>
+                </div>
+
+                <!-- Appointment Form -->
+                <div class="card-glass rounded-xl p-8">
+                    <h2 class="text-2xl font-bold text-metallic-900 mb-6">Appointment Details</h2>
+                    
+                    <form id="appointmentForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-metallic-700 mb-2">First Name *</label>
+                                <input type="text" id="firstName" required class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-metallic-700 mb-2">Last Name *</label>
+                                <input type="text" id="lastName" required class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-metallic-700 mb-2">Phone Number *</label>
+                            <input type="tel" id="phone" required class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-metallic-700 mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-metallic-700 mb-2">Vehicle Information</label>
+                            <input type="text" id="vehicle" placeholder="Year, Make, Model (e.g., 2020 Honda Civic)" class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-metallic-700 mb-2">Service Needed *</label>
+                            <select id="serviceType" required class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                                <option value="">Select a service...</option>
+                                <option value="oil-change">Oil Change</option>
+                                <option value="brake-service">Brake Service</option>
+                                <option value="engine-diagnostics">Engine Diagnostics</option>
+                                <option value="tire-service">Tire Service</option>
+                                <option value="ac-repair">AC Repair</option>
+                                <option value="transmission">Transmission Service</option>
+                                <option value="general-inspection">General Inspection</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-metallic-700 mb-2">Additional Notes</label>
+                            <textarea id="notes" rows="4" class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors" placeholder="Describe any specific issues or concerns..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold w-full transition-all duration-300 hover:-translate-y-1 hover:scale-105" id="submitBtn" disabled>
+                            Schedule Appointment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const timeSlots = {
+            morning: ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'],
+            afternoon: ['1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM']
+        };
+
+        function initCalendar() {
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        function updateCalendarHeader() {
+            document.getElementById('currentMonth').textContent = 
+                `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        }
+
+        function generateCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const today = new Date();
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'h-12';
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                
+                dayElement.className = 'calendar-day h-12 flex items-center justify-center rounded-lg font-medium';
+                dayElement.textContent = day;
+
+                // Disable past dates and Sundays
+                if (dayDate < today || dayDate.getDay() === 0) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    dayElement.addEventListener('click', () => selectDate(dayDate, dayElement));
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(date, element) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add selection to clicked element
+            element.classList.add('selected');
+            selectedDate = date;
+
+            // Update selected date display
+            const selectedDateDisplay = document.getElementById('selectedDateDisplay');
+            const selectedDateText = document.getElementById('selectedDateText');
+            selectedDateText.textContent = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            selectedDateDisplay.style.display = 'block';
+
+            // Show time slots
+            showTimeSlots();
+            updateSubmitButton();
+        }
+
+        function showTimeSlots() {
+            document.getElementById('selectDateFirst').style.display = 'none';
+            document.getElementById('timeSlotContainer').style.display = 'block';
+
+            // Generate morning slots
+            const morningSlots = document.getElementById('morningSlots');
+            morningSlots.innerHTML = '';
+            timeSlots.morning.forEach(time => {
+                const slot = createTimeSlot(time);
+                morningSlots.appendChild(slot);
+            });
+
+            // Generate afternoon slots
+            const afternoonSlots = document.getElementById('afternoonSlots');
+            afternoonSlots.innerHTML = '';
+            timeSlots.afternoon.forEach(time => {
+                const slot = createTimeSlot(time);
+                afternoonSlots.appendChild(slot);
+            });
+        }
+
+        function createTimeSlot(time) {
+            const slot = document.createElement('div');
+            slot.className = 'time-slot p-3 border border-metallic-200 rounded-lg text-center font-medium';
+            slot.textContent = time;
+            
+            // Randomly make some slots unavailable for demo
+            if (Math.random() < 0.2) {
+                slot.classList.add('unavailable');
+                slot.textContent += ' (Unavailable)';
+            } else {
+                slot.addEventListener('click', () => selectTime(time, slot));
+            }
+
+            return slot;
+        }
+
+        function selectTime(time, element) {
+            // Remove previous selection
+            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add selection to clicked element
+            element.classList.add('selected');
+            selectedTime = time;
+
+            // Update selected time display
+            const selectedTimeDisplay = document.getElementById('selectedTimeDisplay');
+            const selectedTimeText = document.getElementById('selectedTimeText');
+            selectedTimeText.textContent = time;
+            selectedTimeDisplay.style.display = 'block';
+
+            updateSubmitButton();
+        }
+
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (selectedDate && selectedTime) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Form submission
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                date: selectedDate.toISOString().split('T')[0],
+                time: selectedTime,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                vehicle: document.getElementById('vehicle').value,
+                serviceType: document.getElementById('serviceType').value,
+                notes: document.getElementById('notes').value
+            };
+
+            // Here you would send the data to your backend
+            console.log('Appointment Data:', formData);
+            
+            // Show success message
+            alert(`Appointment scheduled for ${selectedDate.toLocaleDateString()} at ${selectedTime}!\n\nWe'll contact you at ${formData.phone} to confirm your appointment.`);
+            
+            // Reset form
+            this.reset();
+            selectedDate = null;
+            selectedTime = null;
+            document.getElementById('selectedDateDisplay').style.display = 'none';
+            document.getElementById('selectedTimeDisplay').style.display = 'none';
+            document.getElementById('timeSlotContainer').style.display = 'none';
+            document.getElementById('selectDateFirst').style.display = 'block';
+            document.querySelectorAll('.calendar-day.selected, .time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            updateSubmitButton();
+        });
+
+        // Initialize calendar on page load
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
+</body>
+</html>

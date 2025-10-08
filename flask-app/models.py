@@ -52,11 +52,53 @@ class Part(db.Model):
     quantity_in_stock = db.Column(db.Integer, default=0)
     minimum_stock_level = db.Column(db.Integer, default=0)
     location = db.Column(db.String(50))
+    image_url = db.Column(db.String(500))  # URL or path to part image
+    image_filename = db.Column(db.String(255))  # Original filename
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     def __repr__(self):
         return f'<Part {self.name}>'
+
+class StockHistory(db.Model):
+    """Stock history model for tracking inventory changes"""
+    __tablename__ = 'stock_history'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    part_id = db.Column(db.Integer, db.ForeignKey('parts.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    adjustment_type = db.Column(db.String(20), nullable=False)  # 'add', 'remove', 'set'
+    quantity_before = db.Column(db.Integer, nullable=False)
+    quantity_after = db.Column(db.Integer, nullable=False)
+    adjustment_amount = db.Column(db.Integer, nullable=False)
+    reason = db.Column(db.String(50))  # 'sale', 'restock', 'damaged', etc.
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    part = db.relationship('Part', backref='stock_history')
+    user = db.relationship('User', backref='stock_adjustments')
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'part_id': self.part_id,
+            'part_name': self.part.name if self.part else None,
+            'user_id': self.user_id,
+            'user_name': self.user.username if self.user else None,
+            'adjustment_type': self.adjustment_type,
+            'quantity_before': self.quantity_before,
+            'quantity_after': self.quantity_after,
+            'adjustment_amount': self.adjustment_amount,
+            'reason': self.reason,
+            'notes': self.notes,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<StockHistory {self.part.name if self.part else "Unknown"}: {self.adjustment_amount}>'
 
 class Contact(db.Model):
     """Contact model for customers and suppliers"""
@@ -257,3 +299,70 @@ class WebhookLog(db.Model):
     
     def __repr__(self):
         return f'<WebhookLog {self.provider} {self.endpoint}>'
+
+class ChatMessage(db.Model):
+    """Chat message model for customer support"""
+    __tablename__ = 'chat_messages'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(100), nullable=False)  # Unique session identifier
+    sender_type = db.Column(db.String(20), nullable=False)  # 'customer' or 'admin'
+    sender_name = db.Column(db.String(200))  # Name of sender
+    sender_id = db.Column(db.Integer)  # User ID if admin, null for customers
+    message = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    ip_address = db.Column(db.String(45))  # Customer IP for session tracking
+    user_agent = db.Column(db.String(500))  # Browser info
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        """Convert message to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'session_id': self.session_id,
+            'sender_type': self.sender_type,
+            'sender_name': self.sender_name,
+            'message': self.message,
+            'is_read': self.is_read,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<ChatMessage {self.sender_type}: {self.message[:50]}...>'
+
+class ChatSession(db.Model):
+    """Chat session model for tracking conversations"""
+    __tablename__ = 'chat_sessions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(100), unique=True, nullable=False)
+    customer_name = db.Column(db.String(200))
+    customer_email = db.Column(db.String(120))
+    customer_phone = db.Column(db.String(20))
+    status = db.Column(db.String(20), default='active')  # active, closed, archived
+    assigned_admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    ip_address = db.Column(db.String(45))
+    user_agent = db.Column(db.String(500))
+    last_activity = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    assigned_admin = db.relationship('User', backref='chat_sessions')
+    
+    def to_dict(self):
+        """Convert session to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'session_id': self.session_id,
+            'customer_name': self.customer_name,
+            'customer_email': self.customer_email,
+            'customer_phone': self.customer_phone,
+            'status': self.status,
+            'assigned_admin_id': self.assigned_admin_id,
+            'assigned_admin_name': self.assigned_admin.username if self.assigned_admin else None,
+            'last_activity': self.last_activity.isoformat() if self.last_activity else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<ChatSession {self.session_id}>'

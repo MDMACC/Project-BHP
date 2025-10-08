@@ -1,208 +1,745 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parts - Bluez PowerHouse</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <div class="flex h-screen">
-        <!-- Sidebar (same as dashboard) -->
-        <div class="w-64 bg-white shadow-lg">
-            <div class="p-6">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">
-                        BPH
-                    </div>
-                    <div class="ml-3">
-                        <h1 class="text-lg font-bold text-gray-900">Bluez PowerHouse</h1>
-                        <p class="text-xs text-gray-500">Management System</p>
-                    </div>
-                </div>
+{% extends "base.html" %}
+
+{% block title %}Parts Management - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Parts Management{% endblock %}
+{% block page_description %}Inventory management and parts catalog{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        <span>Add Part</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Inventory Overview Tabs -->
+<div class="mb-8">
+    <div class="flex space-x-1 bg-metallic-100 rounded-lg p-1">
+        <button onclick="switchTab('in-stock')" id="inStockTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white text-metallic-900 shadow-sm">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>In Stock</span>
+                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full" id="inStockCount">{{ parts|selectattr('quantity_in_stock', 'gt', 0)|list|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchTab('out-of-stock')" id="outOfStockTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Out of Stock</span>
+                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full" id="outOfStockCount">{{ parts|selectattr('quantity_in_stock', 'equalto', 0)|list|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchTab('archived')" id="archivedTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l6 6m0 0l6-6m-6 6V4"/>
+                </svg>
+                <span>Archived</span>
+                <span class="bg-metallic-500 text-white text-xs px-2 py-1 rounded-full" id="archivedCount">{{ parts|selectattr('is_active', 'equalto', false)|list|length }}</span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="card rounded-xl p-6 mb-8">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="flex-1 max-w-md">
+            <div class="relative">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-metallic-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search parts by name, number, or description..." 
+                       class="w-full pl-10 pr-4 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent"
+                       onkeyup="filterParts()">
+            </div>
+        </div>
+        
+        <div class="flex flex-wrap gap-3">
+            <select id="categoryFilter" onchange="filterParts()" class="px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                <option value="">All Categories</option>
+                <option value="Brakes">Brakes</option>
+                <option value="Engine">Engine</option>
+                <option value="Suspension">Suspension</option>
+                <option value="Tires">Tires</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Body">Body</option>
+                <option value="Fluids">Fluids</option>
+                <option value="Filters">Filters</option>
+            </select>
+            
+            <button onclick="exportParts()" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700 transition-colors flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Export</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Parts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="partsGrid">
+    {% for part in parts %}
+    <div class="part-card card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" 
+         data-category="{{ part.category or '' }}" 
+         data-stock="{{ part.quantity_in_stock }}"
+         data-active="{{ part.is_active|lower }}"
+         data-search="{{ (part.name + ' ' + part.part_number + ' ' + (part.description or '')).lower() }}">
+        
+        <!-- Part Image -->
+        <div class="relative h-48 bg-gradient-to-br from-metallic-50 to-metallic-100">
+            {% if part.image_url %}
+            <img src="{{ part.image_url }}" alt="{{ part.name }}" class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-metallic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+            </div>
+            {% endif %}
+            
+            <!-- Stock Status Badge -->
+            <div class="absolute top-3 left-3">
+                {% if part.quantity_in_stock == 0 %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 backdrop-blur-sm">
+                    Out of Stock
+                </span>
+                {% elif part.quantity_in_stock <= part.minimum_stock_level %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 backdrop-blur-sm">
+                    Low Stock
+                </span>
+                {% else %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 backdrop-blur-sm">
+                    In Stock
+                </span>
+                {% endif %}
             </div>
             
-            <nav class="px-6 pb-6">
-                <a href="{{ url_for('dashboard') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg mb-2">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+            <!-- Action Buttons -->
+            <div class="absolute top-3 right-3 flex space-x-1">
+                <button onclick="editPart({{ part.id }})" class="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-metallic-600 hover:text-bluez-600 transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
-                    Dashboard
-                </a>
-                <a href="{{ url_for('parts') }}" class="flex items-center px-4 py-2 text-blue-700 bg-blue-50 rounded-lg mb-2">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                    </svg>
-                    Parts
-                </a>
-                <a href="{{ url_for('orders') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg mb-2">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                    </svg>
-                    Orders
-                </a>
-                <a href="{{ url_for('contacts') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg mb-2">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    Contacts
-                </a>
-                <a href="{{ url_for('schedule') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg mb-2">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    Schedule
-                </a>
-            </nav>
-            
-            <!-- User Menu -->
-            <div class="absolute bottom-6 left-6 right-6">
-                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                        {{ session.user.username[0].upper() if session.user else 'U' }}
-                    </div>
-                    <div class="ml-3 flex-1">
-                        <p class="text-sm font-medium text-gray-900">{{ session.user.username if session.user else 'User' }}</p>
-                        <p class="text-xs text-gray-500">{{ session.user.role.title() if session.user else 'Employee' }}</p>
-                    </div>
-                    <a href="{{ url_for('logout') }}" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </button>
+                <div class="relative">
+                    <button onclick="togglePartActions({{ part.id }})" class="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-metallic-600 hover:text-metallic-800 transition-colors shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
                         </svg>
-                    </a>
+                    </button>
+                    <div id="partActions{{ part.id }}" class="absolute right-0 top-12 bg-white rounded-lg shadow-lg border border-metallic-200 py-2 min-w-[150px] hidden z-10">
+                        {% if part.is_active %}
+                        <button onclick="archivePart({{ part.id }})" class="w-full px-4 py-2 text-left text-sm text-metallic-700 hover:bg-metallic-50 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l6 6m0 0l6-6m-6 6V4"/>
+                            </svg>
+                            Archive
+                        </button>
+                        {% else %}
+                        <button onclick="restorePart({{ part.id }})" class="w-full px-4 py-2 text-left text-sm text-green-700 hover:bg-green-50 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+                            </svg>
+                            Restore
+                        </button>
+                        {% endif %}
+                        <button onclick="duplicatePart({{ part.id }})" class="w-full px-4 py-2 text-left text-sm text-metallic-700 hover:bg-metallic-50 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            Duplicate
+                        </button>
+                        <button onclick="deletePart({{ part.id }})" class="w-full px-4 py-2 text-left text-sm text-red-700 hover:bg-red-50 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Main Content -->
-        <div class="flex-1 overflow-y-auto">
-            <header class="bg-white shadow-sm border-b px-6 py-4">
-                <h1 class="text-2xl font-bold text-gray-900">Parts Management</h1>
-                <p class="text-gray-600">Manage your inventory and track stock levels</p>
-            </header>
-            
-            <main class="p-6">
-                <!-- Flash Messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="mb-4 p-4 rounded-md {% if category == 'error' %}bg-red-50 text-red-700 border border-red-200{% elif category == 'success' %}bg-green-50 text-green-700 border border-green-200{% elif category == 'warning' %}bg-yellow-50 text-yellow-700 border border-yellow-200{% else %}bg-blue-50 text-blue-700 border border-blue-200{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                
-                <!-- Search and Filters -->
-                <div class="bg-white rounded-lg shadow mb-6">
-                    <div class="p-6">
-                        <form method="GET" class="flex flex-wrap gap-4">
-                            <div class="flex-1 min-w-64">
-                                <input
-                                    type="text"
-                                    name="search"
-                                    placeholder="Search parts..."
-                                    value="{{ search }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                >
-                            </div>
-                            <div>
-                                <select name="category" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">All Categories</option>
-                                    <option value="Engine" {% if category == 'Engine' %}selected{% endif %}>Engine</option>
-                                    <option value="Brakes" {% if category == 'Brakes' %}selected{% endif %}>Brakes</option>
-                                    <option value="Suspension" {% if category == 'Suspension' %}selected{% endif %}>Suspension</option>
-                                    <option value="Tires" {% if category == 'Tires' %}selected{% endif %}>Tires</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                Search
-                            </button>
-                        </form>
+        <!-- Part Content -->
+        <div class="p-6">
+
+        <!-- Part Info -->
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ part.name }}</h3>
+            <p class="text-sm text-metallic-600 mb-2">{{ part.part_number }}</p>
+            {% if part.description %}
+            <p class="text-sm text-metallic-500 line-clamp-2">{{ part.description }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Category -->
+        {% if part.category %}
+        <div class="mb-4">
+            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-bluez-100 text-bluez-800">
+                {{ part.category }}
+            </span>
+        </div>
+        {% endif %}
+
+        <!-- Pricing and Stock -->
+        <div class="space-y-3">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-metallic-600">Price:</span>
+                <span class="text-lg font-semibold text-metallic-900">${{ "%.2f"|format(part.price) }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-metallic-600">Cost:</span>
+                <span class="text-sm text-metallic-700">${{ "%.2f"|format(part.cost) }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-metallic-600">Stock:</span>
+                <span class="text-sm font-medium {{ 'text-red-600' if part.quantity_in_stock == 0 else 'text-yellow-600' if part.quantity_in_stock <= part.minimum_stock_level else 'text-green-600' }}">
+                    {{ part.quantity_in_stock }} units
+                </span>
+            </div>
+            {% if part.minimum_stock_level %}
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-metallic-600">Min Level:</span>
+                <span class="text-sm text-metallic-700">{{ part.minimum_stock_level }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+            <!-- Stock Management -->
+            <div class="mt-4 pt-4 border-t border-metallic-200">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium text-metallic-700">Stock Management</span>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openStockModal({{ part.id }})" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 
-                <!-- Parts Table -->
-                <div class="bg-white rounded-lg shadow">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part Details</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                {% if parts %}
-                                    {% for part in parts %}
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4">
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900">{{ part.name }}</div>
-                                                <div class="text-sm text-gray-500">{{ part.part_number }}</div>
-                                                {% if part.description %}
-                                                <div class="text-xs text-gray-400 mt-1">{{ part.description[:100] }}{% if part.description|length > 100 %}...{% endif %}</div>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                {{ part.category or 'Uncategorized' }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ part.quantity_in_stock or 0 }}</div>
-                                            <div class="text-xs text-gray-500">Min: {{ part.minimum_stock_level or 0 }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">${{ "{:,.2f}".format(part.price or 0) }}</div>
-                                            {% if part.cost %}
-                                            <div class="text-xs text-gray-500">Cost: ${{ "{:,.2f}".format(part.cost) }}</div>
-                                            {% endif %}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {% if part.quantity_in_stock == 0 %}
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    Out of Stock
-                                                </span>
-                                            {% elif part.quantity_in_stock <= (part.minimum_stock_level or 0) %}
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Low Stock
-                                                </span>
-                                            {% else %}
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    In Stock
-                                                </span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        <td colspan="5" class="px-6 py-12 text-center">
-                                            <div class="text-gray-500">
-                                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                                </svg>
-                                                <p class="text-lg font-medium">No parts found</p>
-                                                <p class="text-sm">{% if search or category %}Try adjusting your search filters{% else %}No parts in inventory yet{% endif %}</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Quick Stock Adjustments -->
+                <div class="grid grid-cols-4 gap-2 mb-3">
+                    <button onclick="adjustStock({{ part.id }}, 1)" class="bg-green-50 text-green-700 px-2 py-1 rounded text-xs font-medium hover:bg-green-100 transition-colors">
+                        +1
+                    </button>
+                    <button onclick="adjustStock({{ part.id }}, 5)" class="bg-green-50 text-green-700 px-2 py-1 rounded text-xs font-medium hover:bg-green-100 transition-colors">
+                        +5
+                    </button>
+                    <button onclick="adjustStock({{ part.id }}, -1)" class="bg-red-50 text-red-700 px-2 py-1 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                        -1
+                    </button>
+                    <button onclick="adjustStock({{ part.id }}, -5)" class="bg-red-50 text-red-700 px-2 py-1 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                        -5
+                    </button>
                 </div>
-            </main>
+                
+                <!-- Reorder Button -->
+                {% if part.quantity_in_stock <= part.minimum_stock_level %}
+                <button onclick="reorderPart({{ part.id }})" class="w-full bg-bluez-50 text-bluez-700 px-3 py-2 rounded-lg hover:bg-bluez-100 transition-colors text-sm font-medium">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Reorder Now
+                </button>
+                {% endif %}
+            </div>
         </div>
     </div>
-</body>
-</html>
+    {% endfor %}
+</div>
+
+<!-- Empty State -->
+{% if not parts %}
+<div class="text-center py-12">
+    <svg class="w-16 h-16 mx-auto text-metallic-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+    </svg>
+    <h3 class="text-lg font-medium text-metallic-900 mb-2">No parts found</h3>
+    <p class="text-metallic-600 mb-6">Get started by adding your first part to the inventory.</p>
+    <button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors">
+        Add First Part
+    </button>
+</div>
+{% endif %}
+
+<!-- Add/Edit Part Modal -->
+<div id="partModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-metallic-900" id="modalTitle">Add New Part</h3>
+                    <button onclick="closePartModal()" class="text-metallic-400 hover:text-metallic-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="partForm" class="p-6 space-y-6" enctype="multipart/form-data">
+                <input type="hidden" id="partId">
+                
+                <!-- Part Image Upload -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Part Image</label>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1">
+                            <div class="relative border-2 border-dashed border-metallic-300 rounded-lg p-6 hover:border-bluez-400 transition-colors">
+                                <input type="file" id="partImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(this)">
+                                <div class="text-center" id="imageUploadArea">
+                                    <svg class="w-12 h-12 mx-auto text-metallic-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <p class="text-sm text-metallic-600">Click to upload or drag and drop</p>
+                                    <p class="text-xs text-metallic-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-24 h-24 bg-metallic-100 rounded-lg flex items-center justify-center" id="imagePreview">
+                            <svg class="w-8 h-8 text-metallic-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Part Number *</label>
+                        <input type="text" id="partNumber" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Part Name *</label>
+                        <input type="text" id="partName" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Description</label>
+                    <textarea id="partDescription" rows="3" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent"></textarea>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Category</label>
+                        <select id="partCategory" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                            <option value="">Select Category</option>
+                            <option value="Brakes">Brakes</option>
+                            <option value="Engine">Engine</option>
+                            <option value="Suspension">Suspension</option>
+                            <option value="Tires">Tires</option>
+                            <option value="Electrical">Electrical</option>
+                            <option value="Body">Body</option>
+                            <option value="Fluids">Fluids</option>
+                            <option value="Filters">Filters</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Price *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-metallic-500">$</span>
+                            <input type="number" id="partPrice" step="0.01" required class="w-full pl-8 pr-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Cost</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-metallic-500">$</span>
+                            <input type="number" id="partCost" step="0.01" class="w-full pl-8 pr-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Current Stock</label>
+                        <input type="number" id="partStock" min="0" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Minimum Level</label>
+                        <input type="number" id="partMinLevel" min="0" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Location</label>
+                        <input type="text" id="partLocation" placeholder="e.g., A1-B2" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button type="button" onclick="closePartModal()" class="px-6 py-2 border border-metallic-300 text-metallic-700 rounded-lg hover:bg-metallic-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-bluez-600 text-white px-6 py-2 rounded-lg hover:bg-bluez-700 transition-colors">
+                        Save Part
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Stock Adjustment Modal -->
+<div id="stockModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl max-w-md w-full">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-metallic-900">Adjust Stock</h3>
+                    <button onclick="closeStockModal()" class="text-metallic-400 hover:text-metallic-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <input type="hidden" id="stockPartId">
+                
+                <div class="text-center">
+                    <h4 class="text-lg font-medium text-metallic-900 mb-2" id="stockPartName"></h4>
+                    <p class="text-sm text-metallic-600 mb-4" id="stockPartNumber"></p>
+                    <div class="text-3xl font-bold text-metallic-900 mb-2">
+                        Current Stock: <span id="currentStockDisplay">0</span>
+                    </div>
+                </div>
+                
+                <!-- Stock Adjustment Controls -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Adjustment Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button type="button" onclick="setAdjustmentType('add')" id="addStockBtn" class="px-4 py-2 border-2 border-green-200 text-green-700 rounded-lg hover:bg-green-50 transition-colors">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                Add Stock
+                            </button>
+                            <button type="button" onclick="setAdjustmentType('remove')" id="removeStockBtn" class="px-4 py-2 border-2 border-red-200 text-red-700 rounded-lg hover:bg-red-50 transition-colors">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                </svg>
+                                Remove Stock
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Quantity</label>
+                        <input type="number" id="stockAdjustment" min="1" value="1" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Reason</label>
+                        <select id="stockReason" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                            <option value="sale">Sale/Used</option>
+                            <option value="restock">Restock/Received</option>
+                            <option value="damaged">Damaged</option>
+                            <option value="returned">Customer Return</option>
+                            <option value="transfer">Transfer</option>
+                            <option value="adjustment">Inventory Adjustment</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Notes (Optional)</label>
+                        <textarea id="stockNotes" rows="2" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent" placeholder="Additional details..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button type="button" onclick="closeStockModal()" class="px-6 py-2 border border-metallic-300 text-metallic-700 rounded-lg hover:bg-metallic-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="saveStockAdjustment()" class="bg-bluez-600 text-white px-6 py-2 rounded-lg hover:bg-bluez-700 transition-colors">
+                        Update Stock
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentTab = 'in-stock';
+    let currentAdjustmentType = 'add';
+    
+    // Tab switching functionality
+    function switchTab(tab) {
+        currentTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('[id$="Tab"]').forEach(btn => {
+            btn.classList.remove('bg-white', 'text-metallic-900', 'shadow-sm');
+            btn.classList.add('text-metallic-600', 'hover:text-metallic-900');
+        });
+        
+        document.getElementById(tab.replace('-', '') + 'Tab').classList.add('bg-white', 'text-metallic-900', 'shadow-sm');
+        document.getElementById(tab.replace('-', '') + 'Tab').classList.remove('text-metallic-600', 'hover:text-metallic-900');
+        
+        // Filter parts based on tab
+        filterPartsByTab();
+    }
+    
+    function filterPartsByTab() {
+        const partCards = document.querySelectorAll('.part-card');
+        
+        partCards.forEach(card => {
+            const stock = parseInt(card.dataset.stock);
+            const isActive = card.dataset.active === 'true';
+            let showCard = false;
+            
+            if (currentTab === 'in-stock') {
+                showCard = stock > 0 && isActive;
+            } else if (currentTab === 'out-of-stock') {
+                showCard = stock === 0 && isActive;
+            } else if (currentTab === 'archived') {
+                showCard = !isActive;
+            }
+            
+            card.style.display = showCard ? 'block' : 'none';
+        });
+        
+        // Also apply search and category filters
+        filterParts();
+    }
+    
+    // Enhanced parts filtering
+    function filterParts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const partCards = document.querySelectorAll('.part-card');
+        
+        partCards.forEach(card => {
+            const searchText = card.dataset.search;
+            const category = card.dataset.category;
+            const stock = parseInt(card.dataset.stock);
+            const isActive = card.dataset.active === 'true';
+            
+            let showCard = false;
+            
+            // First check tab filter
+            if (currentTab === 'in-stock') {
+                showCard = stock > 0 && isActive;
+            } else if (currentTab === 'out-of-stock') {
+                showCard = stock === 0 && isActive;
+            } else if (currentTab === 'archived') {
+                showCard = !isActive;
+            }
+            
+            // Then apply other filters
+            if (showCard) {
+                if (searchTerm && !searchText.includes(searchTerm)) {
+                    showCard = false;
+                }
+                
+                if (categoryFilter && category !== categoryFilter) {
+                    showCard = false;
+                }
+            }
+            
+            card.style.display = showCard ? 'block' : 'none';
+        });
+    }
+    
+    // Image preview functionality
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        const uploadArea = document.getElementById('imageUploadArea');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-lg">`;
+                uploadArea.innerHTML = `
+                    <svg class="w-8 h-8 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="text-sm text-green-600">Image selected</p>
+                    <p class="text-xs text-metallic-500">${input.files[0].name}</p>
+                `;
+            };
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    // Stock management functions
+    function openStockModal(partId) {
+        document.getElementById('stockPartId').value = partId;
+        // In a real app, you'd fetch part data
+        document.getElementById('stockPartName').textContent = 'Part Name';
+        document.getElementById('stockPartNumber').textContent = 'Part Number';
+        document.getElementById('currentStockDisplay').textContent = '10';
+        document.getElementById('stockModal').classList.remove('hidden');
+    }
+    
+    function closeStockModal() {
+        document.getElementById('stockModal').classList.add('hidden');
+    }
+    
+    function setAdjustmentType(type) {
+        currentAdjustmentType = type;
+        
+        const addBtn = document.getElementById('addStockBtn');
+        const removeBtn = document.getElementById('removeStockBtn');
+        
+        if (type === 'add') {
+            addBtn.classList.add('bg-green-100', 'border-green-400');
+            addBtn.classList.remove('border-green-200');
+            removeBtn.classList.remove('bg-red-100', 'border-red-400');
+            removeBtn.classList.add('border-red-200');
+        } else {
+            removeBtn.classList.add('bg-red-100', 'border-red-400');
+            removeBtn.classList.remove('border-red-200');
+            addBtn.classList.remove('bg-green-100', 'border-green-400');
+            addBtn.classList.add('border-green-200');
+        }
+    }
+    
+    function saveStockAdjustment() {
+        const partId = document.getElementById('stockPartId').value;
+        const quantity = parseInt(document.getElementById('stockAdjustment').value);
+        const reason = document.getElementById('stockReason').value;
+        const notes = document.getElementById('stockNotes').value;
+        
+        const adjustment = currentAdjustmentType === 'add' ? quantity : -quantity;
+        
+        // In a real app, you'd send this to the server
+        console.log('Stock adjustment:', {
+            partId,
+            adjustment,
+            reason,
+            notes
+        });
+        
+        closeStockModal();
+    }
+    
+    function togglePartActions(partId) {
+        // Close all other action menus
+        document.querySelectorAll('[id^="partActions"]').forEach(menu => {
+            if (menu.id !== `partActions${partId}`) {
+                menu.classList.add('hidden');
+            }
+        });
+        
+        // Toggle current menu
+        const menu = document.getElementById(`partActions${partId}`);
+        menu.classList.toggle('hidden');
+    }
+    
+    function archivePart(partId) {
+        if (confirm('Archive this part? It will be moved to the archived section.')) {
+            console.log('Archiving part:', partId);
+        }
+    }
+    
+    function restorePart(partId) {
+        if (confirm('Restore this part to active inventory?')) {
+            console.log('Restoring part:', partId);
+        }
+    }
+    
+    function duplicatePart(partId) {
+        console.log('Duplicating part:', partId);
+    }
+    
+    // Close action menus when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[onclick*="togglePartActions"]')) {
+            document.querySelectorAll('[id^="partActions"]').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+        }
+    });
+    
+    function openAddPartModal() {
+        document.getElementById('modalTitle').textContent = 'Add New Part';
+        document.getElementById('partForm').reset();
+        document.getElementById('partId').value = '';
+        document.getElementById('partModal').classList.remove('hidden');
+    }
+    
+    function closePartModal() {
+        document.getElementById('partModal').classList.add('hidden');
+    }
+    
+    function editPart(partId) {
+        // In a real app, you'd fetch part data from the server
+        document.getElementById('modalTitle').textContent = 'Edit Part';
+        document.getElementById('partId').value = partId;
+        document.getElementById('partModal').classList.remove('hidden');
+    }
+    
+    function deletePart(partId) {
+        if (confirm('Are you sure you want to delete this part?')) {
+            // In a real app, you'd send delete request to server
+            console.log('Deleting part:', partId);
+        }
+    }
+    
+    function adjustStock(partId, adjustment) {
+        // In a real app, you'd send stock adjustment to server
+        console.log('Adjusting stock for part', partId, 'by', adjustment);
+    }
+    
+    function reorderPart(partId) {
+        // In a real app, you'd create reorder request
+        console.log('Reordering part:', partId);
+    }
+    
+    function exportParts() {
+        // In a real app, you'd generate and download CSV/Excel file
+        console.log('Exporting parts data');
+    }
+    
+    // Form submission
+    document.getElementById('partForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            id: document.getElementById('partId').value,
+            part_number: document.getElementById('partNumber').value,
+            name: document.getElementById('partName').value,
+            description: document.getElementById('partDescription').value,
+            category: document.getElementById('partCategory').value,
+            price: parseFloat(document.getElementById('partPrice').value),
+            cost: parseFloat(document.getElementById('partCost').value) || 0,
+            stock: parseInt(document.getElementById('partStock').value) || 0,
+            min_level: parseInt(document.getElementById('partMinLevel').value) || 0,
+            location: document.getElementById('partLocation').value
+        };
+        
+        // In a real app, you'd send this data to the server
+        console.log('Saving part:', formData);
+        closePartModal();
+    });
+    
+    // Close modal on outside click
+    document.getElementById('partModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closePartModal();
+        }
+    });
+</script>
+{% endblock %}
