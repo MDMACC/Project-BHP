@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory, ServiceRecord, ServicePart, WorkOrder, TimeEntry, QualityChecklist, QualityChecklistEntry, WarrantyItem
+from models import db, User, Part, Contact, Vehicle, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory, ServiceRecord, ServicePart, WorkOrder, TimeEntry, QualityChecklist, QualityChecklistEntry, WarrantyItem
 db.init_app(app)
 
 # Configure file upload
@@ -476,11 +476,23 @@ def parts():
         
         parts_list = query.order_by(Part.name).all()
         
-        return render_template('parts.html', parts=parts_list, search=search, category=category)
+        # Get all suppliers for the dropdown
+        suppliers = Contact.query.filter_by(type='supplier', is_active=True).order_by(Contact.name).all()
+        
+        # Get categories for filter
+        categories = db.session.query(Part.category).filter(Part.category.isnot(None)).distinct().all()
+        categories = [cat[0] for cat in categories if cat[0]]
+        
+        return render_template('parts/list.html', 
+                             parts=parts_list, 
+                             suppliers=suppliers,
+                             categories=categories,
+                             search=search, 
+                             category=category)
     except Exception as e:
         logger.error(f"Parts page error: {e}")
         flash('Error loading parts', 'error')
-        return render_template('parts.html', parts=[])
+        return render_template('parts/list.html', parts=[])
 
 @app.route('/contacts')
 @login_required
@@ -509,7 +521,7 @@ def customer_management():
                                 .order_by(Contact.name)\
                                 .all()
         
-        # Get service statistics for each customer
+        # Get service statistics and vehicles for each customer
         customer_data = []
         for customer in customers:
             service_count = ServiceRecord.query.filter_by(customer_id=customer.id).count()
@@ -517,11 +529,26 @@ def customer_management():
                                             .order_by(ServiceRecord.service_date.desc())\
                                             .first()
             
+            # Get all vehicles for this customer
+            vehicles = Vehicle.query.filter_by(customer_id=customer.id, is_active=True)\
+                                  .order_by(Vehicle.is_primary.desc(), Vehicle.created_at)\
+                                  .all()
+            
+            # Use new vehicle system or fallback to old data
+            if vehicles:
+                primary_vehicle = vehicles[0]  # First vehicle (primary)
+                vehicle_info = primary_vehicle.get_display_name()
+            else:
+                # Fallback to old vehicle data if no vehicles in new system
+                vehicle_info = customer.get_vehicle_info()
+            
             customer_data.append({
                 'customer': customer,
                 'service_count': service_count,
                 'last_service': last_service,
-                'vehicle_info': customer.get_vehicle_info()
+                'vehicle_info': vehicle_info,
+                'vehicles': vehicles,
+                'vehicle_count': len(vehicles)
             })
         
         return render_template('admin/customer_management.html', customer_data=customer_data)
@@ -558,10 +585,16 @@ def customer_detail(customer_id):
                                    .order_by(Schedule.start_date.desc())\
                                    .all()
         
+        # Get all vehicles for this customer
+        vehicles = Vehicle.query.filter_by(customer_id=customer_id, is_active=True)\
+                              .order_by(Vehicle.is_primary.desc(), Vehicle.created_at)\
+                              .all()
+        
         return render_template('admin/customer_detail.html', 
                              customer=customer,
                              service_records=service_records,
-                             appointments=appointments)
+                             appointments=appointments,
+                             vehicles=vehicles)
     except Exception as e:
         logger.error(f"Customer detail page error: {e}")
         flash('Error loading customer data', 'error')
@@ -991,13 +1024,15 @@ def admin_chat():
 @app.route('/api/admin/chat/sessions', methods=['GET'])
 @login_required
 def admin_chat_sessions():
-    """Get all chat sessions for admin"""
+    """Get all active chat sessions for admin"""
     user = session.get('user', {})
     if user.get('role') not in ['admin', 'manager']:
         return jsonify({'error': 'Access denied'}), 403
     
     try:
-        sessions = ChatSession.query.order_by(ChatSession.last_activity.desc()).all()
+        sessions = ChatSession.query.filter_by(status='active')\
+                                  .order_by(ChatSession.last_activity.desc())\
+                                  .all()
         return jsonify({
             'sessions': [s.to_dict() for s in sessions]
         })
@@ -1070,6 +1105,181 @@ def admin_chat_send(session_id):
         db.session.rollback()
         return jsonify({'success': False, 'error': 'Failed to send message'}), 500
 
+@app.route('/api/admin/chat/<session_id>/archive', methods=['POST'])
+@login_required
+def admin_chat_archive(session_id):
+    """Archive a chat session"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        chat_session = ChatSession.query.filter_by(session_id=session_id).first()
+        if not chat_session:
+            return jsonify({'success': False, 'error': 'Chat session not found'}), 404
+        
+        # Update status to archived
+        chat_session.status = 'archived'
+        chat_session.last_activity = datetime.utcnow()
+        
+        db.session.commit()
+        
+        logger.info(f"Chat session {session_id} archived by {user.get('username')}")
+        
+        return jsonify({
+            'success': True,
+            'message': 'Chat session archived successfully'
+        })
+        
+    except Exception as e:
+        logger.error(f"Admin chat archive error: {e}")
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Failed to archive chat session'}), 500
+
+@app.route('/api/admin/chat/<session_id>/restore', methods=['POST'])
+@login_required
+def admin_chat_restore(session_id):
+    """Restore an archived chat session to active status"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        chat_session = ChatSession.query.filter_by(session_id=session_id).first()
+        if not chat_session:
+            return jsonify({'success': False, 'error': 'Chat session not found'}), 404
+        
+        # Update status to active
+        chat_session.status = 'active'
+        chat_session.last_activity = datetime.utcnow()
+        
+        db.session.commit()
+        
+        logger.info(f"Chat session {session_id} restored by {user.get('username')}")
+        
+        return jsonify({
+            'success': True,
+            'message': 'Chat session restored successfully'
+        })
+        
+    except Exception as e:
+        logger.error(f"Admin chat restore error: {e}")
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Failed to restore chat session'}), 500
+
+@app.route('/api/admin/chat/sessions/archived', methods=['GET'])
+@login_required
+def admin_chat_sessions_archived():
+    """Get all archived chat sessions for admin"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        sessions = ChatSession.query.filter_by(status='archived')\
+                                  .order_by(ChatSession.last_activity.desc())\
+                                  .all()
+        return jsonify({
+            'sessions': [s.to_dict() for s in sessions]
+        })
+    except Exception as e:
+        logger.error(f"Admin archived chat sessions error: {e}")
+        return jsonify({'error': 'Failed to load archived sessions'}), 500
+
+@app.route('/api/chat/start', methods=['POST'])
+def chat_start():
+    """Start a new chat session with customer information"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['customer_name', 'customer_phone']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'success': False, 'error': f'{field} is required'}), 400
+        
+        # Generate new session ID
+        import uuid
+        session_id = str(uuid.uuid4())
+        session['chat_session_id'] = session_id
+        
+        # Parse vehicle year safely
+        vehicle_year = None
+        if data.get('vehicle_year'):
+            try:
+                vehicle_year = int(data['vehicle_year'])
+            except ValueError:
+                pass
+        
+        # Create new chat session with customer info
+        chat_session = ChatSession(
+            session_id=session_id,
+            customer_name=data['customer_name'].strip(),
+            customer_email=data.get('customer_email', '').strip(),
+            customer_phone=data['customer_phone'].strip(),
+            vehicle_make=data.get('vehicle_make', '').strip(),
+            vehicle_model=data.get('vehicle_model', '').strip(),
+            vehicle_year=vehicle_year,
+            service_description=data.get('service_description', '').strip(),
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent', '')
+        )
+        
+        db.session.add(chat_session)
+        
+        # Create initial system message
+        welcome_message = f"Hello {data['customer_name']}! Welcome to Bluez PowerHouse support. "
+        if data.get('vehicle_make') and data.get('vehicle_model'):
+            welcome_message += f"I see you have a {data.get('vehicle_year', '')} {data['vehicle_make']} {data['vehicle_model']}. "
+        if data.get('service_description'):
+            welcome_message += f"You mentioned: {data['service_description']}. "
+        welcome_message += "How can we help you today?"
+        
+        system_message = ChatMessage(
+            session_id=session_id,
+            sender_type='admin',
+            sender_name='Bluez PowerHouse',
+            message=welcome_message
+        )
+        
+        db.session.add(system_message)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'session_id': session_id,
+            'message': 'Chat session started successfully!'
+        })
+        
+    except Exception as e:
+        logger.error(f"Chat start error: {e}")
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'Failed to start chat'}), 500
+
+@app.route('/api/chat/new', methods=['POST'])
+def chat_new():
+    """Start a completely new chat session (archive current one)"""
+    try:
+        # Archive current session if exists
+        current_session_id = session.get('chat_session_id')
+        if current_session_id:
+            current_session = ChatSession.query.filter_by(session_id=current_session_id).first()
+            if current_session:
+                current_session.status = 'archived'
+                db.session.commit()
+        
+        # Clear session
+        session.pop('chat_session_id', None)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Ready to start new chat'
+        })
+        
+    except Exception as e:
+        logger.error(f"New chat error: {e}")
+        return jsonify({'success': False, 'error': 'Failed to start new chat'}), 500
+
 # Admin Tools Routes
 @app.route('/admin/tools/database')
 @login_required
@@ -1103,6 +1313,7 @@ def admin_settings():
         return redirect(url_for('home'))
     
     return render_template('admin/settings.html')
+
 
 @app.route('/api/admin/backup', methods=['POST'])
 @login_required
@@ -1275,6 +1486,63 @@ def get_part_stock_history(part_id):
     except Exception as e:
         logger.error(f"Stock history error: {e}")
         return jsonify({'error': 'Failed to load stock history'}), 500
+
+@app.route('/api/parts', methods=['POST'])
+@login_required
+def create_part():
+    """Create new part"""
+    try:
+        data = request.get_json()
+        
+        # Check if part number already exists
+        existing_part = Part.query.filter_by(part_number=data.get('part_number')).first()
+        if existing_part:
+            return jsonify({'error': 'Part number already exists'}), 400
+        
+        # Create new part
+        part = Part(
+            part_number=data.get('part_number'),
+            name=data.get('name'),
+            description=data.get('description'),
+            category=data.get('category'),
+            price=data.get('price', 0),
+            cost=data.get('cost', 0),
+            quantity_in_stock=data.get('quantity_in_stock', 0),
+            minimum_stock_level=data.get('minimum_stock_level', 5),
+            location=data.get('location'),
+            supplier_id=data.get('supplier_id') if data.get('supplier_id') else None,
+            supplier_part_number=data.get('supplier_part_number'),
+            supplier_url=data.get('supplier_url')
+        )
+        
+        db.session.add(part)
+        db.session.commit()
+        
+        # Create initial stock history entry if quantity > 0
+        if part.quantity_in_stock > 0:
+            stock_history = StockHistory(
+                part_id=part.id,
+                user_id=session.get('user', {}).get('id'),
+                adjustment_type='set',
+                quantity_before=0,
+                quantity_after=part.quantity_in_stock,
+                adjustment_amount=part.quantity_in_stock,
+                reason='initial_stock',
+                notes='Initial stock when part was created'
+            )
+            db.session.add(stock_history)
+            db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Part created successfully!',
+            'part_id': part.id
+        })
+        
+    except Exception as e:
+        logger.error(f"Create part error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create part'}), 500
 
 @app.route('/add-part', methods=['GET', 'POST'])
 @login_required
@@ -1872,6 +2140,153 @@ def upload_vehicle_photo(customer_id):
             return jsonify({
                 'success': True,
                 'photo_url': customer.vehicle_photo_url,
+                'filename': unique_filename
+            })
+        else:
+            return jsonify({'error': 'Invalid file type'}), 400
+            
+    except Exception as e:
+        logger.error(f"Error uploading vehicle photo: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to upload photo'}), 500
+
+@app.route('/api/customers/<int:customer_id>/vehicles', methods=['GET', 'POST'])
+@login_required
+def manage_customer_vehicles(customer_id):
+    """Get or add vehicles for a customer"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    customer = Contact.query.get_or_404(customer_id)
+    
+    if request.method == 'GET':
+        # Get all vehicles for customer
+        vehicles = Vehicle.query.filter_by(customer_id=customer_id, is_active=True)\
+                               .order_by(Vehicle.is_primary.desc(), Vehicle.created_at)\
+                               .all()
+        
+        return jsonify({
+            'success': True,
+            'vehicles': [{
+                'id': v.id,
+                'year': v.year,
+                'make': v.make,
+                'model': v.model,
+                'color': v.color,
+                'license_plate': v.license_plate,
+                'mileage': v.mileage,
+                'photo_url': v.photo_url,
+                'is_primary': v.is_primary,
+                'display_name': v.get_display_name(),
+                'short_name': v.get_short_name()
+            } for v in vehicles]
+        })
+    
+    elif request.method == 'POST':
+        # Add new vehicle for customer
+        try:
+            data = request.get_json()
+            logger.info(f"Adding vehicle for customer {customer_id}: {data}")
+            
+            # Parse numeric fields safely
+            vehicle_year = None
+            vehicle_mileage = None
+            
+            try:
+                if data.get('year') and str(data['year']).strip():
+                    vehicle_year = int(data['year'])
+            except (ValueError, AttributeError):
+                logger.warning(f"Invalid vehicle year: {data.get('year')}")
+            
+            try:
+                if data.get('mileage') and str(data['mileage']).strip():
+                    vehicle_mileage = int(data['mileage'])
+            except (ValueError, AttributeError):
+                logger.warning(f"Invalid vehicle mileage: {data.get('mileage')}")
+            
+            # Create new vehicle
+            vehicle = Vehicle(
+                customer_id=customer_id,
+                year=vehicle_year,
+                make=data.get('make', '').strip(),
+                model=data.get('model', '').strip(),
+                color=data.get('color', '').strip(),
+                license_plate=data.get('license_plate', '').strip(),
+                mileage=vehicle_mileage,
+                engine=data.get('engine', '').strip(),
+                transmission=data.get('transmission', '').strip(),
+                fuel_type=data.get('fuel_type', '').strip(),
+                is_primary=data.get('is_primary', False),
+                notes=data.get('notes', '').strip()
+            )
+            
+            # If this is set as primary, unset other primary vehicles
+            if vehicle.is_primary:
+                Vehicle.query.filter_by(customer_id=customer_id, is_primary=True)\
+                           .update({'is_primary': False})
+            
+            db.session.add(vehicle)
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'message': 'Vehicle added successfully!',
+                'vehicle_id': vehicle.id,
+                'vehicle': {
+                    'id': vehicle.id,
+                    'display_name': vehicle.get_display_name(),
+                    'short_name': vehicle.get_short_name()
+                }
+            })
+            
+        except Exception as e:
+            logger.error(f"Add vehicle error: {e}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to add vehicle'}), 500
+
+@app.route('/api/vehicles/<int:vehicle_id>/photo', methods=['POST'])
+@login_required
+def upload_vehicle_photo_new(vehicle_id):
+    """Upload photo for a specific vehicle"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        vehicle = Vehicle.query.get_or_404(vehicle_id)
+        
+        if 'photo' not in request.files:
+            return jsonify({'error': 'No photo file provided'}), 400
+        
+        file = request.files['photo']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+        
+        if file and allowed_file(file.filename):
+            # Create upload directory if it doesn't exist
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            
+            # Generate unique filename
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            name, ext = os.path.splitext(filename)
+            unique_filename = f"vehicle_{vehicle_id}_{timestamp}_{name}{ext}"
+            
+            # Save file
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(file_path)
+            
+            # Update vehicle with photo info
+            vehicle.photo_filename = unique_filename
+            vehicle.photo_url = url_for('static', filename=f'uploads/photos/{unique_filename}')
+            vehicle.updated_at = datetime.utcnow()
+            
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'photo_url': vehicle.photo_url,
                 'filename': unique_filename
             })
         else:
@@ -2492,9 +2907,10 @@ def init_database():
             # Add new columns to tracking_events table
             logger.info("Adding new columns to tracking_events table...")
             try:
-                db.session.execute('ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)')
-                db.session.execute('ALTER TABLE tracking_events ADD COLUMN photo_filename VARCHAR(255)')
-                db.session.execute('ALTER TABLE tracking_events ADD COLUMN webhook_data TEXT')
+                from sqlalchemy import text
+                db.session.execute(text('ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)'))
+                db.session.execute(text('ALTER TABLE tracking_events ADD COLUMN photo_filename VARCHAR(255)'))
+                db.session.execute(text('ALTER TABLE tracking_events ADD COLUMN webhook_data TEXT'))
                 db.session.commit()
                 logger.info("Successfully added new columns to tracking_events")
             except Exception as e:

@@ -4,12 +4,12 @@
 {% block page_description %}Manage your inventory parts and stock levels{% endblock %}
 
 {% block header_actions %}
-<a href="{{ url_for('parts.create_part') }}" class="btn btn-primary">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
     </svg>
-    Add Part
-</a>
+    <span>Add Part</span>
+</button>
 {% endblock %}
 
 {% block content %}
@@ -64,7 +64,10 @@
                         Stock
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Price
+                        Supplier
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Cost vs Price
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
@@ -107,29 +110,58 @@
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">${{ "{:,.2f}".format(part.price or 0) }}</div>
-                            {% if part.cost %}
-                            <div class="text-xs text-gray-500">Cost: ${{ "{:,.2f}".format(part.cost) }}</div>
+                            {% if part.supplier %}
+                            <div class="text-sm text-gray-900">{{ part.supplier.name }}</div>
+                            {% if part.supplier_part_number %}
+                            <div class="text-xs text-gray-500">P/N: {{ part.supplier_part_number }}</div>
+                            {% endif %}
+                            {% if part.supplier_url %}
+                            <a href="{{ part.supplier_url }}" target="_blank" class="text-xs text-bluez-600 hover:text-bluez-800">
+                                View Product →
+                            </a>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-xs text-gray-400">No supplier</span>
                             {% endif %}
                         </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-500">Cost:</span>
+                                    <span class="font-medium text-red-600">${{ "{:,.2f}".format(part.cost or 0) }}</span>
+                                </div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-500">Price:</span>
+                                    <span class="font-medium text-green-600">${{ "{:,.2f}".format(part.price or 0) }}</span>
+                                </div>
+                                {% if part.cost and part.cost > 0 %}
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Margin:</span>
+                                    <span class="text-xs font-medium {% if part.get_profit_margin() > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                                        {{ part.get_profit_margin() }}%
+                                    </span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ url_for('parts.edit_part', id=part.id) }}" class="text-bluez-600 hover:text-bluez-900 mr-3">Edit</a>
-                            <a href="{{ url_for('parts.restock_part', id=part.id) }}" class="text-green-600 hover:text-green-900">Restock</a>
+                            <button onclick="editPart({{ part.id }})" class="text-bluez-600 hover:text-bluez-900 mr-3">Edit</button>
+                            <button onclick="restockPart({{ part.id }})" class="text-green-600 hover:text-green-900">Restock</button>
                         </td>
                     </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="5" class="px-6 py-12 text-center">
+                        <td colspan="6" class="px-6 py-12 text-center">
                             <div class="text-gray-500">
                                 <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                                 </svg>
                                 <p class="text-lg font-medium">No parts found</p>
                                 <p class="text-sm">Get started by adding your first part to the inventory.</p>
-                                <a href="{{ url_for('parts.create_part') }}" class="btn btn-primary mt-4">
+                                <button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors mt-4">
                                     Add First Part
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -195,4 +227,173 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+function openAddPartModal() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-lg font-semibold mb-4">Add New Part</h3>
+            <form id="addPartForm">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Part Number *</label>
+                        <input type="text" name="part_number" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Part Name *</label>
+                        <input type="text" name="name" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select name="category" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <option value="">Select Category</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+                        <select name="supplier_id" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <option value="">Select Supplier</option>
+                            {% for supplier in suppliers %}
+                            <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cost (What we pay) *</label>
+                        <input type="number" name="cost" step="0.01" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Selling Price *</label>
+                        <input type="number" name="price" step="0.01" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Initial Stock</label>
+                        <input type="number" name="quantity_in_stock" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" value="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Minimum Stock Level</label>
+                        <input type="number" name="minimum_stock_level" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" value="5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Supplier Part Number</label>
+                        <input type="text" name="supplier_part_number" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                        <input type="text" name="location" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="e.g., Shelf A-1">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Supplier Product URL</label>
+                    <input type="url" name="supplier_url" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="https://...">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea name="description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700">Add Part</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    document.getElementById('addPartForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const partData = Object.fromEntries(formData.entries());
+        
+        // Convert numeric fields
+        ['cost', 'price', 'quantity_in_stock', 'minimum_stock_level'].forEach(field => {
+            if (partData[field]) {
+                partData[field] = parseFloat(partData[field]);
+            }
+        });
+        
+        addPart(partData);
+    });
+    
+    // Close modal on outside click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+function addPart(partData) {
+    fetch('/api/parts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(partData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Part added successfully!');
+            closeModal();
+            window.location.reload();
+        } else {
+            alert(`❌ Error: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error adding part:', error);
+        alert('❌ Network Error: Unable to add part.');
+    });
+}
+
+function editPart(partId) {
+    // For now, just show an alert - could implement edit modal later
+    alert('Edit part functionality coming soon!');
+}
+
+function restockPart(partId) {
+    const quantity = prompt('Enter quantity to add to stock:');
+    if (quantity && !isNaN(quantity) && parseInt(quantity) > 0) {
+        fetch(`/api/parts/${partId}/stock`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                adjustment_type: 'add',
+                quantity: parseInt(quantity),
+                reason: 'restock'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Stock updated successfully!');
+                window.location.reload();
+            } else {
+                alert(`❌ Error: ${data.error}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating stock:', error);
+            alert('❌ Network Error: Unable to update stock.');
+        });
+    }
+}
+
+function closeModal() {
+    const modal = document.querySelector('.fixed.inset-0');
+    if (modal) {
+        modal.remove();
+    }
+}
+</script>
 {% endblock %}

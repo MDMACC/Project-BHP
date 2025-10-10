@@ -47,16 +47,38 @@ class Part(db.Model):
     name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
     category = db.Column(db.String(50))
-    price = db.Column(db.Float, default=0.0)
-    cost = db.Column(db.Float, default=0.0)
+    price = db.Column(db.Float, default=0.0)  # Selling price
+    cost = db.Column(db.Float, default=0.0)   # Cost we paid for it
     quantity_in_stock = db.Column(db.Integer, default=0)
     minimum_stock_level = db.Column(db.Integer, default=0)
     location = db.Column(db.String(50))
+    
+    # Supplier information
+    supplier_id = db.Column(db.Integer, db.ForeignKey('contacts.id'))  # Link to supplier contact
+    supplier_part_number = db.Column(db.String(100))  # Supplier's part number
+    supplier_url = db.Column(db.String(500))  # Link to supplier's product page
+    last_order_date = db.Column(db.Date)  # When we last ordered this part
+    last_order_cost = db.Column(db.Float)  # What we paid last time
     image_url = db.Column(db.String(500))  # URL or path to part image
     image_filename = db.Column(db.String(255))  # Original filename
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    supplier = db.relationship('Contact', backref='supplied_parts', foreign_keys=[supplier_id])
+    
+    def get_profit_margin(self):
+        """Calculate profit margin percentage"""
+        if self.cost and self.cost > 0:
+            return round(((self.price - self.cost) / self.cost) * 100, 2)
+        return 0
+    
+    def get_markup_percentage(self):
+        """Calculate markup percentage"""
+        if self.cost and self.cost > 0:
+            return round(((self.price - self.cost) / self.price) * 100, 2)
+        return 0
     
     def __repr__(self):
         return f'<Part {self.name}>'
@@ -145,6 +167,71 @@ class Contact(db.Model):
     
     def __repr__(self):
         return f'<Contact {self.name}>'
+
+class Vehicle(db.Model):
+    """Vehicle model for customer vehicles (multiple vehicles per customer)"""
+    __tablename__ = 'vehicles'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('contacts.id'), nullable=False)
+    
+    # Vehicle Information
+    year = db.Column(db.Integer)
+    make = db.Column(db.String(50))
+    model = db.Column(db.String(50))
+    color = db.Column(db.String(30))
+    vin = db.Column(db.String(17))
+    license_plate = db.Column(db.String(20))
+    mileage = db.Column(db.Integer)
+    
+    # Photos and documentation
+    photo_url = db.Column(db.String(500))  # URL to vehicle photo
+    photo_filename = db.Column(db.String(255))  # Original filename
+    
+    # Vehicle details
+    engine = db.Column(db.String(100))  # Engine type/size
+    transmission = db.Column(db.String(50))  # Manual/Automatic
+    fuel_type = db.Column(db.String(20))  # Gas/Diesel/Electric/Hybrid
+    
+    # Status and notes
+    is_primary = db.Column(db.Boolean, default=False)  # Primary vehicle for customer
+    is_active = db.Column(db.Boolean, default=True)
+    notes = db.Column(db.Text)  # Special notes about this vehicle
+    
+    # Timestamps
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    customer = db.relationship('Contact', backref='vehicles')
+    
+    def get_display_name(self):
+        """Get formatted vehicle display name"""
+        parts = []
+        if self.year:
+            parts.append(str(self.year))
+        if self.make:
+            parts.append(self.make)
+        if self.model:
+            parts.append(self.model)
+        
+        if parts:
+            vehicle_name = ' '.join(parts)
+            if self.color:
+                vehicle_name += f' ({self.color})'
+            return vehicle_name
+        return "Vehicle"
+    
+    def get_short_name(self):
+        """Get short vehicle name for UI"""
+        if self.make and self.model:
+            return f"{self.make} {self.model}"
+        elif self.make:
+            return self.make
+        return "Vehicle"
+    
+    def __repr__(self):
+        return f'<Vehicle {self.get_display_name()}>'
 
 class Order(db.Model):
     """Order model for parts ordering"""
@@ -365,6 +452,14 @@ class ChatSession(db.Model):
     customer_name = db.Column(db.String(200))
     customer_email = db.Column(db.String(120))
     customer_phone = db.Column(db.String(20))
+    
+    # Vehicle information for service requests
+    vehicle_make = db.Column(db.String(50))
+    vehicle_model = db.Column(db.String(50))
+    vehicle_year = db.Column(db.Integer)
+    service_description = db.Column(db.Text)  # What they want done
+    
+    # Session management
     status = db.Column(db.String(20), default='active')  # active, closed, archived
     assigned_admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ip_address = db.Column(db.String(45))
@@ -383,6 +478,10 @@ class ChatSession(db.Model):
             'customer_name': self.customer_name,
             'customer_email': self.customer_email,
             'customer_phone': self.customer_phone,
+            'vehicle_make': self.vehicle_make,
+            'vehicle_model': self.vehicle_model,
+            'vehicle_year': self.vehicle_year,
+            'service_description': self.service_description,
             'status': self.status,
             'assigned_admin_id': self.assigned_admin_id,
             'assigned_admin_name': self.assigned_admin.username if self.assigned_admin else None,

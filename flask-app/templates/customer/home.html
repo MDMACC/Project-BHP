@@ -94,6 +94,28 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Map overlay animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
         /* Page fade animations */
         .page-fade-out {
             opacity: 0;
@@ -151,6 +173,7 @@
         
         .btn-primary {
             background: linear-gradient(to right, #4f46e5, #4338ca);
+            color: white;
             box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
             transition: all 0.3s ease;
         }
@@ -640,11 +663,60 @@
         .chat-messages {
             height: 340px;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
             background: #f8fafc;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+        }
+        
+        /* Custom scrollbar for chat messages */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Chat info form scrolling */
+        .chat-info-form {
+            height: 420px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .chat-info-form::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-info-form::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .chat-info-form::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .chat-info-form::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
         
         .chat-message {
@@ -2155,7 +2227,7 @@
                         </div>
                     </a>
                     
-                    <div class="card-glass rounded-xl p-6 contact-card hover-bounce hover-glow cursor-pointer">
+                    <div class="card-glass rounded-xl p-6 contact-card hover-bounce hover-glow cursor-pointer" onclick="copyFullAddress()" title="Click to copy address">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-bluez-500 rounded-lg flex items-center justify-center hover-rotate">
                                 <svg class="w-6 h-6 text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2165,9 +2237,10 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-metallic-900">Address</h3>
-                                <div class="address-block" onclick="copyFullAddress()">
+                                <div class="address-block">
                                     <p class="address-text text-metallic-600">8033 Remmet Ave</p>
                                     <p class="address-text text-metallic-600">Canoga Park, CA 91304</p>
+                                    <div class="distance-display mt-1 text-xs" style="display: none;"></div>
                                 </div>
                             </div>
                         </div>
@@ -2207,21 +2280,22 @@
                                     8033 Remmet Ave<br>
                                     Canoga Park, CA 91304
                                 </p>
-                                <p class="text-metallic-500 text-xs mb-4">
+                                <p class="text-metallic-500 text-xs mb-2">
                                     Interactive map - zoom and explore our location
                                 </p>
-                                <button onclick="openGoogleBusiness()" class="inline-flex items-center text-bluez-600 hover:text-bluez-800 font-medium text-sm transition-colors">
+                                <div class="distance-display mb-4 text-xs" style="display: none;"></div>
+                                <button onclick="openMapOverlay()" class="inline-flex items-center text-bluez-600 hover:text-bluez-800 font-medium text-sm transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
-                                    View on Google Maps
+                                    View Interactive Map
                                 </button>
                             </div>
                             
                             <!-- Right side: Larger Square Map Widget -->
                             <div class="flex-shrink-0">
-                                <div class="relative w-48 h-48 rounded-lg overflow-hidden border border-metallic-200 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300" onclick="openGoogleBusiness()">
+                                <div class="relative w-48 h-48 rounded-lg overflow-hidden border border-metallic-200 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300" onclick="openMapOverlay()">
                                     <!-- Clean Google Maps Embed with hidden controls -->
                                     <iframe 
                                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3298.123456789012!2d-118.60123456789012!3d34.20123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29abc123def45%3A0x123456789abcdef0!2s8033%20Remmet%20Ave%2C%20Canoga%20Park%2C%20CA%2091304%2C%20USA!5e0!3m2!1sen!2sus!4v1695123456789!5m2!1sen!2sus&disableDefaultUI=true&zoomControl=false&mapTypeControl=false&scaleControl=false&streetViewControl=false&rotateControl=false&fullscreenControl=false"
@@ -2456,8 +2530,85 @@
 
     <!-- Chat Widget -->
     <div class="chat-widget">
-        <div class="chat-container" id="chatContainer">
-            <!-- Chat Header -->
+        <!-- Customer Info Form (shown first) -->
+        <div class="chat-container" id="chatInfoContainer">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">BP</div>
+                    <div class="chat-status">
+                        <h4>Start Chat</h4>
+                        <span><div class="status-dot"></div>Online</span>
+                    </div>
+                </div>
+                <button class="chat-toggle" onclick="toggleChat()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="chat-info-form" id="chatInfoForm">
+                <div class="p-4">
+                    <h4 class="text-sm font-semibold text-metallic-900 mb-3">Let's get started!</h4>
+                    <p class="text-xs text-metallic-600 mb-4">Please provide your information so we can better assist you.</p>
+                    
+                    <form onsubmit="startChatWithInfo(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-metallic-700 mb-1">Name *</label>
+                            <input type="text" id="chatCustomerName" required 
+                                   class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-metallic-700 mb-1">Phone Number *</label>
+                            <input type="tel" id="chatCustomerPhone" required 
+                                   class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-metallic-700 mb-1">Email (optional)</label>
+                            <input type="email" id="chatCustomerEmail" 
+                                   class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-medium text-metallic-700 mb-1">Vehicle Make</label>
+                                <input type="text" id="chatVehicleMake" 
+                                       class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent"
+                                       placeholder="BMW, Toyota, etc.">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-metallic-700 mb-1">Model</label>
+                                <input type="text" id="chatVehicleModel" 
+                                       class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent"
+                                       placeholder="M5, Camry, etc.">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-metallic-700 mb-1">Year (optional)</label>
+                            <input type="number" id="chatVehicleYear" min="1900" max="2030" 
+                                   class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-metallic-700 mb-1">What service do you need?</label>
+                            <textarea id="chatServiceDescription" rows="2" 
+                                      class="w-full px-3 py-2 text-sm border border-metallic-300 rounded-lg focus:ring-1 focus:ring-bluez-500 focus:border-transparent resize-none"
+                                      placeholder="Describe what you need help with..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-bluez-600 text-white py-2 px-4 rounded-lg hover:bg-bluez-700 transition-colors text-sm font-medium">
+                            Start Chat
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Conversation (hidden initially) -->
+        <div class="chat-container hidden" id="chatConversationContainer">
             <div class="chat-header">
                 <div class="chat-header-info">
                     <div class="chat-avatar">BP</div>
@@ -2466,21 +2617,44 @@
                         <span><div class="status-dot"></div>Online</span>
                     </div>
                 </div>
-                <button class="chat-toggle" onclick="toggleChat()" style="width: 32px; height: 32px; background: rgba(255,255,255,0.2);">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="showNewChatConfirmation()" class="text-white/70 hover:text-white text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/20 transition-colors" title="Start New Chat">
+                        New Chat
+                    </button>
+                    <button class="chat-toggle" onclick="toggleChat()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- New Chat Confirmation (hidden by default) -->
+            <div id="newChatConfirmation" class="hidden bg-orange-50 border-b border-orange-200 p-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-orange-900">Start a new chat?</p>
+                        <p class="text-xs text-orange-700">This will archive your current conversation.</p>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-3">
+                    <button onclick="hideNewChatConfirmation()" class="px-3 py-1 text-xs bg-white border border-orange-300 text-orange-700 rounded hover:bg-orange-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="confirmNewChat()" class="px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
+                        Start New Chat
+                    </button>
+                </div>
             </div>
             
             <!-- Chat Messages -->
             <div class="chat-messages" id="chatMessages">
-                <div class="chat-message admin">
-                    <div class="message-bubble">
-                        <div>Hi! Welcome to Bluez PowerHouse Auto Repair. How can I help you today?</div>
-                        <div class="message-time">Just now</div>
-                    </div>
-                </div>
+                <!-- Messages will be loaded here -->
             </div>
             
             <!-- Chat Input -->
@@ -2515,26 +2689,177 @@
         let chatOpen = false;
         let messageCount = 0;
 
+        let chatSessionActive = false;
+
         function toggleChat() {
-            const container = document.getElementById('chatContainer');
+            const infoContainer = document.getElementById('chatInfoContainer');
+            const conversationContainer = document.getElementById('chatConversationContainer');
             const toggle = document.getElementById('chatToggle');
             const notification = document.getElementById('chatNotification');
             
             chatOpen = !chatOpen;
             
             if (chatOpen) {
-                container.classList.add('active');
+                // Show appropriate container based on session status
+                if (chatSessionActive) {
+                    conversationContainer.classList.remove('hidden');
+                    conversationContainer.classList.add('active');
+                    loadChatMessages(); // Load existing messages
+                    setTimeout(() => {
+                        initializeChatScrolling();
+                        document.getElementById('chatInput').focus();
+                    }, 300);
+                } else {
+                    infoContainer.classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('chatCustomerName').focus();
+                    }, 300);
+                }
                 toggle.classList.add('active');
-                notification.style.display = 'none';
-                // Focus on input when opening
-                setTimeout(() => {
-                    document.getElementById('chatInput').focus();
-                }, 300);
+                if (notification) notification.style.display = 'none';
             } else {
-                container.classList.remove('active');
+                infoContainer.classList.remove('active');
+                conversationContainer.classList.remove('active');
+                conversationContainer.classList.add('hidden');
                 toggle.classList.remove('active');
             }
         }
+
+        function startChatWithInfo(event) {
+            event.preventDefault();
+            
+            const formData = {
+                customer_name: document.getElementById('chatCustomerName').value.trim(),
+                customer_phone: document.getElementById('chatCustomerPhone').value.trim(),
+                customer_email: document.getElementById('chatCustomerEmail').value.trim(),
+                vehicle_make: document.getElementById('chatVehicleMake').value.trim(),
+                vehicle_model: document.getElementById('chatVehicleModel').value.trim(),
+                vehicle_year: document.getElementById('chatVehicleYear').value.trim(),
+                service_description: document.getElementById('chatServiceDescription').value.trim()
+            };
+
+            // Validate required fields
+            if (!formData.customer_name || !formData.customer_phone) {
+                alert('Name and phone number are required');
+                return;
+            }
+
+            // Start chat session
+            fetch('/api/chat/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Switch to chat conversation
+                    document.getElementById('chatInfoContainer').classList.remove('active');
+                    document.getElementById('chatConversationContainer').classList.remove('hidden');
+                    document.getElementById('chatConversationContainer').classList.add('active');
+                    chatSessionActive = true;
+                    
+                    // Load initial messages
+                    loadChatMessages();
+                    // Initialize scrolling
+                    setTimeout(() => {
+                        initializeChatScrolling();
+                        document.getElementById('chatInput').focus();
+                    }, 300);
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error starting chat:', error);
+                alert('Failed to start chat. Please try again.');
+            });
+        }
+
+        function showNewChatConfirmation() {
+            const confirmation = document.getElementById('newChatConfirmation');
+            confirmation.classList.remove('hidden');
+            
+            // Scroll to show the confirmation
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = 0;
+        }
+
+        function hideNewChatConfirmation() {
+            const confirmation = document.getElementById('newChatConfirmation');
+            confirmation.classList.add('hidden');
+        }
+
+        function confirmNewChat() {
+            fetch('/api/chat/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reset chat state
+                    chatSessionActive = false;
+                    document.getElementById('chatConversationContainer').classList.add('hidden');
+                    document.getElementById('chatConversationContainer').classList.remove('active');
+                    document.getElementById('chatInfoContainer').classList.add('active');
+                    
+                    // Hide confirmation
+                    hideNewChatConfirmation();
+                    
+                    // Clear form and messages
+                    document.getElementById('chatInfoForm').querySelector('form').reset();
+                    document.getElementById('chatMessages').innerHTML = '';
+                    
+                    setTimeout(() => {
+                        document.getElementById('chatCustomerName').focus();
+                    }, 300);
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error starting new chat:', error);
+                alert('Failed to start new chat. Please try again.');
+            });
+        }
+
+        function loadChatMessages() {
+            fetch('/api/chat/messages')
+                .then(response => response.json())
+                .then(data => {
+                    const messagesContainer = document.getElementById('chatMessages');
+                    messagesContainer.innerHTML = '';
+                    
+                    if (data.messages && data.messages.length > 0) {
+                        data.messages.forEach(message => {
+                            addMessageToUI(message.message, message.sender_type === 'customer' ? 'user' : 'admin', message.created_at);
+                        });
+                        scrollToBottom();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading messages:', error);
+                });
+        }
+
+        // Check if user has existing session on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/chat/messages')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.messages && data.messages.length > 0) {
+                        chatSessionActive = true;
+                    }
+                })
+                .catch(error => {
+                    console.log('No existing chat session');
+                });
+        });
 
         function sendMessage(event) {
             event.preventDefault();
@@ -2545,7 +2870,7 @@
             if (!message) return;
             
             // Add user message
-            addMessage(message, 'user');
+            addMessageToUI(message, 'user');
             input.value = '';
             
             // Auto-resize textarea
@@ -2580,17 +2905,23 @@
             .catch(error => {
                 console.error('Chat error:', error);
                 hideTypingIndicator();
-                addMessage('Sorry, there was an error sending your message. Please try again.', 'admin');
+                addMessageToUI('Sorry, there was an error sending your message. Please try again.', 'admin');
             });
         }
 
-        function addMessage(text, sender) {
+        function addMessageToUI(text, sender, timestamp = null) {
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${sender}`;
             
-            const now = new Date();
-            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            let timeString;
+            if (timestamp) {
+                const date = new Date(timestamp);
+                timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            } else {
+                const now = new Date();
+                timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
             
             messageDiv.innerHTML = `
                 <div class="message-bubble">
@@ -2600,7 +2931,7 @@
             `;
             
             messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            scrollToBottom();
             
             // Show notification if chat is closed and it's an admin message
             if (!chatOpen && sender === 'admin') {
@@ -2635,6 +2966,40 @@
             const typingIndicator = document.getElementById('typingIndicator');
             if (typingIndicator) {
                 typingIndicator.remove();
+            }
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) {
+                // Force scroll to bottom with smooth behavior
+                messagesContainer.scrollTo({
+                    top: messagesContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Ensure chat messages area is properly scrollable
+        function initializeChatScrolling() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) {
+                // Ensure the container can scroll
+                messagesContainer.style.overflowY = 'auto';
+                messagesContainer.style.overflowX = 'hidden';
+                messagesContainer.style.scrollBehavior = 'smooth';
+                
+                // Add touch scrolling for mobile
+                messagesContainer.style.webkitOverflowScrolling = 'touch';
+                
+                // Prevent any event interference with scrolling
+                messagesContainer.addEventListener('touchstart', function(e) {
+                    // Allow touch scrolling
+                }, { passive: true });
+                
+                messagesContainer.addEventListener('touchmove', function(e) {
+                    // Allow touch scrolling
+                }, { passive: true });
             }
         }
 
@@ -2730,23 +3095,194 @@
             }, 3000);
         }
 
-        // Google Business redirect functionality
-        function openGoogleBusiness() {
-            // Open Bluez PowerHouse Google Business listing in new tab
-            window.open('https://www.google.com/search?q=Bluez+Powerhouse+&sca_esv=ff3a164b2762a5c0&rlz=1C5CHFA_enUS1176US1176&sxsrf=AE3TifO5849RtVXjDBGb8FUUYiZIyHYgbQ%3A1760113280855&ei=gDLpaMr0M5DQkPIPi6Cd4AE&ved=0ahUKEwjKtPr2hJqQAxUQKEQIHQtQBxwQ4dUDCBA&uact=5&oq=Bluez+Powerhouse+&gs_lp=Egxnd3Mtd2l6LXNlcnAiEUJsdWV6IFBvd2VyaG91c2UgMgQQIxgnMgQQIxgnMgQQIxgnMgYQABgWGB4yCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBTIFEAAY7wUyBRAAGO8FMggQABiABBiiBDIFEAAY7wVI5whQ_wNY_wNwAXgAkAEAmAFFoAFFqgEBMbgBA8gBAPgBAZgCAqACSsICBxAjGLADGCfCAgcQABiwAxgewgIOEAAYgAQYsAMYhgMYigXCAggQABiwAxjvBcICCxAAGIAEGLADGKIEmAMAiAYBkAYKkgcBMqAH3QiyBwExuAdHwgcDMC4yyAcD&sclient=gws-wiz-serp', '_blank');
+        // Map overlay functionality
+        function openMapOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm';
+            overlay.style.animation = 'fadeIn 0.3s ease-out';
+            
+            overlay.innerHTML = `
+                <div class="relative w-5/6 h-5/6 max-w-6xl max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-hidden" style="animation: slideUp 0.4s ease-out;">
+                    <!-- Header with business info -->
+                    <div class="absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-bluez-600 to-bluez-700 text-white p-6 shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="text-center flex-1">
+                                <h2 class="text-2xl font-bold mb-1">Bluez PowerHouse</h2>
+                                <p class="text-bluez-100 text-sm mb-1">8033 Remmet Ave, Canoga Park, CA 91304</p>
+                                <div class="distance-display text-sm text-white bg-white bg-opacity-20 rounded-full px-3 py-1 mb-2 inline-block" style="display: none;">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span class="distance-text">Calculating distance...</span>
+                                </div>
+                                <a href="tel:(747) 474-9193" class="inline-flex items-center bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                    </svg>
+                                    Call (747) 474-9193
+                                </a>
+                            </div>
+                            <button onclick="closeMapOverlay()" class="ml-4 p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Map container -->
+                    <div class="w-full h-full pt-24">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3298.123456789012!2d-118.60123456789012!3d34.20123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29abc123def45%3A0x123456789abcdef0!2s8033%20Remmet%20Ave%2C%20Canoga%20Park%2C%20CA%2091304%2C%20USA!5e0!3m2!1sen!2sus!4v1695123456789!5m2!1sen!2sus"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    
+                    <!-- Bottom action bar -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-bluez-600 to-bluez-700 text-white p-4">
+                        <div class="flex items-center justify-center space-x-6">
+                            <button onclick="copyFullAddress()" class="flex items-center space-x-2 bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="text-sm">Copy Address</span>
+                            </button>
+                            <a href="https://www.google.com/maps/dir//8033+Remmet+Ave,+Canoga+Park,+CA+91304" target="_blank" class="flex items-center space-x-2 bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                                </svg>
+                                <span class="text-sm">Get Directions</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Close on outside click
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    closeMapOverlay();
+                }
+            });
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMapOverlay() {
+            const overlay = document.querySelector('.fixed.inset-0.bg-black');
+            if (overlay) {
+                overlay.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    overlay.remove();
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
         }
 
         // Legacy function for backward compatibility
         function openMapModal() {
-            openGoogleBusiness();
+            openMapOverlay();
         }
 
-        function closeMapModal() {
-            // No longer needed but kept for compatibility
+        // Location detection and distance calculation
+        let userLocation = null;
+        const shopLocation = {
+            lat: 34.201234, // Approximate coordinates for 8033 Remmet Ave, Canoga Park, CA
+            lng: -118.601234
+        };
+
+        function detectUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        const distance = calculateDistance(userLocation, shopLocation);
+                        updateDistanceDisplay(distance);
+                    },
+                    function(error) {
+                        console.log('Location access denied or unavailable:', error);
+                        // Fallback - show generic message
+                        updateDistanceDisplay(null);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 300000 // 5 minutes
+                    }
+                );
+            } else {
+                console.log('Geolocation not supported');
+                updateDistanceDisplay(null);
+            }
+        }
+
+        function calculateDistance(pos1, pos2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (pos2.lat - pos1.lat) * Math.PI / 180;
+            const dLng = (pos2.lng - pos1.lng) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(pos1.lat * Math.PI / 180) * Math.cos(pos2.lat * Math.PI / 180) *
+                     Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+            return Math.round(distance * 10) / 10; // Round to 1 decimal place
+        }
+
+        function updateDistanceDisplay(distance) {
+            const distanceElements = document.querySelectorAll('.distance-display');
+            distanceElements.forEach(element => {
+                if (distance !== null) {
+                    // Check if this is the map overlay distance display
+                    if (element.classList.contains('text-white')) {
+                        // Map overlay styling - white text with icon in rounded pill
+                        element.innerHTML = `
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="distance-text">${distance} miles from you</span>
+                        `;
+                    } else {
+                        // Regular page styling - blue text
+                        element.innerHTML = `<span class="text-bluez-600 font-medium">${distance} miles from you</span>`;
+                    }
+                    element.style.display = element.classList.contains('inline-block') ? 'inline-block' : 'block';
+                } else {
+                    // Location unavailable
+                    if (element.classList.contains('text-white')) {
+                        // Map overlay styling
+                        element.innerHTML = `
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <span class="distance-text">Location unavailable</span>
+                        `;
+                    } else {
+                        // Regular page styling
+                        element.innerHTML = `<span class="text-metallic-500">Location services unavailable</span>`;
+                    }
+                    element.style.display = element.classList.contains('inline-block') ? 'inline-block' : 'block';
+                }
+            });
         }
 
         // Close modal when clicking outside
         document.addEventListener('DOMContentLoaded', function() {
+            // Detect user location on page load
+            detectUserLocation();
             const modal = document.getElementById('mapModal');
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {

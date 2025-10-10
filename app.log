@@ -18168,3 +18168,1066 @@ WHERE contacts.name = ? AND contacts.type = ?
 2025-10-10 11:06:36,523 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 11:06:36] "GET /api/chat/check HTTP/1.1" 200 -
 2025-10-10 11:06:41,516 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 11:06:41] "GET /api/chat/check HTTP/1.1" 200 -
 2025-10-10 11:06:41,518 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 11:06:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:40:49,047 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:40:49,047 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-10-10 14:40:49,072 - __main__ - INFO - Database already initialized
+2025-10-10 14:40:49,073 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:40:49,104 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.10.3:5001
+2025-10-10 14:40:49,104 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-10-10 14:40:49,105 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:40:49,267 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:40:49,267 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-10-10 14:40:49,286 - __main__ - INFO - Database already initialized
+2025-10-10 14:40:49,286 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:40:49,289 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:40:49,301 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:40:50,796 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "GET / HTTP/1.1" 200 -
+2025-10-10 14:40:50,821 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:50,821 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:50,942 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "GET / HTTP/1.1" 200 -
+2025-10-10 14:40:50,988 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:50,988 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,041 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,179 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:40:51,180 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:40:51,198 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,213 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,214 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,328 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:40:51,329 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:40:51,335 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:40:51,340 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:51] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:40:56,330 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:40:56,332 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:40:58,597 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:58] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-10 14:40:58,606 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:40:58,633 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:58] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-10 14:40:58,650 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:40:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:03,329 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:03,349 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:03,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:03] "GET /parts HTTP/1.1" 200 -
+2025-10-10 14:41:03,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:03] "GET /parts HTTP/1.1" 200 -
+2025-10-10 14:41:03,362 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:03] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:05,560 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:05,585 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:05,585 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:05] "GET /customer-management HTTP/1.1" 200 -
+2025-10-10 14:41:05,586 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:05] "GET /customer-management HTTP/1.1" 200 -
+2025-10-10 14:41:05,601 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:05] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:09,076 - __main__ - ERROR - Contacts page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.is_active = 1 ORDER BY contacts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:09,104 - __main__ - ERROR - Contacts page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.is_active = 1 ORDER BY contacts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:09,104 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:09] "GET /contacts HTTP/1.1" 200 -
+2025-10-10 14:41:09,106 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:09] "GET /contacts HTTP/1.1" 200 -
+2025-10-10 14:41:09,119 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:09] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:11,662 - __main__ - ERROR - Schedule page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:11,682 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:11] "GET /schedule HTTP/1.1" 200 -
+2025-10-10 14:41:11,683 - __main__ - ERROR - Schedule page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:11,684 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:11] "GET /schedule HTTP/1.1" 200 -
+2025-10-10 14:41:11,696 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:11] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:46,989 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:46] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+2025-10-10 14:41:46,995 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:46,996 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:46] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-10 14:41:47,015 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:47] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:41:47,977 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:47,979 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:47] "GET /parts HTTP/1.1" 200 -
+2025-10-10 14:41:47,988 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:41:47,989 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:47] "GET /parts HTTP/1.1" 200 -
+2025-10-10 14:41:48,003 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:41:48] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:02,598 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "GET / HTTP/1.1" 200 -
+2025-10-10 14:42:02,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:02,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:02,826 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:02,930 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:42:02,931 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:42:02,938 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:42:02,941 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:02] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:42:07,930 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:07,933 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:12,930 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:12,934 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:17,929 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:17,931 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:22,931 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:22,934 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:26,189 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-10 14:42:26,307 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:42:26,552 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:42:26,552 - __main__ - ERROR - Error adding columns to tracking_events: Textual SQL expression 'ALTER TABLE tracking_even...' should be explicitly declared as text('ALTER TABLE tracking_even...')
+2025-10-10 14:42:26,573 - __main__ - INFO - Database already initialized
+2025-10-10 14:42:26,573 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:42:26,578 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:42:26,590 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:42:27,935 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:27,938 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:28,309 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "GET / HTTP/1.1" 200 -
+2025-10-10 14:42:28,338 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:28,339 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:28,543 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:28,656 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:42:28,657 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:42:28,662 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:42:28,662 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:28] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:42:33,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:33,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:33,652 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:33,654 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:38,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:38,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:38,651 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:38,653 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:43,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:43,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:43,651 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:43,653 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:48,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:48,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:48,651 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:48,654 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:48,678 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /schedule-appointment HTTP/1.1" 200 -
+2025-10-10 14:42:48,683 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "GET /schedule-appointment HTTP/1.1" 200 -
+2025-10-10 14:42:48,699 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:48] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:42:53,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:53,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:55,705 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:55] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:55,710 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:55] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:58,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:58,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:58,651 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:58,653 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:42:59,174 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:59] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-10 14:42:59,183 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:42:59,212 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:59] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-10 14:42:59,231 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:42:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:01,976 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:43:01,995 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.image_url
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:43:02,031 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "[35m[1mGET /parts HTTP/1.1[0m" 500 -
+2025-10-10 14:43:02,034 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "[35m[1mGET /parts HTTP/1.1[0m" 500 -
+2025-10-10 14:43:02,045 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "GET /parts?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-10-10 14:43:02,045 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "GET /parts?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-10-10 14:43:02,118 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "GET /parts?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-10-10 14:43:02,149 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:02] "[36mGET /parts?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:02,857 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-10 14:43:02,954 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:43:03,198 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:43:03,200 - __main__ - INFO - Successfully added new columns to tracking_events
+2025-10-10 14:43:03,219 - __main__ - INFO - Database already initialized
+2025-10-10 14:43:03,219 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:43:03,224 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:43:03,237 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:43:03,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:03,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:04,896 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:04] "GET / HTTP/1.1" 200 -
+2025-10-10 14:43:04,930 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:04] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:04,930 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:04] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:05,185 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:05] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:05,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:05] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:43:05,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:05] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:43:05,364 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:05] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:05,368 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:05] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:08,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:08,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:10,310 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:10,312 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:13,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:13,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:15,309 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:15,310 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:18,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:18,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:20,310 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:20] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:20,312 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:20] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:21,379 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/models.py', reloading
+2025-10-10 14:43:21,453 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:43:21,686 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:43:21,687 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:43:21,707 - __main__ - INFO - Database already initialized
+2025-10-10 14:43:21,707 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:43:21,712 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:43:21,721 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:43:23,406 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "GET / HTTP/1.1" 200 -
+2025-10-10 14:43:23,408 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:23,412 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:23,434 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:23,434 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:23,642 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:23,757 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:43:23,757 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:43:23,762 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:23,762 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:23] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:25,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:25] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:25,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:25] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:28,755 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:28,758 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:30,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:30] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:30,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:30] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:31,803 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/models.py', reloading
+2025-10-10 14:43:31,890 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:43:32,078 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:43:32,079 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:43:32,098 - __main__ - INFO - Database already initialized
+2025-10-10 14:43:32,099 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:43:32,102 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:43:32,110 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:43:33,762 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:33] "GET / HTTP/1.1" 200 -
+2025-10-10 14:43:33,797 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:33] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:33,797 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:33] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:33,995 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:33] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:34,107 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:43:34,108 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:43:34,113 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:34,113 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:34,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:34,360 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:35,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:35] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:35,354 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:35] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:39,103 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:39,105 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:39,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:39,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:40,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:40] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:40,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:40] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:41,179 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-10 14:43:41,261 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:43:41,608 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:43:41,608 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:43:41,629 - __main__ - INFO - Database already initialized
+2025-10-10 14:43:41,629 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:43:41,637 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:43:41,647 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:43:43,295 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "GET / HTTP/1.1" 200 -
+2025-10-10 14:43:43,319 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:43,319 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:43,516 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:43:43,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:43:43,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:43:43,632 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:43,633 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:43] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:43:44,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:44,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:44,355 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:44,360 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:45,357 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:45,360 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:45,363 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:45,366 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:48,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:48,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:49,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:49,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:49,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:49,352 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:50,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:50] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:50,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:50] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:53,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:53,630 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:54,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:54,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:54,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:54,353 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:55,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:55] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:55,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:55] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:58,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:58,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:59,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:59,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:59,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:43:59,354 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:43:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:00,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:00] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:00,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:00] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:03,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:03,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:04,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:04,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:04,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:04,354 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:05,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:05] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:05,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:05] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:08,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:08,629 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:09,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:09,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:09,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:09,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:10,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:10,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:13,622 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:13,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:14,343 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:14,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:14,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:14,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:15,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:15,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:18,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:18,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:19,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:19,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:19,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:19,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:20,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:20] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:20,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:20] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:23,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:23,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:24,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:24,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:24,351 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:24,353 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:28,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:28,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:29,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:29,348 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:29,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:29,352 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:33,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:33,629 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:33] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:34,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:34,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:38,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:38,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:39,346 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:39,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:43,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:43,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,350 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,355 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,359 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,364 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,371 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,382 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:45,384 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:45] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:48,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:48,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:48] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:53,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:53,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:58,623 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:44:58,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:44:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:03,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:03,628 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:08,634 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:08,648 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:13,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:13,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:18,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:18,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:23,623 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:23,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:23] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:28,625 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:28,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:28] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:30,524 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-10 14:45:30,698 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:45:31,016 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:45:31,018 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:45:31,045 - __main__ - INFO - Database already initialized
+2025-10-10 14:45:31,045 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:45:31,054 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:45:31,072 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:45:32,871 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:32] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:32,905 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:32] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:32,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:32] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:33,113 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:33] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:33,240 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:33] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:33,240 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:33] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:33,245 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:33] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:33,247 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:33] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:34,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:34,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:38,223 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:38,225 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:38] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:39,345 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:39,349 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:43,223 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:43,226 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:43] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:45:44,162 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-10 14:45:44,257 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:45:44,501 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:45:44,503 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:45:44,523 - __main__ - INFO - Database already initialized
+2025-10-10 14:45:44,523 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:45:44,528 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:45:44,540 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:45:46,215 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:46,251 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:46,251 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:46,452 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:46,564 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:46,565 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:46,568 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:46,569 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:46] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,026 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:50,055 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,058 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,110 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,190 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:50,191 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:50,194 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,194 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,761 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:50,776 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,778 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,840 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,898 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:50,898 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:50,909 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,910 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,941 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:50,952 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:50,953 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:50] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,002 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,057 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:51,057 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:51,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,107 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:51,116 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,117 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,164 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,222 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:51,222 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:51,240 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,241 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,275 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:51,286 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,287 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,397 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:51,397 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:51,406 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:51,406 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:51] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:55,713 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:55,744 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:55,746 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:55,796 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:55,882 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:55,882 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:55,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:55,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:55] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:56,269 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,271 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,316 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,371 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:56,372 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:56,387 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,387 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,637 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:56,651 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,652 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,698 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,753 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:56,753 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:56,763 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,764 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,873 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:56,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,934 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:56,988 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:56,988 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:56] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:57,005 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,007 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,118 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:57,133 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,133 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,180 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,238 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:57,238 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:57,247 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,247 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,318 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:57,330 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,330 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,378 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,435 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:57,436 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:57,445 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,446 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,521 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:57,537 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,538 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,607 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,676 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:57,676 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:57,682 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,682 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,706 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:57,718 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,719 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,764 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,819 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:57,820 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:57,835 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,835 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:57,919 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,919 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:57,965 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:57] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,018 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,018 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:58,033 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,034 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,109 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:58,120 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,121 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,167 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,220 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,220 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:58,227 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,228 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,304 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:58,314 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,316 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,361 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,415 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,417 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:58,434 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,435 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,507 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:58,517 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,518 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,567 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,623 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:58,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,645 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,645 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,674 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:58,684 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,684 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,734 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,791 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,791 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:58,809 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,809 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,872 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:58,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,931 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:58,990 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:58,991 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:58] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,010 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,010 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,071 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:59,085 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,085 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,131 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,189 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:59,190 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,208 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,209 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,227 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:59,239 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,240 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,287 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:59,344 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,353 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,354 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,420 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:59,448 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,449 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,511 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,579 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:59,579 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,589 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,591 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,626 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:59,637 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,637 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,686 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,758 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,759 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:59,762 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,762 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,808 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:45:59,819 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,820 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,866 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,926 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:45:59,926 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:45:59,934 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,935 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:45:59,987 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:45:59] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,000 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,000 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,049 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,108 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:00,108 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:00,125 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,126 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,175 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,186 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,187 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,234 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,298 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:00,299 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:00,313 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,316 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,373 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,450 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,450 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,596 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:00,597 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,598 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:00,619 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,624 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,638 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,640 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,695 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,751 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:00,751 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:00,773 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,775 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,775 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,788 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,792 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,840 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:00,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:00,910 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,910 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,971 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:00,983 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:00,984 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:00] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,031 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,092 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:01,092 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:01,113 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,113 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,175 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:01,185 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,185 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,238 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,296 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:01,296 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:01,306 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,307 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,379 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:01,391 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,393 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,440 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,509 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:01,509 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:01,512 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,512 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,574 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:01,582 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,583 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,634 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,692 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:01,692 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:01,714 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,714 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,776 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET / HTTP/1.1" 200 -
+2025-10-10 14:46:01,784 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,787 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,836 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,896 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:46:01,897 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:46:01,906 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:01,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:46:06,902 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:06,914 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:11,898 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:11,902 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:16,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:16,904 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:21,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:21,904 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:26,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:26,904 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:31,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:31,904 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:36,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:36,904 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:41,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:41,903 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:46,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:46,903 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:51,902 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:51,907 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:56,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:46:56,903 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:46:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:01,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:01,903 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:06,898 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:06,901 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:11,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:11,902 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:16,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:16,901 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:21,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:21,902 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:26,897 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:26,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:31,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:31,905 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:36,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:36,905 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:41,898 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:41,900 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:46,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:46,903 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:48,640 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "GET / HTTP/1.1" 200 -
+2025-10-10 14:47:48,665 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:47:48,665 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:47:48,881 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:47:48,949 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:47:48,949 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:47:48,960 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:47:48,961 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:48] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:47:53,950 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:53,952 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:53] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:58,953 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:47:58,956 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:47:58] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:03,951 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:03,953 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:03] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:08,952 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:08,955 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:08] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:13,953 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:13,967 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:13] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:18,950 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:18,952 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:18] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:21,818 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:21] "GET / HTTP/1.1" 200 -
+2025-10-10 14:48:21,843 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:21] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:48:21,843 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:48:22,013 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:22] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:48:22,070 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:22] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:48:22,070 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:22] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:48:22,087 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:22] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:48:22,087 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:22] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:48:27,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:27,080 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:32,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:32,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:37,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:37,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:42,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:42,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:47,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:47,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:52,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:52,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:57,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:48:57,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:48:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:02,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:02] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:02,080 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:02] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:07,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:07,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:12,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:12,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:17,080 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:17,085 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:22,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:22,082 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:27,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:27,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:32,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:32,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:37,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:37,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:42,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:42,081 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:47,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:47,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:52,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:52,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:57,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:49:57,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:49:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:02,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:02] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:02,081 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:02] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:07,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:07,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:07] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:12,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:12,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:12] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:17,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:17,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:17] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:22,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:22,077 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:22] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:27,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:27,078 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:27] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:32,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:32,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:32] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:37,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:37,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:37] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:42,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:42,080 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:42] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:47,073 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:47,076 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:47] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:52,074 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:52,079 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:52] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:57,075 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:50:57,080 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:50:57] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:01,119 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "GET / HTTP/1.1" 200 -
+2025-10-10 14:51:01,141 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:51:01,144 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:51:01,309 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:51:01,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:51:01,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:51:01,392 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:51:01,392 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:01] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:51:06,373 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:06,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:11,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:11,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:16,373 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:16,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:21,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:21,378 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:26,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:26,385 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:31,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:31,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:36,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:36,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:41,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:41,383 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:46,375 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:46,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:51,375 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:51,380 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:56,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:51:56,383 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:51:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:01,375 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:01,379 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:06,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:06,378 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:11,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:11,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:16,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:16,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:21,373 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:21,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:26,375 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:26,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:31,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:31,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:36,375 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:36,381 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:41,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:41,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:46,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:46,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:51,373 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:51,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:56,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:52:56,377 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:52:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:01,376 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:01,378 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:06,372 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:06,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:10,678 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "GET / HTTP/1.1" 200 -
+2025-10-10 14:53:10,709 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:10,709 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:10,882 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:10,949 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:53:10,949 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:53:10,970 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:53:10,970 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:10] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:53:15,946 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:15,950 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:15] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:16,121 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "GET / HTTP/1.1" 200 -
+2025-10-10 14:53:16,145 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:16,146 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:16,193 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:53:16,253 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:53:16,253 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:53:16,273 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:53:16,273 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:16] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:53:21,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:21,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:26,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:26,259 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:31,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:31,261 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:36,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:36,259 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:41,254 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:41,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:46,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:46,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:51,260 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:51,265 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:56,257 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:53:56,261 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:53:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:01,254 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:01,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:06,252 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:06,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:11,254 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:11,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:11] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:16,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:16,263 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:16] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:21,254 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:21,257 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:21] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:26,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:26,259 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:26] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:31,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:31,260 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:31] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:36,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:36,259 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:36] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:41,255 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:41,258 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:41] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:46,254 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:46,257 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:46] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:51,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:51,260 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:51] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:56,257 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:54:56,261 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:54:56] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:01,257 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:01,262 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:01] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:06,256 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:06,261 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:06] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:09,562 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "GET / HTTP/1.1" 200 -
+2025-10-10 14:55:09,592 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:55:09,592 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:55:09,805 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:55:09,887 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:55:09,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:55:09,896 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:55:09,897 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:09] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:55:14,887 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:14,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:19,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:19,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:24,884 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:24,888 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:29,883 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:29,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:34,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:34,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:39,884 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:39,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:44,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:44,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:49,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:49,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:54,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:54,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:59,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:55:59,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:55:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:04,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:04,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:09,887 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:09,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:14,884 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:14,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:19,882 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:19,883 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:24,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:24,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:29,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:29,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:34,884 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:34,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:39,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:39,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:44,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:44,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:49,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:49,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:54,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:54,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:59,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:56:59,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:56:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:04,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:04,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:09,887 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:09,893 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:14,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:14,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:19,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:19,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:24,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:24,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:29,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:29,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:34,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:34,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:39,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:39,896 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:44,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:44,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:49,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:49,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:54,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:54,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:54] "GET /api/chat/check HTTP/1.1" 200 -

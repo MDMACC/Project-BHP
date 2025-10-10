@@ -101,12 +101,30 @@
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-lg shadow-sm border h-full flex flex-col">
                         <div class="p-4 border-b">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-gray-900">Active Chats</h2>
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-semibold text-gray-900">Chat Management</h2>
                                 <button onclick="refreshSessions()" class="text-bluez-600 hover:text-bluez-800">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Tab Navigation -->
+                            <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                                <button 
+                                    onclick="switchTab('active')" 
+                                    id="activeTab"
+                                    class="flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors bg-white text-gray-900 shadow-sm"
+                                >
+                                    Active Chats
+                                </button>
+                                <button 
+                                    onclick="switchTab('archived')" 
+                                    id="archivedTab"
+                                    class="flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors text-gray-600 hover:text-gray-900"
+                                >
+                                    Archived
                                 </button>
                             </div>
                         </div>
@@ -132,10 +150,19 @@
                                                 {{ session.last_activity.strftime('%m/%d %I:%M %p') if session.last_activity }}
                                             </p>
                                         </div>
-                                        <div class="flex flex-col items-end">
+                                        <div class="flex flex-col items-end space-y-1">
                                             {% if session.assigned_admin %}
                                             <span class="text-xs text-bluez-600 font-medium">{{ session.assigned_admin.username }}</span>
                                             {% endif %}
+                                            <button 
+                                                onclick="event.stopPropagation(); deleteChat('{{ session.session_id }}', this)"
+                                                class="text-red-500 hover:text-red-700 text-xs p-1 rounded hover:bg-red-50 transition-colors"
+                                                title="Archive Chat"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -221,6 +248,137 @@
     <script>
         let currentSessionId = null;
         let messagePollingInterval = null;
+        let currentTab = 'active';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            const activeTab = document.getElementById('activeTab');
+            const archivedTab = document.getElementById('archivedTab');
+            
+            if (tab === 'active') {
+                activeTab.className = 'flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors bg-white text-gray-900 shadow-sm';
+                archivedTab.className = 'flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors text-gray-600 hover:text-gray-900';
+            } else {
+                activeTab.className = 'flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors text-gray-600 hover:text-gray-900';
+                archivedTab.className = 'flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors bg-white text-gray-900 shadow-sm';
+            }
+            
+            // Clear current selection and hide chat interface
+            currentSessionId = null;
+            document.getElementById('chatHeader').style.display = 'none';
+            document.getElementById('messageInput').style.display = 'none';
+            document.getElementById('messagesContainer').innerHTML = `
+                <div class="text-center text-gray-500 py-12">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome to Chat Management</h3>
+                    <p class="text-gray-600">Select a chat session from the left to start messaging with customers.</p>
+                </div>
+            `;
+            
+            // Stop polling
+            if (messagePollingInterval) {
+                clearInterval(messagePollingInterval);
+            }
+            
+            // Refresh sessions for the selected tab
+            refreshSessions();
+        }
+
+        function deleteChat(sessionId, buttonElement) {
+            if (!confirm('Are you sure you want to archive this chat? It will be moved to the archived section.')) {
+                return;
+            }
+            
+            // Disable button during request
+            buttonElement.disabled = true;
+            buttonElement.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+            
+            fetch(`/api/admin/chat/${sessionId}/archive`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // If this was the selected session, clear the chat interface
+                    if (currentSessionId === sessionId) {
+                        currentSessionId = null;
+                        document.getElementById('chatHeader').style.display = 'none';
+                        document.getElementById('messageInput').style.display = 'none';
+                        document.getElementById('messagesContainer').innerHTML = `
+                            <div class="text-center text-gray-500 py-12">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome to Chat Management</h3>
+                                <p class="text-gray-600">Select a chat session from the left to start messaging with customers.</p>
+                            </div>
+                        `;
+                        
+                        if (messagePollingInterval) {
+                            clearInterval(messagePollingInterval);
+                        }
+                    }
+                    
+                    // Refresh the sessions list
+                    refreshSessions();
+                } else {
+                    alert('Failed to archive chat: ' + (data.error || 'Unknown error'));
+                    // Re-enable button
+                    buttonElement.disabled = false;
+                    buttonElement.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>';
+                }
+            })
+            .catch(error => {
+                console.error('Error archiving chat:', error);
+                alert('Failed to archive chat');
+                // Re-enable button
+                buttonElement.disabled = false;
+                buttonElement.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>';
+            });
+        }
+
+        function restoreChat(sessionId, buttonElement) {
+            if (!confirm('Are you sure you want to restore this chat to active status?')) {
+                return;
+            }
+            
+            // Disable button during request
+            buttonElement.disabled = true;
+            buttonElement.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+            
+            fetch(`/api/admin/chat/${sessionId}/restore`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Refresh the sessions list
+                    refreshSessions();
+                } else {
+                    alert('Failed to restore chat: ' + (data.error || 'Unknown error'));
+                    // Re-enable button
+                    buttonElement.disabled = false;
+                    buttonElement.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>';
+                }
+            })
+            .catch(error => {
+                console.error('Error restoring chat:', error);
+                alert('Failed to restore chat');
+                // Re-enable button
+                buttonElement.disabled = false;
+                buttonElement.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>';
+            });
+        }
 
         function selectSession(sessionId, element) {
             // Update UI
@@ -340,7 +498,8 @@
         }
 
         function refreshSessions() {
-            fetch('/api/admin/chat/sessions')
+            const endpoint = currentTab === 'active' ? '/api/admin/chat/sessions' : '/api/admin/chat/sessions/archived';
+            fetch(endpoint)
                 .then(response => response.json())
                 .then(data => {
                     if (data.sessions) {
@@ -354,12 +513,13 @@
             const container = document.getElementById('sessionsList');
             
             if (sessions.length === 0) {
+                const emptyMessage = currentTab === 'active' ? 'No active chat sessions' : 'No archived chat sessions';
                 container.innerHTML = `
                     <div class="p-8 text-center text-gray-500">
                         <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
-                        <p>No active chat sessions</p>
+                        <p>${emptyMessage}</p>
                     </div>
                 `;
                 return;
@@ -368,6 +528,34 @@
             container.innerHTML = sessions.map(session => {
                 const lastActivity = session.last_activity ? new Date(session.last_activity).toLocaleDateString() + ' ' + new Date(session.last_activity).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Unknown';
                 
+                // Different buttons for active vs archived sessions
+                let actionButton = '';
+                if (currentTab === 'active') {
+                    actionButton = `
+                        <button 
+                            onclick="event.stopPropagation(); deleteChat('${session.session_id}', this)"
+                            class="text-red-500 hover:text-red-700 text-xs p-1 rounded hover:bg-red-50 transition-colors"
+                            title="Archive Chat"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    `;
+                } else {
+                    actionButton = `
+                        <button 
+                            onclick="event.stopPropagation(); restoreChat('${session.session_id}', this)"
+                            class="text-green-500 hover:text-green-700 text-xs p-1 rounded hover:bg-green-50 transition-colors"
+                            title="Restore Chat"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                            </svg>
+                        </button>
+                    `;
+                }
+                
                 return `
                     <div class="chat-session-item p-4 border-b cursor-pointer ${currentSessionId === session.session_id ? 'active' : ''}" 
                          onclick="selectSession('${session.session_id}', this)"
@@ -375,7 +563,7 @@
                         <div class="flex items-start justify-between">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center space-x-2">
-                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <div class="w-3 h-3 ${currentTab === 'active' ? 'bg-green-500' : 'bg-gray-400'} rounded-full"></div>
                                     <h3 class="text-sm font-medium text-gray-900 truncate">
                                         ${session.customer_name || 'Anonymous Customer'}
                                     </h3>
@@ -387,8 +575,9 @@
                                     ${lastActivity}
                                 </p>
                             </div>
-                            <div class="flex flex-col items-end">
+                            <div class="flex flex-col items-end space-y-1">
                                 ${session.assigned_admin_name ? `<span class="text-xs text-bluez-600 font-medium">${session.assigned_admin_name}</span>` : ''}
+                                ${actionButton}
                             </div>
                         </div>
                     </div>

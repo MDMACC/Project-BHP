@@ -123,17 +123,61 @@
          data-service-count="{{ data.service_count }}"
          onclick="openCustomerFolder({{ data.customer.id }})">
         
-        <!-- Customer Header with Vehicle Photo -->
-        <div class="relative h-32 bg-gradient-to-br from-metallic-100 to-bluez-100">
-            {% if data.customer.vehicle_photo_url %}
-            <img src="{{ data.customer.vehicle_photo_url }}" alt="{{ data.customer.name }}'s Vehicle" 
-                 class="w-full h-full object-cover">
+        <!-- Customer Header with Vehicle Photo and Navigation -->
+        <div class="relative h-32 bg-gradient-to-br from-metallic-100 to-bluez-100" id="vehicleDisplay{{ data.customer.id }}">
+            {% if data.vehicles %}
+                {% for vehicle in data.vehicles %}
+                <div class="vehicle-slide absolute inset-0 {{ 'opacity-100' if loop.first else 'opacity-0' }} transition-opacity duration-300" 
+                     data-vehicle-index="{{ loop.index0 }}">
+                    {% if vehicle.photo_url %}
+                    <img src="{{ vehicle.photo_url }}" alt="{{ vehicle.get_display_name() }}" 
+                         class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <svg class="w-16 h-16 text-metallic-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <!-- Vehicle Navigation Arrows (only show if multiple vehicles) -->
+                {% if data.vehicles|length > 1 %}
+                <button onclick="event.stopPropagation(); previousVehicle({{ data.customer.id }})" 
+                        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110">
+                    <svg class="w-4 h-4 text-metallic-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                
+                <button onclick="event.stopPropagation(); nextVehicle({{ data.customer.id }})" 
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110">
+                    <svg class="w-4 h-4 text-metallic-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                
+                <!-- Vehicle Counter Dots -->
+                <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                    {% for vehicle in data.vehicles %}
+                    <div class="vehicle-dot w-2 h-2 rounded-full {{ 'bg-white' if loop.first else 'bg-white/50' }} transition-all duration-200" 
+                         data-vehicle-index="{{ loop.index0 }}"></div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             {% else %}
-            <div class="w-full h-full flex items-center justify-center">
-                <svg class="w-16 h-16 text-metallic-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                </svg>
-            </div>
+                <!-- Fallback to old vehicle data or no vehicle -->
+                {% if data.customer.vehicle_photo_url %}
+                <img src="{{ data.customer.vehicle_photo_url }}" alt="{{ data.customer.name }}'s Vehicle" 
+                     class="w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                    <svg class="w-16 h-16 text-metallic-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                {% endif %}
             {% endif %}
             
             <!-- Service Count Badge -->
@@ -142,6 +186,15 @@
                     {{ data.service_count }} Services
                 </span>
             </div>
+            
+            <!-- Vehicle Count Badge (if multiple vehicles) -->
+            {% if data.vehicle_count > 1 %}
+            <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 backdrop-blur-sm">
+                    {{ data.vehicle_count }} Vehicles
+                </span>
+            </div>
+            {% endif %}
         </div>
         
         <!-- Customer Information -->
@@ -149,7 +202,18 @@
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ data.customer.name }}</h3>
-                    <p class="text-sm text-metallic-600">{{ data.vehicle_info }}</p>
+                    {% if data.vehicles %}
+                        <div id="vehicleInfo{{ data.customer.id }}">
+                            {% for vehicle in data.vehicles %}
+                            <p class="text-sm text-metallic-600 vehicle-info {{ 'block' if loop.first else 'hidden' }}" 
+                               data-vehicle-index="{{ loop.index0 }}">
+                                {{ vehicle.get_display_name() }}
+                            </p>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-sm text-metallic-600">{{ data.vehicle_info }}</p>
+                    {% endif %}
                 </div>
                 <div class="flex space-x-1">
                     <button onclick="event.stopPropagation(); editCustomer({{ data.customer.id }})" 
@@ -485,6 +549,71 @@ function filterCustomers() {
 function openCustomerFolder(customerId) {
     // Navigate to customer detail page
     window.location.href = `/customer/${customerId}`;
+}
+
+// Vehicle navigation functionality
+const customerVehicleIndex = {}; // Track current vehicle index for each customer
+
+function previousVehicle(customerId) {
+    const vehicleDisplay = document.getElementById(`vehicleDisplay${customerId}`);
+    const vehicleSlides = vehicleDisplay.querySelectorAll('.vehicle-slide');
+    const vehicleInfo = document.getElementById(`vehicleInfo${customerId}`);
+    const vehicleInfoItems = vehicleInfo ? vehicleInfo.querySelectorAll('.vehicle-info') : [];
+    const vehicleDots = vehicleDisplay.querySelectorAll('.vehicle-dot');
+    
+    if (vehicleSlides.length <= 1) return;
+    
+    const currentIndex = customerVehicleIndex[customerId] || 0;
+    const newIndex = currentIndex === 0 ? vehicleSlides.length - 1 : currentIndex - 1;
+    
+    switchToVehicle(customerId, newIndex, vehicleSlides, vehicleInfoItems, vehicleDots);
+}
+
+function nextVehicle(customerId) {
+    const vehicleDisplay = document.getElementById(`vehicleDisplay${customerId}`);
+    const vehicleSlides = vehicleDisplay.querySelectorAll('.vehicle-slide');
+    const vehicleInfo = document.getElementById(`vehicleInfo${customerId}`);
+    const vehicleInfoItems = vehicleInfo ? vehicleInfo.querySelectorAll('.vehicle-info') : [];
+    const vehicleDots = vehicleDisplay.querySelectorAll('.vehicle-dot');
+    
+    if (vehicleSlides.length <= 1) return;
+    
+    const currentIndex = customerVehicleIndex[customerId] || 0;
+    const newIndex = (currentIndex + 1) % vehicleSlides.length;
+    
+    switchToVehicle(customerId, newIndex, vehicleSlides, vehicleInfoItems, vehicleDots);
+}
+
+function switchToVehicle(customerId, newIndex, vehicleSlides, vehicleInfoItems, vehicleDots) {
+    // Hide all vehicle slides
+    vehicleSlides.forEach(slide => slide.style.opacity = '0');
+    
+    // Show selected vehicle slide
+    if (vehicleSlides[newIndex]) {
+        vehicleSlides[newIndex].style.opacity = '1';
+    }
+    
+    // Update vehicle info text
+    if (vehicleInfoItems.length > 0) {
+        vehicleInfoItems.forEach(info => info.classList.add('hidden'));
+        if (vehicleInfoItems[newIndex]) {
+            vehicleInfoItems[newIndex].classList.remove('hidden');
+        }
+    }
+    
+    // Update dots
+    vehicleDots.forEach((dot, index) => {
+        if (index === newIndex) {
+            dot.classList.remove('bg-white/50');
+            dot.classList.add('bg-white');
+        } else {
+            dot.classList.remove('bg-white');
+            dot.classList.add('bg-white/50');
+        }
+    });
+    
+    // Update tracking
+    customerVehicleIndex[customerId] = newIndex;
 }
 
 function editCustomer(customerId) {
