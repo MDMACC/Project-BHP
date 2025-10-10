@@ -905,6 +905,29 @@
                 flex: 0 0 calc(100% - 16px);
             }
         }
+        
+        /* Showcase Carousel Styles */
+        .showcase-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .showcase-slide {
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .showcase-dot {
+            transition: all 0.3s ease;
+        }
+        
+        .showcase-dot.active {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.2);
+        }
+        
+        .showcase-carousel:hover .floating-element {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-metallic-50 to-bluez-50">
@@ -961,7 +984,7 @@
                             <span class="block">You Can Trust</span>
                         </h1>
                         <p class="text-xl text-bluez-100 leading-relaxed max-w-lg">
-                            Expert automotive service with cutting-edge technology and old-school dedication to quality. Your vehicle deserves the best.
+                            Full-service automotive shop specializing in maintenance, performance upgrades, collision repair, and body modifications. From routine service to high-performance builds - we do it all.
                         </p>
                     </div>
                     
@@ -1022,18 +1045,64 @@
                 </div>
                 
                 <div class="relative">
-                    <div class="animate-float">
-                        <div class="relative">
-                            <!-- Car silhouette placeholder -->
-                            <div class="car-container w-full h-96 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                                <svg class="car-icon w-64 h-32 text-white/60" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                                </svg>
+                    <div class="showcase-carousel relative w-full h-96 rounded-2xl overflow-hidden">
+                        <!-- Image 1 - Lamborghini Rear View with BPH License Plate -->
+                        <div class="showcase-slide absolute inset-0 opacity-100 transition-opacity duration-1000">
+                            <img src="{{ url_for('static', filename='images/showcase/lamborghini-rear-bph.jpg') }}" 
+                                 alt="BPH Automotive - Lamborghini with BPH License Plate" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <!-- Fallback for Lamborghini rear image -->
+                            <div class="w-full h-full bg-gradient-to-br from-blue-900/80 to-purple-900/80 flex items-center justify-center" style="display: none;">
+                                <div class="text-center text-white">
+                                    <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                                    </svg>
+                                    <p class="text-lg font-semibold">BPH License Plate</p>
+                                    <p class="text-sm opacity-80">Tuning & Customization Experts</p>
+                                </div>
                             </div>
-                            <!-- Floating elements -->
-                            <div class="floating-element absolute -top-4 -right-4 w-8 h-8 bg-white/20 rounded-full animate-pulse-slow"></div>
-                            <div class="floating-element absolute -bottom-4 -left-4 w-6 h-6 bg-bluez-400/30 rounded-full animate-pulse-slow" style="animation-delay: 1s;"></div>
+                            <!-- Overlay with BPH branding -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <h3 class="text-2xl font-bold mb-1">BPH Performance</h3>
+                                <p class="text-sm opacity-90">Tuning & Customization Experts</p>
+                            </div>
                         </div>
+                        
+                        <!-- Image 2 - Lamborghini Side/Front View -->
+                        <div class="showcase-slide absolute inset-0 opacity-0 transition-opacity duration-1000">
+                            <img src="{{ url_for('static', filename='images/showcase/lamborghini-side-bph.jpg') }}" 
+                                 alt="BPH Automotive - Lamborghini Side View" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <!-- Fallback for Lamborghini side image -->
+                            <div class="w-full h-full bg-gradient-to-br from-gray-900/80 to-blue-900/80 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                    </svg>
+                                    <p class="text-lg font-semibold">Exotic Vehicle Specialists</p>
+                                    <p class="text-sm opacity-80">High-Performance Modifications</p>
+                                </div>
+                            </div>
+                            <!-- Overlay with BPH branding -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <h3 class="text-2xl font-bold mb-1">Exotic Specialists</h3>
+                                <p class="text-sm opacity-90">High-Performance Vehicle Experts</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Navigation Dots -->
+                        <div class="absolute bottom-4 right-6 flex space-x-2">
+                            <button onclick="goToShowcaseSlide(0)" class="showcase-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-200 active"></button>
+                            <button onclick="goToShowcaseSlide(1)" class="showcase-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-200"></button>
+                        </div>
+                        
+                        <!-- Floating elements -->
+                        <div class="floating-element absolute -top-4 -right-4 w-8 h-8 bg-white/20 rounded-full animate-pulse-slow"></div>
+                        <div class="floating-element absolute -bottom-4 -left-4 w-6 h-6 bg-bluez-400/30 rounded-full animate-pulse-slow" style="animation-delay: 1s;"></div>
                     </div>
                 </div>
             </div>
@@ -1044,14 +1113,14 @@
     <section id="services" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-metallic-900 mb-4">Our Services</h2>
+                <h2 class="text-4xl font-bold text-metallic-900 mb-4">Complete Automotive Solutions</h2>
                 <p class="text-xl text-metallic-600 max-w-3xl mx-auto">
-                    From routine maintenance to complex repairs, we provide comprehensive automotive services with precision and care.
+                    From routine maintenance to high-performance builds, collision repair to custom body work - BPH Automotive is your one-stop destination for all automotive needs.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Service 1 -->
+                <!-- Service 1 - Maintenance & Repairs -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1059,69 +1128,69 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Engine Diagnostics</h3>
-                    <p class="text-metallic-600 mb-4">Advanced computer diagnostics to identify and resolve engine issues quickly and accurately.</p>
-                    <div class="text-bluez-600 font-semibold">From $89</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Maintenance & Repairs</h3>
+                    <p class="text-metallic-600 mb-4">Complete automotive maintenance including oil changes, tune-ups, brake service, and all routine servicing needs.</p>
+                    <div class="text-bluez-600 font-semibold">From $39</div>
                 </div>
                 
-                <!-- Service 2 -->
+                <!-- Service 2 - Performance Upgrades -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Brake Service</h3>
-                    <p class="text-metallic-600 mb-4">Complete brake system inspection, repair, and replacement to keep you safe on the road.</p>
-                    <div class="text-bluez-600 font-semibold">From $149</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Performance Upgrades</h3>
+                    <p class="text-metallic-600 mb-4">High-performance parts installation, engine tuning, and custom modifications for enhanced power and performance.</p>
+                    <div class="text-bluez-600 font-semibold">From $299</div>
                 </div>
                 
-                <!-- Service 3 -->
+                <!-- Service 3 - Collision Repair -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Oil Change</h3>
-                    <p class="text-metallic-600 mb-4">Quick and professional oil changes with premium filters to extend your engine's life.</p>
-                    <div class="text-bluez-600 font-semibold">From $39</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Collision Repair</h3>
+                    <p class="text-metallic-600 mb-4">Professional collision repair and body work to restore your vehicle to like-new condition.</p>
+                    <div class="text-bluez-600 font-semibold">Insurance Accepted</div>
                 </div>
                 
-                <!-- Service 4 -->
+                <!-- Service 4 - Body Kits & Modifications -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Tire Service</h3>
-                    <p class="text-metallic-600 mb-4">Tire installation, balancing, rotation, and alignment for optimal performance and safety.</p>
-                    <div class="text-bluez-600 font-semibold">From $79</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Body Kits & Styling</h3>
+                    <p class="text-metallic-600 mb-4">Custom body kit installation, aesthetic modifications, and styling upgrades to make your vehicle unique.</p>
+                    <div class="text-bluez-600 font-semibold">From $599</div>
                 </div>
                 
-                <!-- Service 5 -->
+                <!-- Service 5 - Engine Tuning -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">AC Repair</h3>
-                    <p class="text-metallic-600 mb-4">Climate control system diagnosis and repair to keep you comfortable year-round.</p>
-                    <div class="text-bluez-600 font-semibold">From $119</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Engine Tuning</h3>
+                    <p class="text-metallic-600 mb-4">Professional ECU tuning and engine optimization for maximum performance and efficiency.</p>
+                    <div class="text-bluez-600 font-semibold">From $399</div>
                 </div>
                 
-                <!-- Service 6 -->
+                <!-- Service 6 - Auto Sales -->
                 <div class="card-glass rounded-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="feature-icon w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-metallic-900 mb-3">Transmission</h3>
-                    <p class="text-metallic-600 mb-4">Comprehensive transmission service and repair by certified technicians.</p>
-                    <div class="text-bluez-600 font-semibold">From $199</div>
+                    <h3 class="text-xl font-bold text-metallic-900 mb-3">New & Used Auto Sales</h3>
+                    <p class="text-metallic-600 mb-4">Quality new and pre-owned vehicles with full service history and performance modifications available.</p>
+                    <div class="text-bluez-600 font-semibold">Inventory Available</div>
                 </div>
             </div>
         </div>
@@ -1521,9 +1590,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
-                    <h2 class="text-4xl font-bold text-metallic-900">Why Choose Bluez PowerHouse?</h2>
+                    <h2 class="text-4xl font-bold text-metallic-900">Why Choose BPH Automotive?</h2>
                     <p class="text-lg text-metallic-600">
-                        With over 15 years of experience in automotive repair, we combine traditional craftsmanship with modern technology to deliver exceptional service every time.
+                        With over 15 years of experience, BPH Automotive is your complete automotive solution. We specialize in everything from routine maintenance to high-performance builds, collision repair, and custom modifications. Our expertise with performance and exotic vehicles sets us apart.
                     </p>
                     
                     <div class="space-y-4">
@@ -1534,8 +1603,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-metallic-900">Certified Technicians</h4>
-                                <p class="text-metallic-600">ASE-certified mechanics with ongoing training on the latest automotive technologies.</p>
+                                <h4 class="font-semibold text-metallic-900">Performance Specialists</h4>
+                                <p class="text-metallic-600">Expert technicians specializing in high-performance and exotic vehicles including BMW M, twin turbo engines, and custom builds.</p>
                             </div>
                         </div>
                         
@@ -1546,8 +1615,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-metallic-900">Quality Parts</h4>
-                                <p class="text-metallic-600">We use only premium OEM and aftermarket parts with comprehensive warranties.</p>
+                                <h4 class="font-semibold text-metallic-900">Complete Body Work</h4>
+                                <p class="text-metallic-600">Full collision repair, custom body kits, and aesthetic modifications with insurance work accepted.</p>
                             </div>
                         </div>
                         
@@ -1558,8 +1627,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-metallic-900">Fair Pricing</h4>
-                                <p class="text-metallic-600">Transparent, competitive pricing with detailed estimates before any work begins.</p>
+                                <h4 class="font-semibold text-metallic-900">New & Used Auto Sales</h4>
+                                <p class="text-metallic-600">Quality vehicle inventory with full service history and available performance modifications.</p>
                             </div>
                         </div>
                     </div>
@@ -1647,9 +1716,9 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-metallic-900">Hours</h3>
-                                <p class="text-metallic-600 text-sm">Mon-Fri: 9AM-6PM</p>
-                                <p class="text-metallic-600 text-sm">Saturday: 9AM-6PM</p>
+                                <p class="text-metallic-600 text-sm">Mon-Sat: 11AM-7PM</p>
                                 <p class="text-metallic-600 text-sm">Sunday: Closed</p>
+                                <p class="text-metallic-600 text-sm">DM for bookings</p>
                             </div>
                         </div>
                     </div>
@@ -1747,10 +1816,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                             </div>
-                            <h3 class="text-3xl font-bold text-metallic-900 mb-4">Ready to Schedule Your Service?</h3>
+                            <h3 class="text-3xl font-bold text-metallic-900 mb-4">Ready for Complete Automotive Care?</h3>
                             <p class="text-lg text-metallic-600 mb-8 leading-relaxed">
-                                Use our convenient online booking system to select your preferred date and time. 
-                                Choose from available slots and provide your vehicle details - it's quick and easy!
+                                Whether you need routine maintenance, performance upgrades, collision repair, or custom modifications - schedule your appointment online. We specialize in high-performance and exotic vehicles with expert technicians ready to serve you.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                                 <a href="/schedule-appointment" class="btn-primary text-white px-10 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
@@ -1767,7 +1835,7 @@
                                 </a>
                             </div>
                             <p class="text-sm text-metallic-500 mt-6">
-                                Prefer to call? Our team is available Monday-Saturday, 9AM-6PM
+                                Prefer to call? Our team is available Monday-Saturday, 11AM-7PM. DM us for bookings anytime!
                             </p>
                         </div>
                     </div>
@@ -1800,7 +1868,7 @@
                         </div>
                     </div>
                     <p class="text-metallic-400 mb-4">
-                        Serving the Auto City community with quality automotive repair and maintenance services for over 15 years.
+                        Serving the Canoga Park community with comprehensive automotive services for over 15 years. From maintenance to performance builds, collision repair to custom modifications - we're your complete automotive solution.
                     </p>
                     <div class="flex space-x-4">
                         <a href="https://www.instagram.com/bluezpowerhouse/?hl=en" target="_blank" class="social-hover transition-all duration-300" title="Follow us on Instagram @bluezpowerhouse">
@@ -1821,11 +1889,12 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Services</h4>
                     <ul class="space-y-2 text-metallic-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Engine Repair</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Brake Service</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Oil Changes</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Tire Service</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">AC Repair</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Maintenance & Repairs</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Performance Upgrades</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Collision Repair</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Body Kits & Styling</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Engine Tuning</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Auto Sales</a></li>
                     </ul>
                 </div>
                 
@@ -2111,6 +2180,54 @@
             });
         }
 
+        // Showcase Carousel Functionality
+        let currentShowcaseSlide = 0;
+        let showcaseInterval;
+        
+        function initShowcaseCarousel() {
+            startShowcaseAutoSlide();
+            
+            // Pause on hover
+            const carousel = document.querySelector('.showcase-carousel');
+            carousel.addEventListener('mouseenter', stopShowcaseAutoSlide);
+            carousel.addEventListener('mouseleave', startShowcaseAutoSlide);
+        }
+        
+        function goToShowcaseSlide(slideIndex) {
+            const slides = document.querySelectorAll('.showcase-slide');
+            const dots = document.querySelectorAll('.showcase-dot');
+            
+            // Hide all slides
+            slides.forEach(slide => slide.style.opacity = '0');
+            
+            // Show selected slide
+            slides[slideIndex].style.opacity = '1';
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slideIndex);
+            });
+            
+            currentShowcaseSlide = slideIndex;
+        }
+        
+        function nextShowcaseSlide() {
+            const nextSlide = (currentShowcaseSlide + 1) % 2; // 2 images for now
+            goToShowcaseSlide(nextSlide);
+        }
+        
+        function startShowcaseAutoSlide() {
+            stopShowcaseAutoSlide();
+            showcaseInterval = setInterval(nextShowcaseSlide, 5000); // Change every 5 seconds
+        }
+        
+        function stopShowcaseAutoSlide() {
+            if (showcaseInterval) {
+                clearInterval(showcaseInterval);
+                showcaseInterval = null;
+            }
+        }
+
         // Initialize carousel when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Check for new messages periodically
@@ -2118,6 +2235,9 @@
             
             // Initialize reviews carousel
             initReviewsCarousel();
+            
+            // Initialize showcase carousel
+            initShowcaseCarousel();
         });
 
         function checkForNewMessages() {

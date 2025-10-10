@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory
+from models import db, User, Part, Contact, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory, ServiceRecord, ServicePart, WorkOrder, TimeEntry, QualityChecklist, QualityChecklistEntry, WarrantyItem
 db.init_app(app)
 
 # Configure file upload
@@ -521,7 +521,7 @@ def schedule():
 @app.route('/inventory')
 @login_required
 def inventory():
-    """Inventory management page"""
+    """Inventory management page - redirect to parts (now combined)"""
     return redirect(url_for('parts'))
 
 @app.route('/schedule-appointment')
@@ -532,7 +532,7 @@ def schedule_appointment():
 @app.route('/shipping')
 @login_required
 def shipping():
-    """Shipping management page"""
+    """Unified shipping management page (accounts + webhooks + orders)"""
     user = session.get('user', {})
     if user.get('role') not in ['admin', 'manager']:
         flash('Access denied. Admin privileges required.', 'error')
@@ -542,33 +542,36 @@ def shipping():
         # Get all shipping orders with their tracking events
         shipping_orders = db.session.query(ShippingOrder).join(ShippingAccount).all()
         
-        # Get accounts for filtering
-        accounts = ShippingAccount.query.filter_by(is_active=True).all()
+        # Get all accounts
+        accounts = ShippingAccount.query.all()
+        
+        # Get recent webhook logs
+        webhook_logs = WebhookLog.query.order_by(WebhookLog.created_at.desc()).limit(50).all()
+        
+        # Get recent tracking events with photos
+        tracking_events = TrackingEvent.query.filter(
+            TrackingEvent.photo_filename.isnot(None)
+        ).order_by(TrackingEvent.created_at.desc()).limit(20).all()
         
         return render_template('admin/shipping.html', 
                              shipping_orders=shipping_orders, 
-                             accounts=accounts)
+                             accounts=accounts,
+                             webhook_logs=webhook_logs,
+                             tracking_events=tracking_events)
     except Exception as e:
         logger.error(f"Shipping page error: {e}")
         flash('Error loading shipping data', 'error')
-        return render_template('admin/shipping.html', shipping_orders=[], accounts=[])
+        return render_template('admin/shipping.html', 
+                             shipping_orders=[], 
+                             accounts=[],
+                             webhook_logs=[],
+                             tracking_events=[])
 
 @app.route('/admin/accounts')
 @login_required
 def admin_accounts():
-    """Admin accounts management page"""
-    user = session.get('user', {})
-    if user.get('role') not in ['admin', 'manager']:
-        flash('Access denied. Admin privileges required.', 'error')
-        return redirect(url_for('home'))
-    
-    try:
-        accounts = ShippingAccount.query.all()
-        return render_template('admin/accounts.html', accounts=accounts)
-    except Exception as e:
-        logger.error(f"Admin accounts page error: {e}")
-        flash('Error loading accounts', 'error')
-        return render_template('admin/accounts.html', accounts=[])
+    """Admin accounts management page - redirect to unified shipping page"""
+    return redirect(url_for('shipping'))
 
 @app.route('/admin/accounts/add', methods=['GET', 'POST'])
 @login_required
@@ -741,28 +744,8 @@ def get_tracking_data(order_id):
 @app.route('/admin/webhooks')
 @login_required
 def admin_webhooks():
-    """Admin webhook management page"""
-    user = session.get('user', {})
-    if user.get('role') not in ['admin', 'manager']:
-        flash('Access denied. Admin privileges required.', 'error')
-        return redirect(url_for('home'))
-    
-    try:
-        # Get recent webhook logs
-        webhook_logs = WebhookLog.query.order_by(WebhookLog.created_at.desc()).limit(50).all()
-        
-        # Get recent tracking events with photos
-        tracking_events = TrackingEvent.query.filter(
-            TrackingEvent.photo_filename.isnot(None)
-        ).order_by(TrackingEvent.created_at.desc()).limit(20).all()
-        
-        return render_template('admin/webhooks.html', 
-                             webhook_logs=webhook_logs,
-                             tracking_events=tracking_events)
-    except Exception as e:
-        logger.error(f"Admin webhooks page error: {e}")
-        flash('Error loading webhook data', 'error')
-        return render_template('admin/webhooks.html', webhook_logs=[], tracking_events=[])
+    """Admin webhook management page - redirect to unified shipping page"""
+    return redirect(url_for('shipping'))
 
 # Chat API Routes
 @app.route('/api/chat/send', methods=['POST'])
@@ -1309,6 +1292,334 @@ def test_account_connection(account_id):
         logger.error(f"Account test error: {e}")
         return jsonify({'error': 'Failed to test account'}), 500
 
+# Service Records Routes
+@app.route('/service-records')
+@login_required
+def service_records():
+    """Service records management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get all service records
+        records = ServiceRecord.query.order_by(ServiceRecord.service_date.desc()).all()
+        
+        # Get customers for dropdown
+        customers = Contact.query.filter_by(type='customer', is_active=True).all()
+        
+        # Get technicians for dropdown
+        technicians = User.query.filter_by(is_active=True).all()
+        
+        return render_template('admin/service_records.html', 
+                             records=records,
+                             customers=customers,
+                             technicians=technicians)
+    except Exception as e:
+        logger.error(f"Service records page error: {e}")
+        flash('Error loading service records', 'error')
+        return render_template('admin/service_records.html', records=[], customers=[], technicians=[])
+
+@app.route('/api/service-records', methods=['POST'])
+@login_required
+def create_service_record():
+    """Create new service record"""
+    try:
+        data = request.get_json()
+        
+        # Generate service number
+        import uuid
+        service_number = f"SVC-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+        
+        # Create service record
+        record = ServiceRecord(
+            service_number=service_number,
+            customer_id=data.get('customer_id'),
+            customer_name=data.get('customer_name'),
+            customer_phone=data.get('customer_phone'),
+            customer_email=data.get('customer_email'),
+            vehicle_year=data.get('vehicle_year'),
+            vehicle_make=data.get('vehicle_make'),
+            vehicle_model=data.get('vehicle_model'),
+            vehicle_vin=data.get('vehicle_vin'),
+            vehicle_mileage=data.get('vehicle_mileage'),
+            vehicle_license_plate=data.get('vehicle_license_plate'),
+            service_type=data.get('service_type'),
+            service_category=data.get('service_category'),
+            service_title=data.get('service_title'),
+            service_description=data.get('service_description'),
+            technician_id=data.get('technician_id'),
+            technician_name=data.get('technician_name'),
+            service_date=datetime.strptime(data.get('service_date'), '%Y-%m-%d').date(),
+            labor_hours=data.get('labor_hours', 0),
+            labor_cost=data.get('labor_cost', 0),
+            parts_cost=data.get('parts_cost', 0),
+            total_cost=data.get('total_cost', 0),
+            warranty_months=data.get('warranty_months', 6),
+            warranty_miles=data.get('warranty_miles', 12000),
+            notes=data.get('notes'),
+            internal_notes=data.get('internal_notes'),
+            created_by=session.get('user', {}).get('id')
+        )
+        
+        db.session.add(record)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'service_number': service_number,
+            'record': record.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Create service record error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create service record'}), 500
+
+@app.route('/api/service-records/<int:record_id>', methods=['PUT'])
+@login_required
+def update_service_record(record_id):
+    """Update service record"""
+    try:
+        data = request.get_json()
+        record = ServiceRecord.query.get_or_404(record_id)
+        
+        # Update fields
+        for field in ['customer_name', 'customer_phone', 'customer_email', 'vehicle_year', 
+                     'vehicle_make', 'vehicle_model', 'vehicle_vin', 'vehicle_mileage',
+                     'service_type', 'service_category', 'service_title', 'service_description',
+                     'technician_name', 'labor_hours', 'labor_cost', 'parts_cost', 'total_cost',
+                     'status', 'payment_status', 'payment_method', 'notes', 'internal_notes']:
+            if field in data:
+                setattr(record, field, data[field])
+        
+        if 'service_date' in data:
+            record.service_date = datetime.strptime(data['service_date'], '%Y-%m-%d').date()
+        
+        record.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'record': record.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Update service record error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to update service record'}), 500
+
+@app.route('/api/service-records/<int:record_id>/photos', methods=['POST'])
+@login_required
+def upload_service_photos(record_id):
+    """Upload before/after photos for service record"""
+    try:
+        record = ServiceRecord.query.get_or_404(record_id)
+        photo_type = request.form.get('type', 'before')  # 'before' or 'after'
+        
+        if 'photos' not in request.files:
+            return jsonify({'error': 'No photos provided'}), 400
+        
+        files = request.files.getlist('photos')
+        uploaded_files = []
+        
+        for file in files:
+            if file and allowed_file(file.filename):
+                # Create filename
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f"service_{record_id}_{photo_type}_{timestamp}_{secure_filename(file.filename)}"
+                
+                # Create service photos directory
+                service_upload_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'services')
+                os.makedirs(service_upload_dir, exist_ok=True)
+                
+                # Save file
+                filepath = os.path.join(service_upload_dir, filename)
+                file.save(filepath)
+                uploaded_files.append(filename)
+        
+        # Update record with photo filenames
+        if photo_type == 'before':
+            current_photos = record.get_before_photos()
+            current_photos.extend(uploaded_files)
+            record.set_before_photos(current_photos)
+        else:
+            current_photos = record.get_after_photos()
+            current_photos.extend(uploaded_files)
+            record.set_after_photos(current_photos)
+        
+        record.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'uploaded_files': uploaded_files,
+            'photo_type': photo_type
+        })
+        
+    except Exception as e:
+        logger.error(f"Service photo upload error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to upload photos'}), 500
+
+# Work Order Management Routes
+@app.route('/work-orders')
+@login_required
+def work_orders():
+    """Work orders management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get work orders based on user role
+        if user.get('role') == 'employee':
+            # Employees see only their assigned work orders
+            orders = WorkOrder.query.filter_by(assigned_technician_id=user.get('id')).order_by(WorkOrder.scheduled_start.desc()).all()
+        else:
+            # Admins and managers see all work orders
+            orders = WorkOrder.query.order_by(WorkOrder.scheduled_start.desc()).all()
+        
+        return render_template('admin/work_orders.html', work_orders=orders)
+    except Exception as e:
+        logger.error(f"Work orders page error: {e}")
+        flash('Error loading work orders', 'error')
+        return render_template('admin/work_orders.html', work_orders=[])
+
+@app.route('/api/work-orders', methods=['POST'])
+@login_required
+def create_work_order():
+    """Create new work order"""
+    try:
+        data = request.get_json()
+        
+        # Generate work order number
+        import uuid
+        work_order_number = f"WO-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:6].upper()}"
+        
+        # Create work order
+        work_order = WorkOrder(
+            work_order_number=work_order_number,
+            service_record_id=data.get('service_record_id'),
+            assigned_technician_id=data.get('assigned_technician_id'),
+            priority=data.get('priority', 'normal'),
+            scheduled_start=datetime.fromisoformat(data.get('scheduled_start')) if data.get('scheduled_start') else None,
+            estimated_completion=datetime.fromisoformat(data.get('estimated_completion')) if data.get('estimated_completion') else None,
+            estimated_hours=data.get('estimated_hours', 0),
+            work_description=data.get('work_description'),
+            special_instructions=data.get('special_instructions'),
+            safety_notes=data.get('safety_notes'),
+            created_by=session.get('user', {}).get('id')
+        )
+        
+        # Set required tools if provided
+        if data.get('required_tools'):
+            work_order.set_required_tools(data['required_tools'])
+        
+        db.session.add(work_order)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'work_order_number': work_order_number,
+            'work_order': work_order.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Create work order error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create work order'}), 500
+
+@app.route('/api/work-orders/<int:work_order_id>/time', methods=['POST'])
+@login_required
+def clock_time(work_order_id):
+    """Clock in/out for work order"""
+    try:
+        data = request.get_json()
+        action = data.get('action')  # 'clock_in' or 'clock_out'
+        
+        work_order = WorkOrder.query.get_or_404(work_order_id)
+        user_id = session.get('user', {}).get('id')
+        
+        if action == 'clock_in':
+            # Create new time entry
+            time_entry = TimeEntry(
+                work_order_id=work_order_id,
+                technician_id=user_id,
+                clock_in=datetime.utcnow(),
+                work_performed=data.get('work_performed', '')
+            )
+            
+            # Update work order status if not already in progress
+            if work_order.status == 'assigned':
+                work_order.status = 'in-progress'
+                work_order.actual_start = datetime.utcnow()
+            
+            db.session.add(time_entry)
+            
+        elif action == 'clock_out':
+            # Find the most recent uncompleted time entry
+            time_entry = TimeEntry.query.filter_by(
+                work_order_id=work_order_id,
+                technician_id=user_id,
+                clock_out=None
+            ).order_by(TimeEntry.clock_in.desc()).first()
+            
+            if time_entry:
+                time_entry.clock_out = datetime.utcnow()
+                time_entry.work_performed = data.get('work_performed', time_entry.work_performed)
+                time_entry.break_time_minutes = data.get('break_time_minutes', 0)
+                time_entry.calculate_hours()
+                
+                # Update work order actual hours
+                total_hours = sum([entry.total_minutes / 60 for entry in work_order.time_entries if entry.total_minutes])
+                work_order.actual_hours = total_hours
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'action': action,
+            'time_entry_id': time_entry.id if time_entry else None
+        })
+        
+    except Exception as e:
+        logger.error(f"Time tracking error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to track time'}), 500
+
+@app.route('/api/work-orders/<int:work_order_id>/quality', methods=['POST'])
+@login_required
+def complete_quality_check(work_order_id):
+    """Complete quality control checklist"""
+    try:
+        data = request.get_json()
+        
+        work_order = WorkOrder.query.get_or_404(work_order_id)
+        
+        # Update work order quality info
+        work_order.quality_checklist_completed = True
+        work_order.quality_score = data.get('quality_score', 10)
+        work_order.quality_notes = data.get('quality_notes')
+        work_order.inspector_id = session.get('user', {}).get('id')
+        work_order.inspection_date = datetime.utcnow()
+        work_order.status = 'completed'
+        work_order.actual_completion = datetime.utcnow()
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'work_order': work_order.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Quality check error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to complete quality check'}), 500
+
 # Initialize database and create demo data
 def init_database():
     """Initialize database with demo data"""
@@ -1381,13 +1692,14 @@ def init_database():
         
         # Create shop info
         shop = Shop(
-            name='Bluez PowerHouse Auto Repair',
-            address='123 Main Street',
-            city='Auto City',
+            name='Bluez PowerHouse Auto Repair (BPH Automotive)',
+            address='8033 Remmet Ave',
+            city='Canoga Park',
             state='CA',
-            zip_code='90210',
-            phone='555-AUTO-FIX',
-            business_hours='Monday-Saturday: 9AM-6PM, Sunday: Closed'
+            zip_code='91304',
+            phone='(747) 474-9193',
+            business_hours='Monday-Saturday: 11AM-7PM, Sunday: Closed',
+            services_offered='Full-service automotive shop: Maintenance & Repairs, Performance Upgrades, Collision Repair, Body Kits & Modifications, Engine Tuning, New & Used Auto Sales. Specializing in high-performance and exotic vehicles.'
         )
         db.session.add(shop)
         

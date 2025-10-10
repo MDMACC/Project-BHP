@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+
+{% block title %}Work Orders - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Work Order Management{% endblock %}
+{% block page_description %}Digital work orders with time tracking and quality control{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="openCreateWorkOrderModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        <span>New Work Order</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Work Order Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Active Orders</p>
+                <p class="text-2xl font-bold text-metallic-900">{{ work_orders|selectattr('status', 'in', ['assigned', 'in-progress'])|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">In Progress</p>
+                <p class="text-2xl font-bold text-yellow-600">{{ work_orders|selectattr('status', 'equalto', 'in-progress')|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Completed Today</p>
+                <p class="text-2xl font-bold text-green-600">{{ work_orders|selectattr('status', 'equalto', 'completed')|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">High Priority</p>
+                <p class="text-2xl font-bold text-red-600">{{ work_orders|selectattr('priority', 'in', ['high', 'urgent'])|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Quality Score</p>
+                <p class="text-2xl font-bold text-purple-600">9.2/10</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Work Order Status Tabs -->
+<div class="mb-8">
+    <div class="flex space-x-1 bg-metallic-100 rounded-lg p-1">
+        <button onclick="switchWorkOrderTab('all')" id="allWorkOrdersTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white text-metallic-900 shadow-sm">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 7a2 2 0 012-2h10a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                <span>All Orders</span>
+                <span class="bg-metallic-500 text-white text-xs px-2 py-1 rounded-full">{{ work_orders|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWorkOrderTab('assigned')" id="assignedTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <span>Assigned</span>
+                <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded-full">{{ work_orders|selectattr('status', 'equalto', 'assigned')|list|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWorkOrderTab('in-progress')" id="inProgressTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>In Progress</span>
+                <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{ work_orders|selectattr('status', 'equalto', 'in-progress')|list|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWorkOrderTab('completed')" id="completedTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Completed</span>
+                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">{{ work_orders|selectattr('status', 'equalto', 'completed')|list|length }}</span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- Work Orders Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6" id="workOrdersGrid">
+    {% for work_order in work_orders %}
+    <div class="work-order-card card rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" 
+         data-status="{{ work_order.status }}"
+         data-priority="{{ work_order.priority }}"
+         data-technician="{{ work_order.assigned_technician.username if work_order.assigned_technician else '' }}">
+        
+        <!-- Work Order Header -->
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ work_order.work_order_number }}</h3>
+                <p class="text-sm text-metallic-600">{{ work_order.service_record.service_title if work_order.service_record else 'No service linked' }}</p>
+            </div>
+            
+            <div class="flex flex-col items-end space-y-2">
+                <!-- Priority Badge -->
+                {% if work_order.priority == 'urgent' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    🚨 Urgent
+                </span>
+                {% elif work_order.priority == 'high' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    ⚡ High
+                </span>
+                {% elif work_order.priority == 'low' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    📋 Low
+                </span>
+                {% else %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    📝 Normal
+                </span>
+                {% endif %}
+                
+                <!-- Status Badge -->
+                {% if work_order.status == 'assigned' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    Assigned
+                </span>
+                {% elif work_order.status == 'in-progress' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    In Progress
+                </span>
+                {% elif work_order.status == 'completed' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Completed
+                </span>
+                {% elif work_order.status == 'on-hold' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    On Hold
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Work Order Details -->
+        <div class="space-y-3 text-sm text-metallic-600 mb-4">
+            {% if work_order.assigned_technician %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                {{ work_order.assigned_technician.username }}
+            </div>
+            {% endif %}
+            
+            {% if work_order.scheduled_start %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Scheduled: {{ work_order.scheduled_start.strftime('%m/%d %I:%M %p') }}
+            </div>
+            {% endif %}
+            
+            {% if work_order.estimated_hours %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Est. {{ work_order.estimated_hours }}h
+                {% if work_order.actual_hours %}
+                | Actual: {{ work_order.actual_hours }}h
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            {% if work_order.service_record and work_order.service_record.customer_name %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                {{ work_order.service_record.customer_name }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Progress Bar -->
+        {% if work_order.status == 'in-progress' %}
+        <div class="mb-4">
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-xs text-metallic-600">Progress</span>
+                <span class="text-xs text-metallic-600">
+                    {% if work_order.actual_hours and work_order.estimated_hours %}
+                    {{ ((work_order.actual_hours / work_order.estimated_hours) * 100)|round|int }}%
+                    {% else %}
+                    0%
+                    {% endif %}
+                </span>
+            </div>
+            <div class="w-full bg-metallic-200 rounded-full h-2">
+                <div class="bg-yellow-500 h-2 rounded-full transition-all duration-300" 
+                     style="width: {% if work_order.actual_hours and work_order.estimated_hours %}{{ ((work_order.actual_hours / work_order.estimated_hours) * 100)|round|int }}%{% else %}0%{% endif %}"></div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="flex space-x-2">
+            {% if work_order.status == 'assigned' %}
+            <button onclick="startWorkOrder({{ work_order.id }})" class="flex-1 bg-green-50 text-green-700 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                Start Work
+            </button>
+            {% elif work_order.status == 'in-progress' %}
+            <button onclick="openTimeTracker({{ work_order.id }})" class="flex-1 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
+                Time Tracker
+            </button>
+            <button onclick="completeWorkOrder({{ work_order.id }})" class="flex-1 bg-green-50 text-green-700 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                Complete
+            </button>
+            {% elif work_order.status == 'completed' %}
+            <button onclick="viewQualityCheck({{ work_order.id }})" class="flex-1 bg-purple-50 text-purple-700 px-3 py-2 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium">
+                Quality Check
+            </button>
+            {% endif %}
+            
+            <button onclick="viewWorkOrder({{ work_order.id }})" class="flex-1 bg-metallic-50 text-metallic-700 px-3 py-2 rounded-lg hover:bg-metallic-100 transition-colors text-sm font-medium">
+                View Details
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Empty State -->
+{% if not work_orders %}
+<div class="text-center py-12">
+    <svg class="w-16 h-16 mx-auto text-metallic-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+    <h3 class="text-lg font-medium text-metallic-900 mb-2">No work orders found</h3>
+    <p class="text-metallic-600 mb-6">Create your first work order to get started.</p>
+    <button onclick="openCreateWorkOrderModal()" class="bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors">
+        Create First Work Order
+    </button>
+</div>
+{% endif %}
+
+<!-- Time Tracker Modal -->
+<div id="timeTrackerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-metallic-900">Time Tracker</h3>
+                    <button onclick="closeTimeTracker()" class="text-metallic-400 hover:text-metallic-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <input type="hidden" id="timeTrackerWorkOrderId">
+                
+                <!-- Current Time Display -->
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-metallic-900 mb-2" id="currentTime">00:00:00</div>
+                    <p class="text-metallic-600">Work Order: <span id="timeTrackerWorkOrderNumber"></span></p>
+                </div>
+                
+                <!-- Clock In/Out Controls -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="clockIn()" id="clockInBtn" class="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Clock In
+                    </button>
+                    <button onclick="clockOut()" id="clockOutBtn" class="bg-red-600 text-white px-6 py-4 rounded-lg hover:bg-red-700 transition-colors font-medium" disabled>
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Clock Out
+                    </button>
+                </div>
+                
+                <!-- Work Notes -->
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Work Performed</label>
+                    <textarea id="workPerformed" rows="3" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent" placeholder="Describe work performed during this session..."></textarea>
+                </div>
+                
+                <!-- Break Time -->
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Break Time (minutes)</label>
+                    <input type="number" id="breakTime" min="0" value="0" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+                
+                <!-- Current Session Info -->
+                <div id="sessionInfo" class="hidden p-4 bg-blue-50 rounded-lg">
+                    <h4 class="font-medium text-blue-900 mb-2">Current Session</h4>
+                    <div class="text-sm text-blue-800">
+                        <p>Started: <span id="sessionStart"></span></p>
+                        <p>Duration: <span id="sessionDuration">0h 0m</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quality Checklist Modal -->
+<div id="qualityChecklistModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-metallic-900">Quality Control Checklist</h3>
+                    <button onclick="closeQualityChecklist()" class="text-metallic-400 hover:text-metallic-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <input type="hidden" id="qualityWorkOrderId">
+                
+                <!-- Checklist Items -->
+                <div id="checklistItems" class="space-y-3">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+                
+                <!-- Overall Quality Score -->
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Overall Quality Score (1-10)</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="range" id="qualityScore" min="1" max="10" value="10" class="flex-1">
+                        <span class="text-lg font-semibold text-metallic-900 w-8" id="qualityScoreDisplay">10</span>
+                    </div>
+                </div>
+                
+                <!-- Inspector Notes -->
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Inspector Notes</label>
+                    <textarea id="qualityNotes" rows="3" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button onclick="closeQualityChecklist()" class="px-6 py-2 border border-metallic-300 text-metallic-700 rounded-lg hover:bg-metallic-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="saveQualityChecklist()" class="bg-bluez-600 text-white px-6 py-2 rounded-lg hover:bg-bluez-700 transition-colors">
+                        Complete Inspection
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentWorkOrderTab = 'all';
+    let clockedInWorkOrder = null;
+    let sessionStartTime = null;
+    let timeUpdateInterval = null;
+    
+    function switchWorkOrderTab(tab) {
+        currentWorkOrderTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('[id$="Tab"]').forEach(btn => {
+            btn.classList.remove('bg-white', 'text-metallic-900', 'shadow-sm');
+            btn.classList.add('text-metallic-600', 'hover:text-metallic-900');
+        });
+        
+        const tabButton = document.getElementById(tab === 'all' ? 'allWorkOrdersTab' : tab.replace('-', '') + 'Tab');
+        if (tabButton) {
+            tabButton.classList.add('bg-white', 'text-metallic-900', 'shadow-sm');
+            tabButton.classList.remove('text-metallic-600', 'hover:text-metallic-900');
+        }
+        
+        filterWorkOrders();
+    }
+    
+    function filterWorkOrders() {
+        const workOrderCards = document.querySelectorAll('.work-order-card');
+        
+        workOrderCards.forEach(card => {
+            const status = card.dataset.status;
+            let showCard = false;
+            
+            if (currentWorkOrderTab === 'all') {
+                showCard = true;
+            } else {
+                showCard = status === currentWorkOrderTab;
+            }
+            
+            card.style.display = showCard ? 'block' : 'none';
+        });
+    }
+    
+    function startWorkOrder(workOrderId) {
+        if (confirm('Start this work order? This will mark it as in progress.')) {
+            console.log('Starting work order:', workOrderId);
+            // In a real app, you'd send API request to update status
+        }
+    }
+    
+    function openTimeTracker(workOrderId) {
+        document.getElementById('timeTrackerWorkOrderId').value = workOrderId;
+        document.getElementById('timeTrackerWorkOrderNumber').textContent = `WO-${workOrderId}`;
+        document.getElementById('timeTrackerModal').classList.remove('hidden');
+        
+        // Start time display update
+        updateTimeDisplay();
+        timeUpdateInterval = setInterval(updateTimeDisplay, 1000);
+    }
+    
+    function closeTimeTracker() {
+        document.getElementById('timeTrackerModal').classList.add('hidden');
+        if (timeUpdateInterval) {
+            clearInterval(timeUpdateInterval);
+        }
+    }
+    
+    function clockIn() {
+        sessionStartTime = new Date();
+        clockedInWorkOrder = document.getElementById('timeTrackerWorkOrderId').value;
+        
+        document.getElementById('clockInBtn').disabled = true;
+        document.getElementById('clockOutBtn').disabled = false;
+        document.getElementById('sessionInfo').classList.remove('hidden');
+        document.getElementById('sessionStart').textContent = sessionStartTime.toLocaleTimeString();
+        
+        console.log('Clocked in for work order:', clockedInWorkOrder);
+    }
+    
+    function clockOut() {
+        if (sessionStartTime) {
+            const endTime = new Date();
+            const duration = Math.round((endTime - sessionStartTime) / 1000 / 60); // minutes
+            
+            console.log('Clocked out. Duration:', duration, 'minutes');
+            
+            document.getElementById('clockInBtn').disabled = false;
+            document.getElementById('clockOutBtn').disabled = true;
+            document.getElementById('sessionInfo').classList.add('hidden');
+            
+            sessionStartTime = null;
+            clockedInWorkOrder = null;
+        }
+    }
+    
+    function updateTimeDisplay() {
+        const now = new Date();
+        document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        
+        if (sessionStartTime) {
+            const duration = Math.round((now - sessionStartTime) / 1000 / 60); // minutes
+            const hours = Math.floor(duration / 60);
+            const minutes = duration % 60;
+            document.getElementById('sessionDuration').textContent = `${hours}h ${minutes}m`;
+        }
+    }
+    
+    function completeWorkOrder(workOrderId) {
+        if (confirm('Mark this work order as completed? This will trigger quality control.')) {
+            console.log('Completing work order:', workOrderId);
+            // Open quality checklist
+            openQualityChecklist(workOrderId);
+        }
+    }
+    
+    function openQualityChecklist(workOrderId) {
+        document.getElementById('qualityWorkOrderId').value = workOrderId;
+        
+        // Sample checklist items (in a real app, these would come from the database)
+        const sampleItems = [
+            'Work completed according to specifications',
+            'All parts properly installed and secured',
+            'No leaks or unusual noises detected',
+            'Customer vehicle cleaned and prepared',
+            'All tools and equipment returned to proper location',
+            'Work area cleaned and organized',
+            'Customer notified of completion'
+        ];
+        
+        const container = document.getElementById('checklistItems');
+        container.innerHTML = sampleItems.map((item, index) => `
+            <div class="flex items-center space-x-3 p-3 bg-metallic-50 rounded-lg">
+                <input type="checkbox" id="item${index}" class="w-4 h-4 text-bluez-600 border-metallic-300 rounded focus:ring-bluez-500">
+                <label for="item${index}" class="flex-1 text-sm text-metallic-700">${item}</label>
+            </div>
+        `).join('');
+        
+        document.getElementById('qualityChecklistModal').classList.remove('hidden');
+    }
+    
+    function closeQualityChecklist() {
+        document.getElementById('qualityChecklistModal').classList.add('hidden');
+    }
+    
+    function saveQualityChecklist() {
+        const workOrderId = document.getElementById('qualityWorkOrderId').value;
+        const score = document.getElementById('qualityScore').value;
+        const notes = document.getElementById('qualityNotes').value;
+        
+        // Check completed items
+        const checkboxes = document.querySelectorAll('#checklistItems input[type="checkbox"]');
+        const completedItems = Array.from(checkboxes).map((cb, index) => ({
+            index,
+            completed: cb.checked,
+            item: cb.nextElementSibling.textContent
+        }));
+        
+        console.log('Saving quality checklist:', {
+            workOrderId,
+            score,
+            notes,
+            completedItems
+        });
+        
+        alert(`✓ Quality inspection completed!\n\nScore: ${score}/10\nCompleted items: ${completedItems.filter(item => item.completed).length}/${completedItems.length}`);
+        closeQualityChecklist();
+    }
+    
+    function viewQualityCheck(workOrderId) {
+        alert(`View quality check for work order ${workOrderId}`);
+    }
+    
+    function viewWorkOrder(workOrderId) {
+        alert(`View detailed work order ${workOrderId}`);
+    }
+    
+    function openCreateWorkOrderModal() {
+        alert('Create new work order - This would open a modal to create work orders from service records');
+    }
+    
+    // Update quality score display
+    document.addEventListener('DOMContentLoaded', function() {
+        const scoreSlider = document.getElementById('qualityScore');
+        const scoreDisplay = document.getElementById('qualityScoreDisplay');
+        
+        if (scoreSlider && scoreDisplay) {
+            scoreSlider.addEventListener('input', function() {
+                scoreDisplay.textContent = this.value;
+            });
+        }
+    });
+</script>
+{% endblock %}

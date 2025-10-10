@@ -331,14 +331,31 @@
                             <label class="block text-sm font-medium text-metallic-700 mb-2">Service Needed *</label>
                             <select id="serviceType" required class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
                                 <option value="">Select a service...</option>
-                                <option value="oil-change">Oil Change</option>
-                                <option value="brake-service">Brake Service</option>
-                                <option value="engine-diagnostics">Engine Diagnostics</option>
-                                <option value="tire-service">Tire Service</option>
-                                <option value="ac-repair">AC Repair</option>
-                                <option value="transmission">Transmission Service</option>
-                                <option value="general-inspection">General Inspection</option>
-                                <option value="other">Other</option>
+                                <optgroup label="Maintenance & Repairs">
+                                    <option value="oil-change">Oil Change & Maintenance</option>
+                                    <option value="brake-service">Brake Service</option>
+                                    <option value="engine-diagnostics">Engine Diagnostics</option>
+                                    <option value="transmission">Transmission Service</option>
+                                    <option value="general-repair">General Repair</option>
+                                </optgroup>
+                                <optgroup label="Performance & Tuning">
+                                    <option value="performance-upgrade">Performance Upgrade</option>
+                                    <option value="engine-tuning">Engine Tuning/ECU</option>
+                                    <option value="turbo-work">Turbo Installation/Service</option>
+                                    <option value="exhaust-system">Exhaust System</option>
+                                    <option value="suspension-upgrade">Suspension Upgrade</option>
+                                </optgroup>
+                                <optgroup label="Body Work & Styling">
+                                    <option value="collision-repair">Collision Repair</option>
+                                    <option value="body-kit">Body Kit Installation</option>
+                                    <option value="paint-work">Paint & Body Work</option>
+                                    <option value="aesthetic-mods">Aesthetic Modifications</option>
+                                </optgroup>
+                                <optgroup label="Sales & Other">
+                                    <option value="vehicle-sales">Vehicle Sales Inquiry</option>
+                                    <option value="consultation">Performance Consultation</option>
+                                    <option value="other">Other Service</option>
+                                </optgroup>
                             </select>
                         </div>
                         

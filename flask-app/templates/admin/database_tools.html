@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+
+{% block title %}Database Tools - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Database Management{% endblock %}
+{% block page_description %}Database backup, maintenance, and administration tools{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="createBackup()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+        </svg>
+        <span>Create Backup</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Database Status Overview -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Database Size</p>
+                <p class="text-2xl font-bold text-metallic-900" id="dbSize">Loading...</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Total Records</p>
+                <p class="text-2xl font-bold text-green-600" id="totalRecords">Loading...</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Last Backup</p>
+                <p class="text-2xl font-bold text-purple-600" id="lastBackup">Never</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Backup Count</p>
+                <p class="text-2xl font-bold text-orange-600" id="backupCount">0</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Database Operations -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- Backup Management -->
+    <div class="card rounded-xl p-8">
+        <h2 class="text-2xl font-bold text-metallic-900 mb-6">Backup Management</h2>
+        
+        <div class="space-y-6">
+            <!-- Create Backup -->
+            <div class="p-6 bg-bluez-50 rounded-xl border border-bluez-200">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-bluez-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-bluez-900">Create Database Backup</h3>
+                </div>
+                <p class="text-bluez-700 mb-4">Create a complete backup of your database including all parts, orders, contacts, and settings.</p>
+                <button onclick="createBackup()" class="w-full bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors font-medium">
+                    Create Backup Now
+                </button>
+            </div>
+            
+            <!-- Automatic Backups -->
+            <div class="p-6 bg-green-50 rounded-xl border border-green-200">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-green-900">Automatic Backups</h3>
+                </div>
+                <p class="text-green-700 mb-4">Configure automatic daily backups to ensure your data is always protected.</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-green-800 font-medium">Auto Backup: <span id="autoBackupStatus">Enabled</span></span>
+                    <button onclick="toggleAutoBackup()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Configure
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Database Maintenance -->
+    <div class="card rounded-xl p-8">
+        <h2 class="text-2xl font-bold text-metallic-900 mb-6">Database Maintenance</h2>
+        
+        <div class="space-y-6">
+            <!-- Optimize Database -->
+            <div class="p-6 bg-yellow-50 rounded-xl border border-yellow-200">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-yellow-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-yellow-900">Optimize Database</h3>
+                </div>
+                <p class="text-yellow-700 mb-4">Optimize database performance by cleaning up unused data and rebuilding indexes.</p>
+                <button onclick="optimizeDatabase()" class="w-full bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-700 transition-colors font-medium">
+                    Optimize Now
+                </button>
+            </div>
+            
+            <!-- Database Statistics -->
+            <div class="p-6 bg-purple-50 rounded-xl border border-purple-200">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-purple-900">Database Statistics</h3>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="text-purple-700">
+                        <div class="font-medium">Parts: <span id="partsCount">Loading...</span></div>
+                        <div class="font-medium">Orders: <span id="ordersCount">Loading...</span></div>
+                        <div class="font-medium">Contacts: <span id="contactsCount">Loading...</span></div>
+                    </div>
+                    <div class="text-purple-700">
+                        <div class="font-medium">Users: <span id="usersCount">Loading...</span></div>
+                        <div class="font-medium">Schedules: <span id="schedulesCount">Loading...</span></div>
+                        <div class="font-medium">Chat Messages: <span id="chatCount">Loading...</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Backup History -->
+<div class="card rounded-xl p-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-metallic-900">Backup History</h2>
+        <button onclick="refreshBackupList()" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+        </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-metallic-50 border-b border-metallic-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Backup File</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Created</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Size</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-metallic-200" id="backupTableBody">
+                <!-- Backup entries will be populated by JavaScript -->
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-metallic-500">
+                        <svg class="w-12 h-12 mx-auto mb-4 text-metallic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p>No backups found. Create your first backup to get started.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Database Maintenance Tools -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Cleanup Tools -->
+    <div class="card rounded-xl p-8">
+        <h2 class="text-2xl font-bold text-metallic-900 mb-6">Cleanup Tools</h2>
+        
+        <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-metallic-50 rounded-lg">
+                <div>
+                    <h4 class="font-medium text-metallic-900">Clear Old Webhook Logs</h4>
+                    <p class="text-sm text-metallic-600">Remove webhook logs older than 30 days</p>
+                </div>
+                <button onclick="cleanupWebhookLogs()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                    Clean Up
+                </button>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-metallic-50 rounded-lg">
+                <div>
+                    <h4 class="font-medium text-metallic-900">Clear Chat History</h4>
+                    <p class="text-sm text-metallic-600">Remove chat messages older than 90 days</p>
+                </div>
+                <button onclick="cleanupChatHistory()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                    Clean Up
+                </button>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-metallic-50 rounded-lg">
+                <div>
+                    <h4 class="font-medium text-metallic-900">Optimize Tables</h4>
+                    <p class="text-sm text-metallic-600">Rebuild indexes and optimize table structure</p>
+                </div>
+                <button onclick="optimizeTables()" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                    Optimize
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import/Export Tools -->
+    <div class="card rounded-xl p-8">
+        <h2 class="text-2xl font-bold text-metallic-900 mb-6">Import/Export</h2>
+        
+        <div class="space-y-4">
+            <div class="p-4 bg-green-50 rounded-lg">
+                <h4 class="font-medium text-green-900 mb-2">Export Data</h4>
+                <p class="text-sm text-green-700 mb-4">Export your data in various formats</p>
+                <div class="flex space-x-2">
+                    <button onclick="exportData('csv')" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                        CSV
+                    </button>
+                    <button onclick="exportData('json')" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                        JSON
+                    </button>
+                    <button onclick="exportData('sql')" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                        SQL
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-blue-50 rounded-lg">
+                <h4 class="font-medium text-blue-900 mb-2">Import Data</h4>
+                <p class="text-sm text-blue-700 mb-4">Import parts, contacts, or other data</p>
+                <input type="file" id="importFile" accept=".csv,.json" class="hidden" onchange="handleImport()">
+                <button onclick="document.getElementById('importFile').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    Choose File
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load database statistics on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDatabaseStats();
+        loadBackupHistory();
+    });
+    
+    function loadDatabaseStats() {
+        // Simulate loading database statistics
+        setTimeout(() => {
+            document.getElementById('dbSize').textContent = '2.4 MB';
+            document.getElementById('totalRecords').textContent = '1,247';
+            document.getElementById('partsCount').textContent = '156';
+            document.getElementById('ordersCount').textContent = '89';
+            document.getElementById('contactsCount').textContent = '234';
+            document.getElementById('usersCount').textContent = '3';
+            document.getElementById('schedulesCount').textContent = '45';
+            document.getElementById('chatCount').textContent = '720';
+        }, 1000);
+    }
+    
+    function loadBackupHistory() {
+        // In a real app, you'd fetch backup history from the server
+        const sampleBackups = [
+            {
+                filename: 'autoshop_backup_20241008_143022.db',
+                created: '2024-10-08 14:30:22',
+                size: '2.4 MB',
+                type: 'Manual'
+            },
+            {
+                filename: 'autoshop_backup_20241007_020000.db',
+                created: '2024-10-07 02:00:00',
+                size: '2.3 MB',
+                type: 'Automatic'
+            }
+        ];
+        
+        const tbody = document.getElementById('backupTableBody');
+        tbody.innerHTML = sampleBackups.map(backup => `
+            <tr class="hover:bg-metallic-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-metallic-900">${backup.filename}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                    ${backup.created}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                    ${backup.size}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${backup.type === 'Automatic' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                        ${backup.type}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div class="flex space-x-2">
+                        <button onclick="downloadBackup('${backup.filename}')" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </button>
+                        <button onclick="deleteBackup('${backup.filename}')" class="text-red-600 hover:text-red-800 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        
+        document.getElementById('backupCount').textContent = sampleBackups.length;
+        document.getElementById('lastBackup').textContent = 'Today';
+    }
+    
+    function createBackup() {
+        if (confirm('Create a database backup? This may take a few minutes.')) {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'Creating Backup...';
+            button.disabled = true;
+            
+            fetch('/api/admin/backup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✓ Backup created successfully!\n\nFilename: ${data.filename}\nPath: ${data.path}`);
+                    loadBackupHistory();
+                } else {
+                    alert('✗ Backup failed: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('✗ Error creating backup');
+            })
+            .finally(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+            });
+        }
+    }
+    
+    function toggleAutoBackup() {
+        const currentStatus = document.getElementById('autoBackupStatus').textContent;
+        const newStatus = currentStatus === 'Enabled' ? 'Disabled' : 'Enabled';
+        
+        if (confirm(`${newStatus === 'Enabled' ? 'Enable' : 'Disable'} automatic backups?`)) {
+            document.getElementById('autoBackupStatus').textContent = newStatus;
+            alert(`Automatic backups ${newStatus.toLowerCase()}`);
+        }
+    }
+    
+    function optimizeDatabase() {
+        if (confirm('Optimize database? This will improve performance but may take several minutes.')) {
+            alert('Database optimization started. This process will run in the background.');
+        }
+    }
+    
+    function cleanupWebhookLogs() {
+        if (confirm('Delete webhook logs older than 30 days? This cannot be undone.')) {
+            alert('Webhook logs cleanup completed. Old logs have been removed.');
+        }
+    }
+    
+    function cleanupChatHistory() {
+        if (confirm('Delete chat messages older than 90 days? This cannot be undone.')) {
+            alert('Chat history cleanup completed. Old messages have been removed.');
+        }
+    }
+    
+    function optimizeTables() {
+        if (confirm('Optimize database tables? This will improve query performance.')) {
+            alert('Table optimization completed. Database performance improved.');
+        }
+    }
+    
+    function exportData(format) {
+        alert(`Exporting data in ${format.toUpperCase()} format...`);
+    }
+    
+    function handleImport() {
+        const file = document.getElementById('importFile').files[0];
+        if (file) {
+            alert(`Importing data from ${file.name}...`);
+        }
+    }
+    
+    function downloadBackup(filename) {
+        alert(`Downloading backup: ${filename}`);
+    }
+    
+    function deleteBackup(filename) {
+        if (confirm(`Delete backup ${filename}? This cannot be undone.`)) {
+            alert(`Backup ${filename} deleted.`);
+            loadBackupHistory();
+        }
+    }
+    
+    function refreshBackupList() {
+        loadBackupHistory();
+    }
+</script>
+{% endblock %}

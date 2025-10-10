@@ -366,3 +366,452 @@ class ChatSession(db.Model):
     
     def __repr__(self):
         return f'<ChatSession {self.session_id}>'
+
+class ServiceRecord(db.Model):
+    """Service record model for tracking all services performed"""
+    __tablename__ = 'service_records'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    service_number = db.Column(db.String(50), unique=True, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('contacts.id'))
+    customer_name = db.Column(db.String(200))  # Fallback if no customer_id
+    customer_phone = db.Column(db.String(20))
+    customer_email = db.Column(db.String(120))
+    
+    # Vehicle Information
+    vehicle_year = db.Column(db.Integer)
+    vehicle_make = db.Column(db.String(50))
+    vehicle_model = db.Column(db.String(50))
+    vehicle_vin = db.Column(db.String(17))
+    vehicle_mileage = db.Column(db.Integer)
+    vehicle_license_plate = db.Column(db.String(20))
+    
+    # Service Details
+    service_type = db.Column(db.String(50), nullable=False)  # 'service', 'modification', 'tune', 'repair'
+    service_category = db.Column(db.String(50))  # 'maintenance', 'performance', 'cosmetic', 'repair'
+    service_title = db.Column(db.String(200), nullable=False)
+    service_description = db.Column(db.Text)
+    
+    # Technician and Timing
+    technician_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    technician_name = db.Column(db.String(100))  # Fallback if no technician_id
+    service_date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+    labor_hours = db.Column(db.Float, default=0.0)
+    
+    # Financial
+    labor_cost = db.Column(db.Float, default=0.0)
+    parts_cost = db.Column(db.Float, default=0.0)
+    total_cost = db.Column(db.Float, default=0.0)
+    customer_paid = db.Column(db.Float, default=0.0)
+    payment_status = db.Column(db.String(20), default='pending')  # 'pending', 'partial', 'paid'
+    payment_method = db.Column(db.String(20))  # 'cash', 'card', 'check', 'financing'
+    
+    # Status and Quality
+    status = db.Column(db.String(20), default='scheduled')  # 'scheduled', 'in-progress', 'completed', 'cancelled'
+    quality_rating = db.Column(db.Integer)  # 1-5 stars
+    warranty_months = db.Column(db.Integer, default=6)
+    warranty_miles = db.Column(db.Integer, default=12000)
+    
+    # Documentation
+    before_photos = db.Column(db.Text)  # JSON array of photo filenames
+    after_photos = db.Column(db.Text)  # JSON array of photo filenames
+    notes = db.Column(db.Text)
+    internal_notes = db.Column(db.Text)  # Private notes for staff
+    
+    # Metadata
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    customer = db.relationship('Contact', backref='service_records')
+    technician = db.relationship('User', foreign_keys=[technician_id], backref='services_performed')
+    created_by_user = db.relationship('User', foreign_keys=[created_by], backref='service_records_created')
+    
+    def set_before_photos(self, photo_list):
+        """Set before photos as JSON"""
+        self.before_photos = json.dumps(photo_list) if photo_list else None
+    
+    def get_before_photos(self):
+        """Get before photos as list"""
+        if self.before_photos:
+            return json.loads(self.before_photos)
+        return []
+    
+    def set_after_photos(self, photo_list):
+        """Set after photos as JSON"""
+        self.after_photos = json.dumps(photo_list) if photo_list else None
+    
+    def get_after_photos(self):
+        """Get after photos as list"""
+        if self.after_photos:
+            return json.loads(self.after_photos)
+        return []
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'service_number': self.service_number,
+            'customer_name': self.customer_name,
+            'customer_phone': self.customer_phone,
+            'vehicle_info': f"{self.vehicle_year} {self.vehicle_make} {self.vehicle_model}" if self.vehicle_year else None,
+            'service_type': self.service_type,
+            'service_title': self.service_title,
+            'service_description': self.service_description,
+            'technician_name': self.technician_name,
+            'service_date': self.service_date.isoformat() if self.service_date else None,
+            'labor_hours': self.labor_hours,
+            'total_cost': self.total_cost,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<ServiceRecord {self.service_number}: {self.service_title}>'
+
+class ServicePart(db.Model):
+    """Parts used in service records"""
+    __tablename__ = 'service_parts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    service_record_id = db.Column(db.Integer, db.ForeignKey('service_records.id'), nullable=False)
+    part_id = db.Column(db.Integer, db.ForeignKey('parts.id'))
+    part_name = db.Column(db.String(200))  # Fallback if no part_id
+    part_number = db.Column(db.String(50))
+    quantity_used = db.Column(db.Integer, default=1)
+    unit_cost = db.Column(db.Float, default=0.0)
+    total_cost = db.Column(db.Float, default=0.0)
+    supplier = db.Column(db.String(100))
+    notes = db.Column(db.Text)
+    
+    # Relationships
+    service_record = db.relationship('ServiceRecord', backref='parts_used')
+    part = db.relationship('Part', backref='service_usage')
+    
+    def __repr__(self):
+        return f'<ServicePart {self.part_name}: {self.quantity_used}x>'
+
+class WorkOrder(db.Model):
+    """Work order model for detailed workflow management"""
+    __tablename__ = 'work_orders'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    work_order_number = db.Column(db.String(50), unique=True, nullable=False)
+    service_record_id = db.Column(db.Integer, db.ForeignKey('service_records.id'), nullable=False)
+    
+    # Assignment and Status
+    assigned_technician_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    priority = db.Column(db.String(20), default='normal')  # 'low', 'normal', 'high', 'urgent'
+    status = db.Column(db.String(20), default='assigned')  # 'assigned', 'in-progress', 'on-hold', 'completed', 'cancelled'
+    
+    # Timing
+    scheduled_start = db.Column(db.DateTime)
+    actual_start = db.Column(db.DateTime)
+    estimated_completion = db.Column(db.DateTime)
+    actual_completion = db.Column(db.DateTime)
+    estimated_hours = db.Column(db.Float, default=0.0)
+    actual_hours = db.Column(db.Float, default=0.0)
+    
+    # Work Details
+    work_description = db.Column(db.Text)
+    special_instructions = db.Column(db.Text)
+    safety_notes = db.Column(db.Text)
+    required_tools = db.Column(db.Text)  # JSON array of required tools
+    
+    # Quality Control
+    quality_checklist_completed = db.Column(db.Boolean, default=False)
+    quality_score = db.Column(db.Integer)  # 1-10 quality rating
+    quality_notes = db.Column(db.Text)
+    inspector_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    inspection_date = db.Column(db.DateTime)
+    
+    # Documentation
+    work_photos = db.Column(db.Text)  # JSON array of photo filenames
+    technician_notes = db.Column(db.Text)
+    supervisor_notes = db.Column(db.Text)
+    
+    # Metadata
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    service_record = db.relationship('ServiceRecord', backref='work_orders')
+    assigned_technician = db.relationship('User', foreign_keys=[assigned_technician_id], backref='assigned_work_orders')
+    inspector = db.relationship('User', foreign_keys=[inspector_id], backref='inspected_work_orders')
+    created_by_user = db.relationship('User', foreign_keys=[created_by], backref='work_orders_created')
+    
+    def set_required_tools(self, tools_list):
+        """Set required tools as JSON"""
+        self.required_tools = json.dumps(tools_list) if tools_list else None
+    
+    def get_required_tools(self):
+        """Get required tools as list"""
+        if self.required_tools:
+            return json.loads(self.required_tools)
+        return []
+    
+    def set_work_photos(self, photo_list):
+        """Set work photos as JSON"""
+        self.work_photos = json.dumps(photo_list) if photo_list else None
+    
+    def get_work_photos(self):
+        """Get work photos as list"""
+        if self.work_photos:
+            return json.loads(self.work_photos)
+        return []
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'work_order_number': self.work_order_number,
+            'service_record_id': self.service_record_id,
+            'assigned_technician': self.assigned_technician.username if self.assigned_technician else None,
+            'priority': self.priority,
+            'status': self.status,
+            'scheduled_start': self.scheduled_start.isoformat() if self.scheduled_start else None,
+            'actual_start': self.actual_start.isoformat() if self.actual_start else None,
+            'estimated_completion': self.estimated_completion.isoformat() if self.estimated_completion else None,
+            'actual_completion': self.actual_completion.isoformat() if self.actual_completion else None,
+            'estimated_hours': self.estimated_hours,
+            'actual_hours': self.actual_hours,
+            'quality_checklist_completed': self.quality_checklist_completed,
+            'quality_score': self.quality_score,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<WorkOrder {self.work_order_number}>'
+
+class TimeEntry(db.Model):
+    """Time tracking model for technician work hours"""
+    __tablename__ = 'time_entries'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    work_order_id = db.Column(db.Integer, db.ForeignKey('work_orders.id'), nullable=False)
+    technician_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    # Time Tracking
+    clock_in = db.Column(db.DateTime, nullable=False)
+    clock_out = db.Column(db.DateTime)
+    break_time_minutes = db.Column(db.Integer, default=0)
+    total_minutes = db.Column(db.Integer)
+    billable_minutes = db.Column(db.Integer)
+    
+    # Work Details
+    work_performed = db.Column(db.Text)
+    issues_encountered = db.Column(db.Text)
+    materials_used = db.Column(db.Text)  # JSON array of materials/parts
+    
+    # Status
+    is_billable = db.Column(db.Boolean, default=True)
+    approved_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    approval_date = db.Column(db.DateTime)
+    
+    # Metadata
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    work_order = db.relationship('WorkOrder', backref='time_entries')
+    technician = db.relationship('User', foreign_keys=[technician_id], backref='time_entries')
+    approved_by_user = db.relationship('User', foreign_keys=[approved_by], backref='time_approvals')
+    
+    def calculate_hours(self):
+        """Calculate total hours worked"""
+        if self.clock_out and self.clock_in:
+            total_seconds = (self.clock_out - self.clock_in).total_seconds()
+            total_minutes = int(total_seconds / 60) - (self.break_time_minutes or 0)
+            self.total_minutes = max(0, total_minutes)
+            self.billable_minutes = self.total_minutes if self.is_billable else 0
+            return self.total_minutes / 60
+        return 0
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'work_order_id': self.work_order_id,
+            'technician': self.technician.username if self.technician else None,
+            'clock_in': self.clock_in.isoformat() if self.clock_in else None,
+            'clock_out': self.clock_out.isoformat() if self.clock_out else None,
+            'total_hours': round(self.total_minutes / 60, 2) if self.total_minutes else 0,
+            'billable_hours': round(self.billable_minutes / 60, 2) if self.billable_minutes else 0,
+            'work_performed': self.work_performed,
+            'is_billable': self.is_billable,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<TimeEntry {self.technician.username if self.technician else "Unknown"}: {self.total_minutes}min>'
+
+class QualityChecklist(db.Model):
+    """Quality control checklist templates"""
+    __tablename__ = 'quality_checklists'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    service_type = db.Column(db.String(50))  # 'service', 'modification', 'tune', 'repair', 'collision'
+    service_category = db.Column(db.String(50))  # 'maintenance', 'performance', 'body', etc.
+    
+    # Checklist Items
+    checklist_items = db.Column(db.Text, nullable=False)  # JSON array of checklist items
+    required_photos = db.Column(db.Text)  # JSON array of required photo types
+    
+    # Metadata
+    is_active = db.Column(db.Boolean, default=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    created_by_user = db.relationship('User', backref='quality_checklists_created')
+    
+    def set_checklist_items(self, items_list):
+        """Set checklist items as JSON"""
+        self.checklist_items = json.dumps(items_list) if items_list else None
+    
+    def get_checklist_items(self):
+        """Get checklist items as list"""
+        if self.checklist_items:
+            return json.loads(self.checklist_items)
+        return []
+    
+    def set_required_photos(self, photos_list):
+        """Set required photos as JSON"""
+        self.required_photos = json.dumps(photos_list) if photos_list else None
+    
+    def get_required_photos(self):
+        """Get required photos as list"""
+        if self.required_photos:
+            return json.loads(self.required_photos)
+        return []
+    
+    def __repr__(self):
+        return f'<QualityChecklist {self.name}>'
+
+class QualityChecklistEntry(db.Model):
+    """Completed quality checklist for work orders"""
+    __tablename__ = 'quality_checklist_entries'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    work_order_id = db.Column(db.Integer, db.ForeignKey('work_orders.id'), nullable=False)
+    checklist_id = db.Column(db.Integer, db.ForeignKey('quality_checklists.id'), nullable=False)
+    
+    # Completion Data
+    completed_items = db.Column(db.Text)  # JSON object with item_id: {completed: bool, notes: str}
+    overall_score = db.Column(db.Integer)  # Percentage score (0-100)
+    inspector_signature = db.Column(db.String(200))
+    
+    # Photos
+    inspection_photos = db.Column(db.Text)  # JSON array of photo filenames
+    
+    # Metadata
+    completed_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    completed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    work_order = db.relationship('WorkOrder', backref='quality_entries')
+    checklist = db.relationship('QualityChecklist', backref='entries')
+    completed_by_user = db.relationship('User', backref='quality_inspections')
+    
+    def set_completed_items(self, items_dict):
+        """Set completed items as JSON"""
+        self.completed_items = json.dumps(items_dict) if items_dict else None
+    
+    def get_completed_items(self):
+        """Get completed items as dict"""
+        if self.completed_items:
+            return json.loads(self.completed_items)
+        return {}
+    
+    def set_inspection_photos(self, photo_list):
+        """Set inspection photos as JSON"""
+        self.inspection_photos = json.dumps(photo_list) if photo_list else None
+    
+    def get_inspection_photos(self):
+        """Get inspection photos as list"""
+        if self.inspection_photos:
+            return json.loads(self.inspection_photos)
+        return []
+    
+    def __repr__(self):
+        return f'<QualityChecklistEntry WO:{self.work_order_id}>'
+
+class WarrantyItem(db.Model):
+    """Warranty tracking for services and parts"""
+    __tablename__ = 'warranty_items'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    service_record_id = db.Column(db.Integer, db.ForeignKey('service_records.id'))
+    work_order_id = db.Column(db.Integer, db.ForeignKey('work_orders.id'))
+    part_id = db.Column(db.Integer, db.ForeignKey('parts.id'))
+    
+    # Warranty Details
+    warranty_type = db.Column(db.String(50), nullable=False)  # 'labor', 'parts', 'comprehensive'
+    warranty_description = db.Column(db.String(500))
+    warranty_months = db.Column(db.Integer)
+    warranty_miles = db.Column(db.Integer)
+    
+    # Dates
+    start_date = db.Column(db.Date, nullable=False)
+    expiration_date = db.Column(db.Date)
+    expiration_mileage = db.Column(db.Integer)  # Starting mileage + warranty miles
+    
+    # Status
+    status = db.Column(db.String(20), default='active')  # 'active', 'expired', 'claimed', 'voided'
+    claim_count = db.Column(db.Integer, default=0)
+    last_claim_date = db.Column(db.Date)
+    
+    # Customer Info (for easy lookup)
+    customer_name = db.Column(db.String(200))
+    vehicle_info = db.Column(db.String(200))
+    
+    # Metadata
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    service_record = db.relationship('ServiceRecord', backref='warranty_items')
+    work_order = db.relationship('WorkOrder', backref='warranty_items')
+    part = db.relationship('Part', backref='warranty_items')
+    created_by_user = db.relationship('User', backref='warranty_items_created')
+    
+    def is_expired(self):
+        """Check if warranty is expired"""
+        if self.expiration_date:
+            return datetime.now().date() > self.expiration_date
+        return False
+    
+    def days_until_expiration(self):
+        """Calculate days until warranty expires"""
+        if self.expiration_date:
+            delta = self.expiration_date - datetime.now().date()
+            return delta.days
+        return None
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'warranty_type': self.warranty_type,
+            'warranty_description': self.warranty_description,
+            'warranty_months': self.warranty_months,
+            'warranty_miles': self.warranty_miles,
+            'start_date': self.start_date.isoformat() if self.start_date else None,
+            'expiration_date': self.expiration_date.isoformat() if self.expiration_date else None,
+            'status': self.status,
+            'days_until_expiration': self.days_until_expiration(),
+            'is_expired': self.is_expired(),
+            'customer_name': self.customer_name,
+            'vehicle_info': self.vehicle_info,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<WarrantyItem {self.warranty_type}: {self.customer_name}>'

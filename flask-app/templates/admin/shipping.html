@@ -1,461 +1,608 @@
 {% extends "base.html" %}
 
-{% block page_title %}Shipping Dashboard{% endblock %}
-{% block page_description %}Track orders and shipments from all providers{% endblock %}
+{% block title %}Shipping & Webhooks - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Shipping & Webhooks{% endblock %}
+{% block page_description %}Manage shipping accounts, webhooks, and API integrations{% endblock %}
 
 {% block header_actions %}
-<a href="{{ url_for('admin_accounts') }}" class="btn bg-gray-500 text-white hover:bg-gray-600">
-    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-    </svg>
-    Manage Accounts
-</a>
-{% endblock %}
-
-{% block extra_head %}
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=geometry" async defer></script>
-<style>
-    .tracking-map {
-        height: 300px;
-        width: 100%;
-        border-radius: 0.5rem;
-    }
-    .status-badge {
-        @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full;
-    }
-    .status-ordered { @apply bg-blue-100 text-blue-800; }
-    .status-shipped { @apply bg-yellow-100 text-yellow-800; }
-    .status-in_transit { @apply bg-purple-100 text-purple-800; }
-    .status-delivered { @apply bg-green-100 text-green-800; }
-    .status-delayed { @apply bg-red-100 text-red-800; }
-</style>
+<div class="flex items-center space-x-4">
+    <button onclick="syncAllAccounts()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        <span>Sync All</span>
+    </button>
+    <button onclick="testAllWebhooks()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+        <span>Test All</span>
+    </button>
+    <a href="{{ url_for('add_account') }}" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        <span>Add Account</span>
+    </a>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="card p-4">
-            <div class="flex items-center">
-                <div class="p-2 bg-blue-100 rounded-lg">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <div class="text-2xl font-bold text-gray-900">{{ shipping_orders|selectattr('status', 'equalto', 'ordered')|list|length }}</div>
-                    <div class="text-sm text-gray-600">Ordered</div>
-                </div>
+<!-- Overview Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Active Accounts</p>
+                <p class="text-2xl font-bold text-metallic-900">{{ accounts|selectattr('is_active', 'equalto', true)|list|length }}</p>
             </div>
-        </div>
-        
-        <div class="card p-4">
-            <div class="flex items-center">
-                <div class="p-2 bg-yellow-100 rounded-lg">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <div class="text-2xl font-bold text-gray-900">{{ shipping_orders|selectattr('status', 'equalto', 'shipped')|list|length }}</div>
-                    <div class="text-sm text-gray-600">Shipped</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card p-4">
-            <div class="flex items-center">
-                <div class="p-2 bg-purple-100 rounded-lg">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <div class="text-2xl font-bold text-gray-900">{{ shipping_orders|selectattr('status', 'equalto', 'in_transit')|list|length }}</div>
-                    <div class="text-sm text-gray-600">In Transit</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card p-4">
-            <div class="flex items-center">
-                <div class="p-2 bg-green-100 rounded-lg">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <div class="text-2xl font-bold text-gray-900">{{ shipping_orders|selectattr('status', 'equalto', 'delivered')|list|length }}</div>
-                    <div class="text-sm text-gray-600">Delivered</div>
-                </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
             </div>
         </div>
     </div>
-
-    <!-- Filters -->
-    <div class="card p-4">
-        <div class="flex flex-wrap gap-4 items-center">
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
             <div>
-                <label for="provider-filter" class="block text-sm font-medium text-gray-700 mb-1">Provider</label>
-                <select id="provider-filter" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-bluez-500">
-                    <option value="">All Providers</option>
-                    {% for account in accounts %}
-                    <option value="{{ account.provider }}">{{ account.provider|replace('_', ' ')|title }}</option>
-                    {% endfor %}
-                </select>
+                <p class="text-sm font-medium text-metallic-600">Shipping Orders</p>
+                <p class="text-2xl font-bold text-green-600">{{ shipping_orders|length }}</p>
             </div>
-            
-            <div>
-                <label for="status-filter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select id="status-filter" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-bluez-500">
-                    <option value="">All Statuses</option>
-                    <option value="ordered">Ordered</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="in_transit">In Transit</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="delayed">Delayed</option>
-                </select>
-            </div>
-            
-            <div>
-                <label for="date-filter" class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
-                <select id="date-filter" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-bluez-500">
-                    <option value="">All Time</option>
-                    <option value="today">Today</option>
-                    <option value="week">This Week</option>
-                    <option value="month">This Month</option>
-                </select>
-            </div>
-            
-            <div class="ml-auto">
-                <button onclick="refreshData()" class="btn btn-primary">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                    </svg>
-                    Refresh
-                </button>
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7"/>
+                </svg>
             </div>
         </div>
     </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Webhooks Today</p>
+                <p class="text-2xl font-bold text-purple-600">{{ webhook_logs|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Processed</p>
+                <p class="text-2xl font-bold text-blue-600">{{ webhook_logs|selectattr('processed', 'equalto', true)|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Failed</p>
+                <p class="text-2xl font-bold text-red-600">{{ webhook_logs|selectattr('processing_error', 'defined')|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Orders List -->
-    <div class="card">
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Shipping Orders</h2>
-            <p class="text-sm text-gray-600">Track all your orders from connected providers</p>
+<!-- Tabbed Interface -->
+<div class="mb-8">
+    <div class="flex space-x-1 bg-metallic-100 rounded-lg p-1">
+        <button onclick="switchTab('accounts')" id="accountsTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white text-metallic-900 shadow-sm">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Accounts</span>
+                <span class="bg-bluez-500 text-white text-xs px-2 py-1 rounded-full">{{ accounts|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchTab('webhooks')" id="webhooksTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>
+                <span>Webhooks</span>
+                <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">{{ webhook_logs|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchTab('orders')" id="ordersTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7"/>
+                </svg>
+                <span>Orders</span>
+                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">{{ shipping_orders|length }}</span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- Accounts Tab -->
+<div id="accountsContent" class="space-y-8">
+    <!-- Provider Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {% set providers = ['fedex', 'ups', 'usps', 'dhl', 'amazon'] %}
+        {% for provider in providers %}
+        {% set provider_accounts = accounts|selectattr('provider', 'equalto', provider)|list %}
+        <div class="card rounded-xl p-4 text-center hover:shadow-lg transition-shadow">
+            <div class="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-bold text-lg
+                {% if provider == 'fedex' %}bg-gradient-to-br from-purple-500 to-purple-600
+                {% elif provider == 'ups' %}bg-gradient-to-br from-yellow-600 to-yellow-700
+                {% elif provider == 'usps' %}bg-gradient-to-br from-blue-500 to-blue-600
+                {% elif provider == 'dhl' %}bg-gradient-to-br from-red-500 to-red-600
+                {% elif provider == 'amazon' %}bg-gradient-to-br from-orange-500 to-orange-600
+                {% endif %}">
+                {{ provider[:2].upper() }}
+            </div>
+            <div class="text-2xl font-bold text-metallic-900">{{ provider_accounts|length }}</div>
+            <div class="text-sm text-metallic-600 capitalize mb-2">{{ provider }}</div>
+            {% if provider_accounts %}
+            <div class="flex justify-center space-x-1">
+                {% for account in provider_accounts %}
+                <div class="w-2 h-2 rounded-full {{ 'bg-green-400' if account.is_active else 'bg-red-400' }}"></div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Accounts Table -->
+    <div class="card rounded-xl overflow-hidden">
+        <div class="p-6 border-b border-metallic-200">
+            <h3 class="text-xl font-semibold text-metallic-900">Shipping Accounts</h3>
         </div>
         
-        {% if shipping_orders %}
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="w-full">
+                <thead class="bg-metallic-50 border-b border-metallic-200">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tracking</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estimated Delivery</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Provider</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Account Name</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Last Sync</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for order in shipping_orders %}
-                    <tr class="hover:bg-gray-50 order-row" data-provider="{{ order.account.provider }}" data-status="{{ order.status }}">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ order.order_id }}</div>
-                            {% if order.order_number %}
-                            <div class="text-sm text-gray-500">Internal: {{ order.order_number }}</div>
-                            {% endif %}
-                        </td>
+                <tbody class="bg-white divide-y divide-metallic-200">
+                    {% for account in accounts %}
+                    <tr class="hover:bg-metallic-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                {% if order.account.provider == 'fcpeuro' %}
-                                <div class="h-6 w-6 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-xs mr-2">FC</div>
-                                {% elif order.account.provider == 'orielly' %}
-                                <div class="h-6 w-6 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xs mr-2">OR</div>
-                                {% elif order.account.provider == 'autozone' %}
-                                <div class="h-6 w-6 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs mr-2">AZ</div>
-                                {% elif order.account.provider == 'harborfreight' %}
-                                <div class="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs mr-2">HF</div>
-                                {% elif order.account.provider == 'amazon' %}
-                                <div class="h-6 w-6 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs mr-2">AM</div>
-                                {% endif %}
-                                <span class="text-sm text-gray-900">{{ order.account.account_name }}</span>
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3
+                                    {% if account.provider == 'fedex' %}bg-gradient-to-br from-purple-500 to-purple-600
+                                    {% elif account.provider == 'ups' %}bg-gradient-to-br from-yellow-600 to-yellow-700
+                                    {% elif account.provider == 'usps' %}bg-gradient-to-br from-blue-500 to-blue-600
+                                    {% elif account.provider == 'dhl' %}bg-gradient-to-br from-red-500 to-red-600
+                                    {% elif account.provider == 'amazon' %}bg-gradient-to-br from-orange-500 to-orange-600
+                                    {% else %}bg-gradient-to-br from-metallic-500 to-metallic-600{% endif %}">
+                                    {{ account.provider[:2].upper() }}
+                                </div>
+                                <span class="text-sm font-medium text-metallic-900 capitalize">{{ account.provider }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="status-badge status-{{ order.status }}">
-                                {{ order.status|replace('_', ' ')|title }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {% if order.tracking_number %}
-                            <div class="text-sm text-gray-900">{{ order.tracking_number }}</div>
-                            <div class="text-sm text-gray-500">{{ order.carrier or 'Unknown Carrier' }}</div>
-                            {% else %}
-                            <span class="text-sm text-gray-400">No tracking</span>
+                            <div class="text-sm text-metallic-900">{{ account.account_name }}</div>
+                            {% if account.username %}
+                            <div class="text-sm text-metallic-500">{{ account.username }}</div>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            {% if order.estimated_delivery %}
-                            <div class="text-sm text-gray-900">{{ order.estimated_delivery.strftime('%Y-%m-%d') }}</div>
-                            <div class="text-sm text-gray-500">{{ order.estimated_delivery.strftime('%H:%M') }}</div>
+                            {% if account.is_active %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <div class="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
+                                Active
+                            </span>
                             {% else %}
-                            <span class="text-sm text-gray-400">TBD</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <div class="w-2 h-2 bg-red-400 rounded-full mr-1"></div>
+                                Inactive
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                            {% if account.last_sync %}
+                            {{ account.last_sync.strftime('%m/%d/%Y %I:%M %p') }}
+                            {% else %}
+                            <span class="text-metallic-400">Never</span>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="showTrackingDetails({{ order.id }})" class="text-bluez-600 hover:text-bluez-900 mr-3">
-                                Track
-                            </button>
-                            {% if order.tracking_number %}
-                            <button onclick="showMap({{ order.id }})" class="text-green-600 hover:text-green-900">
-                                Map
-                            </button>
-                            {% endif %}
+                            <div class="flex space-x-2">
+                                <button onclick="testConnection({{ account.id }})" class="text-purple-600 hover:text-purple-800 transition-colors" title="Test Connection">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                </button>
+                                <a href="{{ url_for('edit_account', account_id=account.id) }}" class="text-bluez-600 hover:text-bluez-800 transition-colors" title="Edit Account">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                <button onclick="syncAccount({{ account.id }})" class="text-green-600 hover:text-green-800 transition-colors" title="Sync Account">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        {% else %}
-        <div class="p-8 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-            </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No shipping orders</h3>
-            <p class="mt-1 text-sm text-gray-500">Orders will appear here once your accounts sync data.</p>
-            <div class="mt-6">
-                <a href="{{ url_for('admin_accounts') }}" class="btn btn-primary">
-                    Configure Accounts
-                </a>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 
-<!-- Tracking Details Modal -->
-<div id="tracking-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Tracking Details</h3>
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
+<!-- Webhooks Tab -->
+<div id="webhooksContent" class="hidden space-y-8">
+    <!-- Webhook Endpoints Configuration -->
+    <div class="card rounded-xl p-8">
+        <h2 class="text-2xl font-bold text-metallic-900 mb-6">Webhook Endpoints</h2>
+        <p class="text-metallic-600 mb-6">Configure these URLs in your shipping carrier accounts:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for provider in ['fedex', 'ups', 'usps', 'dhl', 'amazon'] %}
+            <div class="bg-gradient-to-br 
+                {% if provider == 'fedex' %}from-purple-50 to-purple-100 border-purple-200
+                {% elif provider == 'ups' %}from-yellow-50 to-yellow-100 border-yellow-200
+                {% elif provider == 'usps' %}from-blue-50 to-blue-100 border-blue-200
+                {% elif provider == 'dhl' %}from-red-50 to-red-100 border-red-200
+                {% elif provider == 'amazon' %}from-orange-50 to-orange-100 border-orange-200
+                {% endif %} p-6 rounded-xl border">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg
+                        {% if provider == 'fedex' %}text-purple-800
+                        {% elif provider == 'ups' %}text-yellow-800
+                        {% elif provider == 'usps' %}text-blue-800
+                        {% elif provider == 'dhl' %}text-red-800
+                        {% elif provider == 'amazon' %}text-orange-800
+                        {% endif %}">{{ provider.upper() }}</h3>
+                    <button onclick="testWebhook('{{ provider }}')" class="
+                        {% if provider == 'fedex' %}bg-purple-600 hover:bg-purple-700
+                        {% elif provider == 'ups' %}bg-yellow-600 hover:bg-yellow-700
+                        {% elif provider == 'usps' %}bg-blue-600 hover:bg-blue-700
+                        {% elif provider == 'dhl' %}bg-red-600 hover:bg-red-700
+                        {% elif provider == 'amazon' %}bg-orange-600 hover:bg-orange-700
+                        {% endif %} text-white px-3 py-1 rounded-lg transition-colors text-sm">
+                        Test
+                    </button>
+                </div>
+                <div class="bg-white p-3 rounded-lg border mb-3">
+                    <code class="text-sm text-metallic-800 break-all">{{ request.url_root }}webhooks/shipping/{{ provider }}</code>
+                </div>
+                <div class="text-xs 
+                    {% if provider == 'fedex' %}text-purple-700
+                    {% elif provider == 'ups' %}text-yellow-700
+                    {% elif provider == 'usps' %}text-blue-700
+                    {% elif provider == 'dhl' %}text-red-700
+                    {% elif provider == 'amazon' %}text-orange-700
+                    {% endif %}">
+                    <p><strong>Method:</strong> POST</p>
+                    <p><strong>Content-Type:</strong> application/json</p>
+                </div>
             </div>
-            <div id="tracking-content" class="p-6">
-                <!-- Tracking content will be loaded here -->
-            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Webhook Activity -->
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-metallic-900">Recent Webhook Activity</h3>
+            <button onclick="refreshWebhooks()" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-metallic-50 border-b border-metallic-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Provider</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Timestamp</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">IP Address</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-metallic-200">
+                    {% for log in webhook_logs[:20] %}
+                    <tr class="hover:bg-metallic-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if log.provider == 'fedex' %}bg-purple-100 text-purple-800
+                                {% elif log.provider == 'ups' %}bg-yellow-100 text-yellow-800
+                                {% elif log.provider == 'usps' %}bg-blue-100 text-blue-800
+                                {% elif log.provider == 'dhl' %}bg-red-100 text-red-800
+                                {% elif log.provider == 'amazon' %}bg-orange-100 text-orange-800
+                                {% else %}bg-metallic-100 text-metallic-800{% endif %}">
+                                {{ log.provider.upper() }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if log.processed %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                ✓ Success
+                            </span>
+                            {% elif log.processing_error %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                ✗ Failed
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                ⏳ Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                            {{ log.created_at.strftime('%m/%d %I:%M %p') if log.created_at }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-600">
+                            {{ log.ip_address }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="viewWebhookDetails({{ log.id }})" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-<!-- Map Modal -->
-<div id="map-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-4xl w-full">
-            <div class="p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Shipment Tracking Map</h3>
-                <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="p-6">
-                <div id="tracking-map" class="tracking-map"></div>
-            </div>
+<!-- Orders Tab -->
+<div id="ordersContent" class="hidden space-y-8">
+    <div class="card rounded-xl overflow-hidden">
+        <div class="p-6 border-b border-metallic-200">
+            <h3 class="text-xl font-semibold text-metallic-900">Shipping Orders</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-metallic-50 border-b border-metallic-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Tracking #</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Carrier</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Estimated Delivery</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-metallic-200">
+                    {% for order in shipping_orders %}
+                    <tr class="hover:bg-metallic-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-metallic-900">{{ order.tracking_number or 'N/A' }}</div>
+                            <div class="text-sm text-metallic-500">{{ order.order_id }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if order.carrier == 'FEDEX' %}bg-purple-100 text-purple-800
+                                {% elif order.carrier == 'UPS' %}bg-yellow-100 text-yellow-800
+                                {% elif order.carrier == 'USPS' %}bg-blue-100 text-blue-800
+                                {% elif order.carrier == 'DHL' %}bg-red-100 text-red-800
+                                {% else %}bg-metallic-100 text-metallic-800{% endif %}">
+                                {{ order.carrier or 'Unknown' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if order.status in ['delivered', 'completed'] %}bg-green-100 text-green-800
+                                {% elif order.status in ['shipped', 'in_transit'] %}bg-blue-100 text-blue-800
+                                {% elif order.status in ['pending', 'processing'] %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-metallic-100 text-metallic-800{% endif %}">
+                                {{ order.status.replace('_', ' ').title() if order.status else 'Unknown' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                            {{ order.estimated_delivery.strftime('%m/%d/%Y') if order.estimated_delivery else 'TBD' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="trackOrder('{{ order.carrier.lower() if order.carrier else 'fedex' }}', '{{ order.tracking_number }}')" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
-let map;
-let trackingMarkers = [];
-
-// Filter functionality
-document.getElementById('provider-filter').addEventListener('change', filterOrders);
-document.getElementById('status-filter').addEventListener('change', filterOrders);
-document.getElementById('date-filter').addEventListener('change', filterOrders);
-
-function filterOrders() {
-    const providerFilter = document.getElementById('provider-filter').value;
-    const statusFilter = document.getElementById('status-filter').value;
-    const dateFilter = document.getElementById('date-filter').value;
+    let currentTab = 'accounts';
     
-    const rows = document.querySelectorAll('.order-row');
+    function switchTab(tab) {
+        currentTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('[id$="Tab"]').forEach(btn => {
+            btn.classList.remove('bg-white', 'text-metallic-900', 'shadow-sm');
+            btn.classList.add('text-metallic-600', 'hover:text-metallic-900');
+        });
+        
+        document.getElementById(tab + 'Tab').classList.add('bg-white', 'text-metallic-900', 'shadow-sm');
+        document.getElementById(tab + 'Tab').classList.remove('text-metallic-600', 'hover:text-metallic-900');
+        
+        // Show/hide content
+        document.getElementById('accountsContent').classList.toggle('hidden', tab !== 'accounts');
+        document.getElementById('webhooksContent').classList.toggle('hidden', tab !== 'webhooks');
+        document.getElementById('ordersContent').classList.toggle('hidden', tab !== 'orders');
+    }
     
-    rows.forEach(row => {
-        let show = true;
+    function testConnection(accountId) {
+        const button = event.target.closest('button');
+        const originalContent = button.innerHTML;
         
-        if (providerFilter && row.dataset.provider !== providerFilter) {
-            show = false;
-        }
+        button.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`;
+        button.disabled = true;
         
-        if (statusFilter && row.dataset.status !== statusFilter) {
-            show = false;
-        }
-        
-        // Date filtering would require additional data attributes
-        // Implementation depends on specific requirements
-        
-        row.style.display = show ? '' : 'none';
-    });
-}
-
-function refreshData() {
-    // Implement refresh functionality
-    location.reload();
-}
-
-function showTrackingDetails(orderId) {
-    fetch(`/api/shipping/orders/${orderId}/tracking`)
+        fetch(`/api/accounts/${accountId}/test`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                alert('Error loading tracking data: ' + data.error);
-                return;
-            }
-            
-            let content = `
-                <div class="space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h4 class="font-semibold">Order Information</h4>
-                        <p><strong>Order ID:</strong> ${data.order.order_id}</p>
-                        <p><strong>Tracking Number:</strong> ${data.order.tracking_number || 'N/A'}</p>
-                        <p><strong>Status:</strong> ${data.order.status}</p>
-                        <p><strong>Estimated Delivery:</strong> ${data.order.estimated_delivery || 'TBD'}</p>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-semibold mb-3">Tracking Events</h4>
-                        <div class="space-y-3">
-            `;
-            
-            if (data.tracking_events && data.tracking_events.length > 0) {
-                data.tracking_events.forEach(event => {
-                    content += `
-                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                            <div class="w-3 h-3 bg-bluez-500 rounded-full mt-1"></div>
-                            <div class="flex-1">
-                                <div class="font-medium">${event.status}</div>
-                                <div class="text-sm text-gray-600">${event.description || ''}</div>
-                                <div class="text-xs text-gray-500">${event.location || ''} - ${new Date(event.date).toLocaleString()}</div>
-                            </div>
-                        </div>
-                    `;
-                });
+            if (data.success) {
+                alert(`✓ Connection successful!\n\nProvider: ${data.provider}\nAccount: ${data.account_name}`);
             } else {
-                content += '<p class="text-gray-500">No tracking events available</p>';
+                alert(`✗ Connection failed!\n\nError: ${data.error || 'Unknown error'}`);
             }
-            
-            content += `
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('tracking-content').innerHTML = content;
-            document.getElementById('tracking-modal').classList.remove('hidden');
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading tracking data');
+            alert('✗ Error testing connection');
+        })
+        .finally(() => {
+            button.innerHTML = originalContent;
+            button.disabled = false;
         });
-}
-
-function showMap(orderId) {
-    fetch(`/api/shipping/orders/${orderId}/tracking`)
+    }
+    
+    function syncAccount(accountId) {
+        if (confirm('Sync this account? This will fetch the latest orders and tracking information.')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/admin/accounts/${accountId}/sync`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+    
+    function syncAllAccounts() {
+        if (confirm('Sync all active accounts? This may take a few minutes.')) {
+            fetch('/api/shipping/sync-all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✓ Sync completed!\n\nTotal orders synced: ${data.total_synced}\n\nDetails:\n${Object.entries(data.results).map(([provider, count]) => `${provider}: ${count}`).join('\n')}`);
+                    location.reload();
+                } else {
+                    alert('✗ Sync failed: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('✗ Error syncing accounts');
+            });
+        }
+    }
+    
+    function testWebhook(provider) {
+        fetch(`/api/webhooks/test/${provider}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`✓ ${provider.toUpperCase()} webhook test successful!`);
+                if (currentTab === 'webhooks') {
+                    location.reload();
+                }
+            } else {
+                alert(`✗ ${provider.toUpperCase()} webhook test failed: ${data.error || 'Unknown error'}`);
+            }
+        })
+        .catch(error => {
+            alert(`✗ Error testing ${provider.toUpperCase()} webhook`);
+        });
+    }
+    
+    function testAllWebhooks() {
+        const providers = ['fedex', 'ups', 'usps', 'dhl', 'amazon'];
+        let completed = 0;
+        let successful = 0;
+        
+        providers.forEach(provider => {
+            fetch(`/api/webhooks/test/${provider}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) successful++;
+                completed++;
+                
+                if (completed === providers.length) {
+                    alert(`Webhook tests completed: ${successful}/${providers.length} successful`);
+                    if (currentTab === 'webhooks') {
+                        location.reload();
+                    }
+                }
+            })
+            .catch(error => {
+                completed++;
+                if (completed === providers.length) {
+                    alert(`Webhook tests completed: ${successful}/${providers.length} successful`);
+                }
+            });
+        });
+    }
+    
+    function trackOrder(provider, trackingNumber) {
+        if (!trackingNumber || trackingNumber === 'None') {
+            alert('No tracking number available for this order');
+            return;
+        }
+        
+        fetch(`/api/shipping/track/${provider}/${trackingNumber}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                alert('Error loading tracking data: ' + data.error);
-                return;
-            }
-            
-            document.getElementById('map-modal').classList.remove('hidden');
-            
-            // Initialize map
-            if (!map) {
-                map = new google.maps.Map(document.getElementById('tracking-map'), {
-                    zoom: 4,
-                    center: { lat: 39.8283, lng: -98.5795 } // Center of USA
-                });
-            }
-            
-            // Clear existing markers
-            trackingMarkers.forEach(marker => marker.setMap(null));
-            trackingMarkers = [];
-            
-            // Add markers for tracking events with coordinates
-            if (data.tracking_events) {
-                const bounds = new google.maps.LatLngBounds();
-                
-                data.tracking_events.forEach((event, index) => {
-                    if (event.latitude && event.longitude) {
-                        const marker = new google.maps.Marker({
-                            position: { lat: event.latitude, lng: event.longitude },
-                            map: map,
-                            title: event.status,
-                            label: String(index + 1)
-                        });
-                        
-                        const infoWindow = new google.maps.InfoWindow({
-                            content: `
-                                <div>
-                                    <h4>${event.status}</h4>
-                                    <p>${event.description || ''}</p>
-                                    <p><strong>Location:</strong> ${event.location}</p>
-                                    <p><strong>Date:</strong> ${new Date(event.date).toLocaleString()}</p>
-                                </div>
-                            `
-                        });
-                        
-                        marker.addListener('click', () => {
-                            infoWindow.open(map, marker);
-                        });
-                        
-                        trackingMarkers.push(marker);
-                        bounds.extend(marker.getPosition());
-                    }
-                });
-                
-                if (trackingMarkers.length > 0) {
-                    map.fitBounds(bounds);
-                }
+                alert(`Tracking lookup failed: ${data.error}`);
+            } else {
+                alert(`Tracking info retrieved for ${trackingNumber}:\n\n${JSON.stringify(data, null, 2)}`);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading map data');
+            alert('Error looking up tracking information');
         });
-}
-
-function closeModal() {
-    document.getElementById('tracking-modal').classList.add('hidden');
-}
-
-function closeMapModal() {
-    document.getElementById('map-modal').classList.add('hidden');
-}
-
-// Close modals when clicking outside
-document.getElementById('tracking-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
     }
-});
-
-document.getElementById('map-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeMapModal();
+    
+    function viewWebhookDetails(logId) {
+        alert(`Webhook details for log ID: ${logId}\n\n(In a full implementation, this would show detailed webhook payload and processing information)`);
     }
-});
+    
+    function refreshWebhooks() {
+        if (currentTab === 'webhooks') {
+            location.reload();
+        }
+    }
 </script>
 {% endblock %}

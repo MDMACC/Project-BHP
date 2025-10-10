@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}System Settings - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}System Settings{% endblock %}
+{% block page_description %}Configure system preferences, security, and business settings{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="saveAllSettings()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+        </svg>
+        <span>Save All</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Settings Categories -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Business Settings -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">Business Info</h2>
+        </div>
+        
+        <form class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-metallic-700 mb-2">Shop Name</label>
+                <input type="text" value="Bluez PowerHouse Auto Repair" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-metallic-700 mb-2">Address</label>
+                <input type="text" value="8033 Remmet Ave" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">City</label>
+                    <input type="text" value="Canoga Park" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">State</label>
+                    <input type="text" value="CA" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">ZIP Code</label>
+                    <input type="text" value="91304" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Phone</label>
+                    <input type="tel" value="(747) 474-9193" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-metallic-700 mb-2">Business Hours</label>
+                <textarea rows="3" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">Monday-Saturday: 9AM-6PM
+Sunday: Closed</textarea>
+            </div>
+        </form>
+    </div>
+    
+    <!-- System Settings -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">System Config</h2>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- Inventory Settings -->
+            <div class="p-4 bg-green-50 rounded-lg">
+                <h4 class="font-medium text-green-900 mb-3">Inventory Settings</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-green-800">Auto-reorder alerts</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-green-800">Stock movement tracking</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-green-800 mb-1">Default minimum stock level</label>
+                        <input type="number" value="10" min="0" class="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Settings -->
+            <div class="p-4 bg-blue-50 rounded-lg">
+                <h4 class="font-medium text-blue-900 mb-3">Notifications</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-blue-800">Email notifications</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-blue-800">Chat notifications</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Security & Access -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">Security</h2>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- Password Policy -->
+            <div class="p-4 bg-red-50 rounded-lg">
+                <h4 class="font-medium text-red-900 mb-3">Password Policy</h4>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm text-red-800 mb-1">Minimum password length</label>
+                        <input type="number" value="8" min="6" max="20" class="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-red-800">Require special characters</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-red-800">Force password reset (days)</span>
+                        <input type="number" value="90" min="30" max="365" class="w-20 px-2 py-1 border border-red-300 rounded text-sm">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Session Settings -->
+            <div class="p-4 bg-yellow-50 rounded-lg">
+                <h4 class="font-medium text-yellow-900 mb-3">Session Management</h4>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm text-yellow-800 mb-1">Session timeout (minutes)</label>
+                        <input type="number" value="60" min="15" max="480" class="w-full px-3 py-2 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-yellow-800">Remember login</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Settings -->
+<div class="card rounded-xl p-8 mt-8">
+    <h2 class="text-2xl font-bold text-metallic-900 mb-6">Advanced Settings</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- API Settings -->
+        <div>
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4">API Configuration</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">API Rate Limit (requests/minute)</label>
+                    <input type="number" value="100" min="10" max="1000" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Webhook Timeout (seconds)</label>
+                    <input type="number" value="30" min="5" max="120" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-metallic-700">Enable API logging</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-bluez-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bluez-600"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Maintenance Settings -->
+        <div>
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4">Maintenance</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-metallic-700">Maintenance mode</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-metallic-700">Debug mode</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
+                    </label>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Log retention (days)</label>
+                    <input type="number" value="30" min="7" max="365" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Management -->
+<div class="card rounded-xl p-8 mt-8">
+    <h2 class="text-2xl font-bold text-metallic-900 mb-6">User Management</h2>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-metallic-50 border-b border-metallic-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">User</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Last Login</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-metallic-200">
+                <tr class="hover:bg-metallic-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-3">
+                                A
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-metallic-900">admin</div>
+                                <div class="text-sm text-metallic-500">admin@autoshop.com</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Admin
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Active
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        Today, 2:30 PM
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button onclick="editUser(1)" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                            <button onclick="resetPassword(1)" class="text-yellow-600 hover:text-yellow-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2m0 0v2a2 2 0 01-2 2m0 0h-2m-6-4h2m0 0V9a2 2 0 012-2m0 0a2 2 0 012-2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="hover:bg-metallic-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-3">
+                                M
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-metallic-900">manager</div>
+                                <div class="text-sm text-metallic-500">manager@autoshop.com</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Manager
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Active
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        Yesterday, 4:15 PM
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button onclick="editUser(2)" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                            <button onclick="resetPassword(2)" class="text-yellow-600 hover:text-yellow-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2m0 0v2a2 2 0 01-2 2m0 0h-2m-6-4h2m0 0V9a2 2 0 012-2m0 0a2 2 0 012-2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-6">
+        <button onclick="addUser()" class="bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors">
+            Add New User
+        </button>
+    </div>
+</div>
+
+<script>
+    function saveAllSettings() {
+        if (confirm('Save all system settings?')) {
+            alert('✓ All settings saved successfully!');
+        }
+    }
+    
+    function generateAllReports() {
+        if (confirm('Generate all available reports? This may take several minutes.')) {
+            alert('Generating all reports... You will be notified when complete.');
+        }
+    }
+    
+    function editUser(userId) {
+        alert(`Edit user ${userId} - This would open a user editing modal`);
+    }
+    
+    function resetPassword(userId) {
+        if (confirm('Reset password for this user? They will need to set a new password on next login.')) {
+            alert(`Password reset for user ${userId}`);
+        }
+    }
+    
+    function addUser() {
+        alert('Add new user - This would open a user creation modal');
+    }
+</script>
+{% endblock %}

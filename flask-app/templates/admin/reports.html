@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}System Reports - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}System Reports{% endblock %}
+{% block page_description %}Analytics, insights, and business intelligence reports{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="generateAllReports()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Export All</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Report Categories -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <!-- Inventory Reports -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">Inventory Reports</h2>
+        </div>
+        
+        <div class="space-y-3">
+            <button onclick="generateReport('inventory-summary')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Inventory Summary</div>
+                <div class="text-sm text-metallic-600">Stock levels, values, and alerts</div>
+            </button>
+            
+            <button onclick="generateReport('low-stock')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Low Stock Alert</div>
+                <div class="text-sm text-metallic-600">Parts below minimum levels</div>
+            </button>
+            
+            <button onclick="generateReport('stock-movement')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Stock Movement</div>
+                <div class="text-sm text-metallic-600">Inventory changes and trends</div>
+            </button>
+            
+            <button onclick="generateReport('valuation')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Inventory Valuation</div>
+                <div class="text-sm text-metallic-600">Total inventory value analysis</div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Sales & Orders Reports -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">Sales & Orders</h2>
+        </div>
+        
+        <div class="space-y-3">
+            <button onclick="generateReport('sales-summary')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Sales Summary</div>
+                <div class="text-sm text-metallic-600">Revenue and order statistics</div>
+            </button>
+            
+            <button onclick="generateReport('order-status')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Order Status Report</div>
+                <div class="text-sm text-metallic-600">Pending, shipped, delivered orders</div>
+            </button>
+            
+            <button onclick="generateReport('supplier-performance')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Supplier Performance</div>
+                <div class="text-sm text-metallic-600">Delivery times and reliability</div>
+            </button>
+            
+            <button onclick="generateReport('monthly-trends')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Monthly Trends</div>
+                <div class="text-sm text-metallic-600">Sales patterns and forecasting</div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Customer & Service Reports -->
+    <div class="card rounded-xl p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-metallic-900">Customer & Service</h2>
+        </div>
+        
+        <div class="space-y-3">
+            <button onclick="generateReport('customer-summary')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Customer Summary</div>
+                <div class="text-sm text-metallic-600">Customer database overview</div>
+            </button>
+            
+            <button onclick="generateReport('service-schedule')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Service Schedule</div>
+                <div class="text-sm text-metallic-600">Upcoming and completed services</div>
+            </button>
+            
+            <button onclick="generateReport('chat-analytics')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Chat Analytics</div>
+                <div class="text-sm text-metallic-600">Customer support metrics</div>
+            </button>
+            
+            <button onclick="generateReport('shipping-analytics')" class="w-full text-left p-3 bg-metallic-50 hover:bg-metallic-100 rounded-lg transition-colors">
+                <div class="font-medium text-metallic-900">Shipping Analytics</div>
+                <div class="text-sm text-metallic-600">Delivery performance and costs</div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Report Generation Status -->
+<div class="card rounded-xl p-8 mb-8">
+    <h2 class="text-2xl font-bold text-metallic-900 mb-6">Report Generation</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Custom Date Range -->
+        <div>
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4">Custom Date Range</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Start Date</label>
+                        <input type="date" id="startDate" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">End Date</label>
+                        <input type="date" id="endDate" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Report Type</label>
+                    <select id="customReportType" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        <option value="comprehensive">Comprehensive Report</option>
+                        <option value="inventory">Inventory Only</option>
+                        <option value="sales">Sales Only</option>
+                        <option value="customers">Customers Only</option>
+                        <option value="shipping">Shipping Only</option>
+                    </select>
+                </div>
+                
+                <button onclick="generateCustomReport()" class="w-full bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors font-medium">
+                    Generate Custom Report
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quick Reports -->
+        <div>
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4">Quick Reports</h3>
+            <div class="space-y-3">
+                <button onclick="generateQuickReport('today')" class="w-full bg-green-50 text-green-700 px-4 py-3 rounded-lg hover:bg-green-100 transition-colors text-left">
+                    <div class="font-medium">Today's Activity</div>
+                    <div class="text-sm opacity-75">Orders, appointments, stock changes</div>
+                </button>
+                
+                <button onclick="generateQuickReport('week')" class="w-full bg-blue-50 text-blue-700 px-4 py-3 rounded-lg hover:bg-blue-100 transition-colors text-left">
+                    <div class="font-medium">This Week</div>
+                    <div class="text-sm opacity-75">Weekly performance summary</div>
+                </button>
+                
+                <button onclick="generateQuickReport('month')" class="w-full bg-purple-50 text-purple-700 px-4 py-3 rounded-lg hover:bg-purple-100 transition-colors text-left">
+                    <div class="font-medium">This Month</div>
+                    <div class="text-sm opacity-75">Monthly business overview</div>
+                </button>
+                
+                <button onclick="generateQuickReport('quarter')" class="w-full bg-orange-50 text-orange-700 px-4 py-3 rounded-lg hover:bg-orange-100 transition-colors text-left">
+                    <div class="font-medium">Quarterly Report</div>
+                    <div class="text-sm opacity-75">Comprehensive quarterly analysis</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Reports -->
+<div class="card rounded-xl p-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-metallic-900">Recent Reports</h2>
+        <button onclick="refreshReports()" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+        </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-metallic-50 border-b border-metallic-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Report Name</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Generated</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Size</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-metallic-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-metallic-200" id="reportsTableBody">
+                <!-- Sample reports -->
+                <tr class="hover:bg-metallic-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-metallic-900">Monthly Inventory Report</div>
+                        <div class="text-sm text-metallic-500">October 2024</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-bluez-100 text-bluez-800">
+                            Inventory
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        10/08/2024 2:30 PM
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        245 KB
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button onclick="downloadReport('monthly_inventory_202410.pdf')" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </button>
+                            <button onclick="viewReport('monthly_inventory_202410.pdf')" class="text-green-600 hover:text-green-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                            <button onclick="deleteReport('monthly_inventory_202410.pdf')" class="text-red-600 hover:text-red-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="hover:bg-metallic-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-metallic-900">Weekly Sales Report</div>
+                        <div class="text-sm text-metallic-500">Week of Oct 1-7, 2024</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Sales
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        10/07/2024 9:15 AM
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-metallic-900">
+                        189 KB
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button onclick="downloadReport('weekly_sales_20241001.pdf')" class="text-bluez-600 hover:text-bluez-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </button>
+                            <button onclick="viewReport('weekly_sales_20241001.pdf')" class="text-green-600 hover:text-green-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                            <button onclick="deleteReport('weekly_sales_20241001.pdf')" class="text-red-600 hover:text-red-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Set default dates
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        
+        document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        document.getElementById('startDate').value = lastMonth.toISOString().split('T')[0];
+    });
+    
+    function generateReport(reportType) {
+        alert(`Generating ${reportType.replace('-', ' ')} report...`);
+        // In a real app, this would trigger report generation
+    }
+    
+    function generateCustomReport() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reportType = document.getElementById('customReportType').value;
+        
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates');
+            return;
+        }
+        
+        alert(`Generating ${reportType} report from ${startDate} to ${endDate}...`);
+    }
+    
+    function generateQuickReport(period) {
+        alert(`Generating ${period} report...`);
+    }
+    
+    function generateAllReports() {
+        if (confirm('Generate all available reports? This may take several minutes.')) {
+            alert('Generating all reports... You will be notified when complete.');
+        }
+    }
+    
+    function downloadReport(filename) {
+        alert(`Downloading report: ${filename}`);
+    }
+    
+    function viewReport(filename) {
+        alert(`Opening report: ${filename}`);
+    }
+    
+    function deleteReport(filename) {
+        if (confirm(`Delete report ${filename}? This cannot be undone.`)) {
+            alert(`Report ${filename} deleted.`);
+        }
+    }
+    
+    function refreshReports() {
+        location.reload();
+    }
+</script>
+{% endblock %}
