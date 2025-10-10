@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Part - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Add New Part{% endblock %}
+{% block page_description %}Add a new part to the inventory with photo{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <a href="{{ url_for('parts') }}" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <span>Back to Parts</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <form method="POST" enctype="multipart/form-data" class="space-y-8">
+        <!-- Photo Upload Section -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-bluez-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Part Photo
+            </h3>
+            
+            <div class="photo-upload-area border-2 border-dashed border-metallic-300 rounded-lg p-8 text-center hover:border-bluez-400 transition-colors" id="photoUploadArea">
+                <div id="photoPreview" class="hidden">
+                    <img id="previewImage" src="" alt="Part preview" class="max-w-xs max-h-48 mx-auto rounded-lg shadow-md mb-4">
+                    <p class="text-sm text-metallic-600 mb-2">Photo selected</p>
+                    <button type="button" onclick="clearPhoto()" class="text-red-600 hover:text-red-800 text-sm">Remove photo</button>
+                </div>
+                
+                <div id="uploadPrompt">
+                    <svg class="w-12 h-12 text-metallic-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <p class="text-metallic-600 mb-2">Click to upload a photo or drag and drop</p>
+                    <p class="text-sm text-metallic-500">PNG, JPG, GIF up to 16MB</p>
+                </div>
+                
+                <input type="file" name="photo" id="photoInput" accept="image/*" class="hidden">
+            </div>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-bluez-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Basic Information
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Part Number *</label>
+                    <input type="text" name="part_number" required 
+                           class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                           placeholder="e.g., BRK-001">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Part Name *</label>
+                    <input type="text" name="name" required 
+                           class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                           placeholder="e.g., Brake Pads - Front">
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" 
+                              class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                              placeholder="Detailed description of the part..."></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Category</label>
+                    <select name="category" class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors">
+                        <option value="">Select Category</option>
+                        <option value="Brakes">Brakes</option>
+                        <option value="Engine">Engine</option>
+                        <option value="Suspension">Suspension</option>
+                        <option value="Tires">Tires</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Body">Body</option>
+                        <option value="Interior">Interior</option>
+                        <option value="Performance">Performance</option>
+                        <option value="Tools">Tools</option>
+                        <option value="Fluids">Fluids</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Location</label>
+                    <input type="text" name="location" 
+                           class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                           placeholder="e.g., Shelf A-1, Bay 2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing & Stock -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-metallic-900 mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-bluez-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+                Pricing & Stock
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Cost Price</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-metallic-500">$</span>
+                        <input type="number" name="cost" step="0.01" min="0" 
+                               class="w-full pl-8 pr-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                               placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Selling Price</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-metallic-500">$</span>
+                        <input type="number" name="price" step="0.01" min="0" 
+                               class="w-full pl-8 pr-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                               placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Current Stock</label>
+                    <input type="number" name="quantity_in_stock" min="0" 
+                           class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                           placeholder="0">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Minimum Stock Level</label>
+                    <input type="number" name="minimum_stock_level" min="0" 
+                           class="w-full px-4 py-3 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent transition-colors"
+                           placeholder="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end space-x-4">
+            <a href="{{ url_for('parts') }}" class="px-6 py-3 border border-metallic-300 text-metallic-700 rounded-lg hover:bg-metallic-50 transition-colors">
+                Cancel
+            </a>
+            <button type="submit" class="px-6 py-3 bg-bluez-600 text-white rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                <span>Add Part</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const photoUploadArea = document.getElementById('photoUploadArea');
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const previewImage = document.getElementById('previewImage');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+
+    // Click to upload
+    photoUploadArea.addEventListener('click', function() {
+        photoInput.click();
+    });
+
+    // File input change
+    photoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            displayPhoto(file);
+        }
+    });
+
+    // Drag and drop
+    photoUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        photoUploadArea.classList.add('border-bluez-400', 'bg-bluez-50');
+    });
+
+    photoUploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        photoUploadArea.classList.remove('border-bluez-400', 'bg-bluez-50');
+    });
+
+    photoUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        photoUploadArea.classList.remove('border-bluez-400', 'bg-bluez-50');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+                photoInput.files = files;
+                displayPhoto(file);
+            }
+        }
+    });
+
+    function displayPhoto(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            uploadPrompt.classList.add('hidden');
+            photoPreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.clearPhoto = function() {
+        photoInput.value = '';
+        previewImage.src = '';
+        photoPreview.classList.add('hidden');
+        uploadPrompt.classList.remove('hidden');
+    };
+});
+</script>
+{% endblock %}

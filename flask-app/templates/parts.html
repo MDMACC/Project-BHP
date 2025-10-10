@@ -7,12 +7,12 @@
 
 {% block header_actions %}
 <div class="flex items-center space-x-4">
-    <button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+    <a href="{{ url_for('add_part') }}" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
         </svg>
         <span>Add Part</span>
-    </button>
+    </a>
     <div class="text-right">
         <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
         <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>

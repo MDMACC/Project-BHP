@@ -593,20 +593,58 @@
                 notes: document.getElementById('notes').value
             };
 
-            // Here you would send the data to your backend
-            console.log('Appointment Data:', formData);
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Scheduling...';
+            submitButton.disabled = true;
+
+            // Send data to backend API
+            fetch('/api/schedule-appointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message with appointment details
+                    const details = data.appointment_details;
+                    alert(`✅ Appointment Scheduled Successfully!\n\n` +
+                          `📅 Date: ${details.date}\n` +
+                          `🕐 Time: ${details.time}\n` +
+                          `👤 Customer: ${details.customer}\n` +
+                          `🔧 Service: ${details.service}\n` +
+                          `📞 Contact: ${details.phone}\n\n` +
+                          `We'll contact you to confirm your appointment. Thank you for choosing Bluez PowerHouse!`);
+                    
+                    // Reset form
+                    this.reset();
+                    selectedDate = null;
+                    selectedTime = null;
+                    document.getElementById('selectedDateDisplay').style.display = 'none';
+                    document.getElementById('selectedTimeDisplay').style.display = 'none';
+                    document.getElementById('timeSlotContainer').style.display = 'none';
+                    document.getElementById('selectDateFirst').style.display = 'block';
+                    document.querySelectorAll('.calendar-day.selected, .time-slot.selected').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                } else {
+                    alert(`❌ Error: ${data.error}\n\nPlease try again or contact us at (747) 474-9193.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error scheduling appointment:', error);
+                alert(`❌ Network Error\n\nUnable to schedule appointment. Please check your connection and try again, or contact us at (747) 474-9193.`);
+            })
+            .finally(() => {
+                // Restore button state
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            });
             
-            // Show success message
-            alert(`Appointment scheduled for ${selectedDate.toLocaleDateString()} at ${selectedTime}!\n\nWe'll contact you at ${formData.phone} to confirm your appointment.`);
-            
-            // Reset form
-            this.reset();
-            selectedDate = null;
-            selectedTime = null;
-            document.getElementById('selectedDateDisplay').style.display = 'none';
-            document.getElementById('selectedTimeDisplay').style.display = 'none';
-            document.getElementById('timeSlotContainer').style.display = 'none';
-            document.getElementById('selectDateFirst').style.display = 'block';
             document.querySelectorAll('.calendar-day.selected, .time-slot.selected').forEach(el => {
                 el.classList.remove('selected');
             });

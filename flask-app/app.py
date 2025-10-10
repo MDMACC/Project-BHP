@@ -494,29 +494,118 @@ def contacts():
         flash('Error loading contacts', 'error')
         return render_template('contacts.html', contacts=[])
 
+@app.route('/customer-management')
+@login_required
+def customer_management():
+    """Customer management page with vehicle folders and service history"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get all customers with their service records
+        customers = Contact.query.filter_by(type='customer', is_active=True)\
+                                .order_by(Contact.name)\
+                                .all()
+        
+        # Get service statistics for each customer
+        customer_data = []
+        for customer in customers:
+            service_count = ServiceRecord.query.filter_by(customer_id=customer.id).count()
+            last_service = ServiceRecord.query.filter_by(customer_id=customer.id)\
+                                            .order_by(ServiceRecord.service_date.desc())\
+                                            .first()
+            
+            customer_data.append({
+                'customer': customer,
+                'service_count': service_count,
+                'last_service': last_service,
+                'vehicle_info': customer.get_vehicle_info()
+            })
+        
+        return render_template('admin/customer_management.html', customer_data=customer_data)
+    except Exception as e:
+        logger.error(f"Customer management page error: {e}")
+        flash('Error loading customer data', 'error')
+        return render_template('admin/customer_management.html', customer_data=[])
+
 @app.route('/orders')
 @login_required
 def orders():
-    """Orders management page"""
+    """Redirect to customer management"""
+    return redirect(url_for('customer_management'))
+
+@app.route('/customer/<int:customer_id>')
+@login_required
+def customer_detail(customer_id):
+    """Individual customer folder with service history"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
     try:
-        orders_list = Order.query.order_by(Order.created_at.desc()).all()
-        return render_template('orders.html', orders=orders_list)
+        customer = Contact.query.get_or_404(customer_id)
+        
+        # Get all service records for this customer
+        service_records = ServiceRecord.query.filter_by(customer_id=customer_id)\
+                                           .order_by(ServiceRecord.service_date.desc())\
+                                           .all()
+        
+        # Get all appointments for this customer
+        appointments = Schedule.query.filter_by(customer_id=customer_id)\
+                                   .order_by(Schedule.start_date.desc())\
+                                   .all()
+        
+        return render_template('admin/customer_detail.html', 
+                             customer=customer,
+                             service_records=service_records,
+                             appointments=appointments)
     except Exception as e:
-        logger.error(f"Orders page error: {e}")
-        flash('Error loading orders', 'error')
-        return render_template('orders.html', orders=[])
+        logger.error(f"Customer detail page error: {e}")
+        flash('Error loading customer data', 'error')
+        return redirect(url_for('customer_management'))
 
 @app.route('/schedule')
 @login_required
 def schedule():
     """Schedule management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
     try:
-        schedules_list = Schedule.query.filter_by(is_active=True).order_by(Schedule.start_date).all()
-        return render_template('schedule.html', schedules=schedules_list)
+        from datetime import date
+        today = date.today()
+        
+        # Get all active schedules ordered by date and time
+        schedules_list = Schedule.query.filter_by(is_active=True)\
+                                     .order_by(Schedule.start_date, Schedule.start_time)\
+                                     .all()
+        
+        # Get all customers for appointment assignment
+        contacts = Contact.query.filter_by(type='customer', is_active=True)\
+                               .order_by(Contact.name)\
+                               .all()
+        
+        # Get statistics
+        today_appointments = Schedule.query.filter_by(is_active=True, start_date=today).count()
+        pending_appointments = Schedule.query.filter_by(is_active=True, status='pending').count()
+        confirmed_appointments = Schedule.query.filter_by(is_active=True, status='confirmed').count()
+        
+        return render_template('schedule.html', 
+                             schedules=schedules_list,
+                             contacts=contacts,
+                             today=today,
+                             today_appointments=today_appointments,
+                             pending_appointments=pending_appointments,
+                             confirmed_appointments=confirmed_appointments)
     except Exception as e:
         logger.error(f"Schedule page error: {e}")
         flash('Error loading schedule', 'error')
-        return render_template('schedule.html', schedules=[])
+        return render_template('schedule.html', schedules=[], today=None)
 
 @app.route('/inventory')
 @login_required
@@ -567,10 +656,17 @@ def shipping():
                              webhook_logs=[],
                              tracking_events=[])
 
+# Redirect old routes to unified shipping page
 @app.route('/admin/accounts')
 @login_required
 def admin_accounts():
-    """Admin accounts management page - redirect to unified shipping page"""
+    """Redirect to unified shipping page"""
+    return redirect(url_for('shipping'))
+
+@app.route('/admin/webhooks')
+@login_required
+def admin_webhooks():
+    """Redirect to unified shipping page"""
     return redirect(url_for('shipping'))
 
 @app.route('/admin/accounts/add', methods=['GET', 'POST'])
@@ -740,12 +836,6 @@ def get_tracking_data(order_id):
     except Exception as e:
         logger.error(f"Error getting tracking data: {e}")
         return {'error': 'Error loading tracking data'}, 500
-
-@app.route('/admin/webhooks')
-@login_required
-def admin_webhooks():
-    """Admin webhook management page - redirect to unified shipping page"""
-    return redirect(url_for('shipping'))
 
 # Chat API Routes
 @app.route('/api/chat/send', methods=['POST'])
@@ -1185,6 +1275,612 @@ def get_part_stock_history(part_id):
     except Exception as e:
         logger.error(f"Stock history error: {e}")
         return jsonify({'error': 'Failed to load stock history'}), 500
+
+@app.route('/add-part', methods=['GET', 'POST'])
+@login_required
+def add_part():
+    """Add new part with photo upload"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        try:
+            # Get form data
+            part_number = request.form.get('part_number', '').strip()
+            name = request.form.get('name', '').strip()
+            description = request.form.get('description', '').strip()
+            category = request.form.get('category', '').strip()
+            price = float(request.form.get('price', 0) or 0)
+            cost = float(request.form.get('cost', 0) or 0)
+            quantity = int(request.form.get('quantity_in_stock', 0) or 0)
+            minimum_stock = int(request.form.get('minimum_stock_level', 0) or 0)
+            location = request.form.get('location', '').strip()
+            
+            # Validate required fields
+            if not part_number or not name:
+                flash('Part number and name are required', 'error')
+                return render_template('admin/add_part.html')
+            
+            # Check if part number already exists
+            existing_part = Part.query.filter_by(part_number=part_number).first()
+            if existing_part:
+                flash('Part number already exists', 'error')
+                return render_template('admin/add_part.html')
+            
+            # Create new part
+            new_part = Part(
+                part_number=part_number,
+                name=name,
+                description=description,
+                category=category,
+                price=price,
+                cost=cost,
+                quantity_in_stock=quantity,
+                minimum_stock_level=minimum_stock,
+                location=location
+            )
+            
+            db.session.add(new_part)
+            db.session.flush()  # Get the ID
+            
+            # Handle photo upload
+            if 'photo' in request.files:
+                file = request.files['photo']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    # Create upload directory if it doesn't exist
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    
+                    # Generate unique filename
+                    filename = secure_filename(file.filename)
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    name_part, ext = os.path.splitext(filename)
+                    unique_filename = f"part_{new_part.id}_{timestamp}_{name_part}{ext}"
+                    
+                    # Save file
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+                    
+                    # Update part with image info
+                    new_part.image_filename = unique_filename
+                    new_part.image_url = url_for('static', filename=f'uploads/photos/{unique_filename}')
+            
+            db.session.commit()
+            
+            flash(f'Part "{name}" added successfully!', 'success')
+            return redirect(url_for('parts'))
+            
+        except ValueError as e:
+            flash('Invalid number format in price, cost, or quantity fields', 'error')
+            return render_template('admin/add_part.html')
+        except Exception as e:
+            logger.error(f"Error adding part: {e}")
+            db.session.rollback()
+            flash('Error adding part', 'error')
+            return render_template('admin/add_part.html')
+    
+    return render_template('admin/add_part.html')
+
+@app.route('/api/schedule-appointment', methods=['POST'])
+def schedule_appointment_api():
+    """API endpoint to schedule appointments"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['date', 'time', 'firstName', 'lastName', 'phone', 'serviceType']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+        
+        # Parse date and time
+        appointment_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        appointment_time_str = data['time']
+        
+        # Convert time string to datetime
+        time_obj = datetime.strptime(appointment_time_str, '%I:%M %p').time()
+        start_datetime = datetime.combine(appointment_date, time_obj)
+        end_datetime = start_datetime + timedelta(hours=1)  # Default 1 hour appointment
+        
+        # Create customer name
+        customer_name = f"{data['firstName']} {data['lastName']}"
+        
+        # Check if customer exists in contacts
+        customer = Contact.query.filter_by(
+            name=customer_name,
+            phone=data['phone']
+        ).first()
+        
+        # If customer doesn't exist, create them
+        if not customer:
+            customer = Contact(
+                name=customer_name,
+                phone=data['phone'],
+                email=data.get('email', ''),
+                type='customer'
+            )
+            db.session.add(customer)
+            db.session.flush()  # Get the ID
+        
+        # Generate appointment title
+        service_type = data['serviceType']
+        title = f"{service_type} - {customer_name}"
+        
+        # Create schedule entry
+        schedule = Schedule(
+            title=title,
+            description=f"Service: {service_type}\nVehicle: {data.get('vehicle', 'Not specified')}\nNotes: {data.get('notes', '')}",
+            customer_id=customer.id,
+            customer_name=customer_name,
+            start_date=appointment_date,
+            end_date=appointment_date,
+            start_time=start_datetime,
+            end_time=end_datetime,
+            status='pending',
+            notes=data.get('notes', '')
+        )
+        
+        db.session.add(schedule)
+        db.session.commit()
+        
+        # Create a service record for tracking
+        service_record = ServiceRecord(
+            service_number=f"SVC-{datetime.now().strftime('%Y%m%d')}-{schedule.id:04d}",
+            customer_id=customer.id,
+            customer_name=customer_name,
+            customer_phone=data['phone'],
+            customer_email=data.get('email', ''),
+            vehicle_year=None,  # Could be parsed from vehicle string
+            vehicle_make=None,
+            vehicle_model=None,
+            service_type=service_type.lower(),
+            service_category='maintenance',  # Default category
+            service_title=title,
+            service_description=f"Scheduled appointment for {service_type}",
+            service_date=appointment_date,
+            start_time=start_datetime,
+            status='scheduled'
+        )
+        
+        db.session.add(service_record)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Appointment scheduled successfully!',
+            'appointment_id': schedule.id,
+            'service_record_id': service_record.id,
+            'appointment_details': {
+                'date': appointment_date.strftime('%B %d, %Y'),
+                'time': appointment_time_str,
+                'customer': customer_name,
+                'service': service_type,
+                'phone': data['phone']
+            }
+        })
+        
+    except ValueError as e:
+        logger.error(f"Date/time parsing error: {e}")
+        return jsonify({'error': 'Invalid date or time format'}), 400
+    except Exception as e:
+        logger.error(f"Schedule appointment error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to schedule appointment'}), 500
+
+@app.route('/api/appointments/<int:appointment_id>/status', methods=['POST'])
+@login_required
+def update_appointment_status(appointment_id):
+    """Update appointment status (confirm, cancel, etc.)"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        
+        if new_status not in ['pending', 'confirmed', 'cancelled', 'completed', 'no-show']:
+            return jsonify({'error': 'Invalid status'}), 400
+        
+        # Update schedule
+        schedule = Schedule.query.get_or_404(appointment_id)
+        schedule.status = new_status
+        
+        # Update related service record if it exists
+        service_record = ServiceRecord.query.filter_by(customer_id=schedule.customer_id, service_date=schedule.start_date).first()
+        if service_record:
+            if new_status == 'confirmed':
+                service_record.status = 'scheduled'
+            elif new_status == 'cancelled':
+                service_record.status = 'cancelled'
+            elif new_status == 'completed':
+                service_record.status = 'completed'
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': f'Appointment status updated to {new_status}',
+            'appointment_id': appointment_id,
+            'new_status': new_status
+        })
+        
+    except Exception as e:
+        logger.error(f"Update appointment status error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to update appointment status'}), 500
+
+@app.route('/api/admin/appointments', methods=['POST'])
+@login_required
+def create_admin_appointment():
+    """Create appointment from admin panel"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['title', 'customerName', 'startDate', 'startTime']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+        
+        # Parse date and time
+        start_date = datetime.strptime(data['startDate'], '%Y-%m-%d').date()
+        start_time_str = data['startTime']
+        
+        # Convert time string to datetime
+        time_obj = datetime.strptime(start_time_str, '%H:%M').time()
+        start_datetime = datetime.combine(start_date, time_obj)
+        end_datetime = start_datetime + timedelta(hours=1)  # Default 1 hour appointment
+        
+        customer_id = data.get('customerId')
+        customer_name = data['customerName']
+        
+        # Handle customer assignment
+        if customer_id:
+            # Use existing customer
+            customer = Contact.query.get_or_404(customer_id)
+            customer_name = customer.name
+        else:
+            # Check if customer exists by name
+            customer = Contact.query.filter_by(name=customer_name, type='customer').first()
+            
+            # If customer doesn't exist, create them
+            if not customer:
+                customer = Contact(
+                    name=customer_name,
+                    type='customer'
+                )
+                db.session.add(customer)
+                db.session.flush()  # Get the ID
+        
+        # Create schedule entry
+        schedule = Schedule(
+            title=data['title'],
+            description=data.get('description', ''),
+            customer_id=customer.id,
+            customer_name=customer_name,
+            start_date=start_date,
+            end_date=start_date,
+            start_time=start_datetime,
+            end_time=end_datetime,
+            status=data.get('status', 'pending'),
+            technician_name=data.get('technicianName', ''),
+            notes=data.get('notes', '')
+        )
+        
+        db.session.add(schedule)
+        db.session.commit()
+        
+        # Create a service record for tracking
+        service_record = ServiceRecord(
+            service_number=f"SVC-{datetime.now().strftime('%Y%m%d')}-{schedule.id:04d}",
+            customer_id=customer.id,
+            customer_name=customer_name,
+            service_type='maintenance',  # Default type
+            service_category='maintenance',
+            service_title=data['title'],
+            service_description=data.get('description', ''),
+            service_date=start_date,
+            start_time=start_datetime,
+            status='scheduled'
+        )
+        
+        db.session.add(service_record)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Appointment created successfully!',
+            'appointment_id': schedule.id,
+            'service_record_id': service_record.id
+        })
+        
+    except ValueError as e:
+        logger.error(f"Date/time parsing error: {e}")
+        return jsonify({'error': 'Invalid date or time format'}), 400
+    except Exception as e:
+        logger.error(f"Create admin appointment error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create appointment'}), 500
+
+@app.route('/api/customers', methods=['POST'])
+@login_required
+def create_customer():
+    """Create new customer with vehicle information"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        logger.error(f"Access denied for user: {user}")
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        data = request.get_json()
+        logger.info(f"Creating customer with data: {data}")
+        
+        # Validate required fields
+        if not data or not data.get('name'):
+            logger.error("Customer name is missing from request")
+            return jsonify({'error': 'Customer name is required'}), 400
+        
+        customer_name = data['name'].strip()
+        if not customer_name:
+            logger.error("Customer name is empty after stripping")
+            return jsonify({'error': 'Customer name cannot be empty'}), 400
+        
+        # Check if customer already exists
+        existing_customer = Contact.query.filter_by(
+            name=customer_name,
+            type='customer'
+        ).first()
+        
+        if existing_customer:
+            logger.error(f"Customer already exists: {customer_name}")
+            return jsonify({'error': f'Customer "{customer_name}" already exists'}), 400
+        
+        # Parse numeric fields safely
+        vehicle_year = None
+        vehicle_mileage = None
+        
+        try:
+            if data.get('vehicleYear') and data['vehicleYear'].strip():
+                vehicle_year = int(data['vehicleYear'])
+        except (ValueError, AttributeError):
+            logger.warning(f"Invalid vehicle year: {data.get('vehicleYear')}")
+        
+        try:
+            if data.get('vehicleMileage') and data['vehicleMileage'].strip():
+                vehicle_mileage = int(data['vehicleMileage'])
+        except (ValueError, AttributeError):
+            logger.warning(f"Invalid vehicle mileage: {data.get('vehicleMileage')}")
+        
+        # Create new customer
+        customer = Contact(
+            name=customer_name,
+            type='customer',
+            phone=data.get('phone', '').strip(),
+            email=data.get('email', '').strip(),
+            vehicle_year=vehicle_year,
+            vehicle_make=data.get('vehicleMake', '').strip(),
+            vehicle_model=data.get('vehicleModel', '').strip(),
+            vehicle_color=data.get('vehicleColor', '').strip(),
+            vehicle_license_plate=data.get('vehicleLicense', '').strip(),
+            vehicle_mileage=vehicle_mileage,
+            folder_notes=data.get('notes', '').strip(),
+            preferred_contact_method=data.get('preferredContact', 'phone')
+        )
+        
+        logger.info(f"Adding customer to database: {customer.name}")
+        db.session.add(customer)
+        db.session.commit()
+        
+        logger.info(f"Customer created successfully with ID: {customer.id}")
+        return jsonify({
+            'success': True,
+            'message': 'Customer created successfully!',
+            'customer_id': customer.id
+        })
+        
+    except ValueError as e:
+        logger.error(f"ValueError in create customer: {e}")
+        return jsonify({'error': 'Invalid number format in year or mileage'}), 400
+    except Exception as e:
+        logger.error(f"Create customer error: {e}")
+        import traceback
+        logger.error(f"Full traceback: {traceback.format_exc()}")
+        db.session.rollback()
+        return jsonify({'error': f'Failed to create customer: {str(e)}'}), 500
+
+@app.route('/api/customers/<int:customer_id>', methods=['GET', 'PUT', 'DELETE'])
+@login_required
+def manage_customer(customer_id):
+    """Get, update, or delete customer"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    customer = Contact.query.get_or_404(customer_id)
+    
+    if request.method == 'GET':
+        # Get customer details
+        return jsonify({
+            'success': True,
+            'customer': {
+                'id': customer.id,
+                'name': customer.name,
+                'phone': customer.phone,
+                'email': customer.email,
+                'vehicle_year': customer.vehicle_year,
+                'vehicle_make': customer.vehicle_make,
+                'vehicle_model': customer.vehicle_model,
+                'vehicle_color': customer.vehicle_color,
+                'vehicle_license_plate': customer.vehicle_license_plate,
+                'vehicle_mileage': customer.vehicle_mileage,
+                'vehicle_photo_url': customer.vehicle_photo_url,
+                'folder_notes': customer.folder_notes,
+                'preferred_contact_method': customer.preferred_contact_method,
+                'vehicle_info': customer.get_vehicle_info()
+            }
+        })
+    
+    elif request.method == 'PUT':
+        # Update customer
+        try:
+            data = request.get_json()
+            logger.info(f"Updating customer {customer_id} with data: {data}")
+            
+            # Update fields
+            if 'name' in data:
+                customer.name = data['name'].strip()
+            if 'phone' in data:
+                customer.phone = data['phone'].strip()
+            if 'email' in data:
+                customer.email = data['email'].strip()
+            if 'vehicleYear' in data and data['vehicleYear']:
+                customer.vehicle_year = int(data['vehicleYear'])
+            if 'vehicleMake' in data:
+                customer.vehicle_make = data['vehicleMake'].strip()
+            if 'vehicleModel' in data:
+                customer.vehicle_model = data['vehicleModel'].strip()
+            if 'vehicleColor' in data:
+                customer.vehicle_color = data['vehicleColor'].strip()
+            if 'vehicleLicense' in data:
+                customer.vehicle_license_plate = data['vehicleLicense'].strip()
+            if 'vehicleMileage' in data and data['vehicleMileage']:
+                customer.vehicle_mileage = int(data['vehicleMileage'])
+            if 'notes' in data:
+                customer.folder_notes = data['notes'].strip()
+            if 'preferredContact' in data:
+                customer.preferred_contact_method = data['preferredContact']
+            
+            customer.updated_at = datetime.utcnow()
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'message': 'Customer updated successfully!'
+            })
+            
+        except Exception as e:
+            logger.error(f"Update customer error: {e}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to update customer'}), 500
+    
+    elif request.method == 'DELETE':
+        # Soft delete customer
+        try:
+            customer.is_active = False
+            customer.updated_at = datetime.utcnow()
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'message': 'Customer archived successfully!'
+            })
+            
+        except Exception as e:
+            logger.error(f"Delete customer error: {e}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to archive customer'}), 500
+
+@app.route('/api/test-auth', methods=['GET'])
+@login_required
+def test_auth():
+    """Test endpoint to verify authentication is working"""
+    user = session.get('user', {})
+    return jsonify({
+        'success': True,
+        'message': 'Authentication working',
+        'user': user,
+        'session_data': dict(session)
+    })
+
+@app.route('/api/customers/test', methods=['POST'])
+def test_customer_creation():
+    """Test customer creation without authentication for debugging"""
+    try:
+        data = request.get_json()
+        logger.info(f"Test customer creation with data: {data}")
+        
+        if not data or not data.get('name'):
+            return jsonify({'error': 'Name is required'}), 400
+        
+        # Simple test creation
+        customer = Contact(
+            name=data['name'],
+            type='customer',
+            phone=data.get('phone', ''),
+            email=data.get('email', '')
+        )
+        
+        db.session.add(customer)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Test customer created!',
+            'customer_id': customer.id
+        })
+        
+    except Exception as e:
+        logger.error(f"Test customer creation error: {e}")
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/customers/<int:customer_id>/vehicle-photo', methods=['POST'])
+@login_required
+def upload_vehicle_photo(customer_id):
+    """Upload vehicle photo for customer"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    try:
+        customer = Contact.query.get_or_404(customer_id)
+        
+        if 'photo' not in request.files:
+            return jsonify({'error': 'No photo file provided'}), 400
+        
+        file = request.files['photo']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+        
+        if file and allowed_file(file.filename):
+            # Create upload directory if it doesn't exist
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            
+            # Generate unique filename
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            name, ext = os.path.splitext(filename)
+            unique_filename = f"vehicle_{customer_id}_{timestamp}_{name}{ext}"
+            
+            # Save file
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(file_path)
+            
+            # Update customer with vehicle photo info
+            customer.vehicle_photo_filename = unique_filename
+            customer.vehicle_photo_url = url_for('static', filename=f'uploads/photos/{unique_filename}')
+            customer.updated_at = datetime.utcnow()
+            
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'photo_url': customer.vehicle_photo_url,
+                'filename': unique_filename
+            })
+        else:
+            return jsonify({'error': 'Invalid file type'}), 400
+            
+    except Exception as e:
+        logger.error(f"Error uploading vehicle photo: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to upload photo'}), 500
 
 # Enhanced Shipping & Webhook API Routes
 @app.route('/api/shipping/track/<provider>/<tracking_number>', methods=['GET'])
@@ -1822,15 +2518,12 @@ def init_database():
         for user in users:
             db.session.add(user)
         
-        # Create demo contacts
+        # Create supplier contacts (keep suppliers, remove fake customers)
         contacts = [
             Contact(name='NAPA Auto Parts', company='NAPA Auto Parts', type='supplier', 
                    email='orders@napaonline.com', phone='555-0101'),
             Contact(name="O'Reilly Auto Parts", company="O'Reilly Auto Parts", type='supplier',
-                   email='orders@oreillyauto.com', phone='555-0102'),
-            Contact(name='John Smith', type='customer', email='john.smith@email.com', phone='555-0201'),
-            Contact(name='Jane Doe', company='Doe Enterprises', type='customer',
-                   email='jane@doeenterprises.com', phone='555-0301')
+                   email='orders@oreillyauto.com', phone='555-0102')
         ]
         
         for contact in contacts:

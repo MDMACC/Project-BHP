@@ -114,8 +114,34 @@ class Contact(db.Model):
     city = db.Column(db.String(100))
     state = db.Column(db.String(50))
     zip_code = db.Column(db.String(20))
+    
+    # Vehicle Information (for customers)
+    vehicle_year = db.Column(db.Integer)
+    vehicle_make = db.Column(db.String(50))
+    vehicle_model = db.Column(db.String(50))
+    vehicle_color = db.Column(db.String(30))
+    vehicle_vin = db.Column(db.String(17))
+    vehicle_license_plate = db.Column(db.String(20))
+    vehicle_mileage = db.Column(db.Integer)
+    vehicle_photo_url = db.Column(db.String(500))  # URL to vehicle photo
+    vehicle_photo_filename = db.Column(db.String(255))  # Original filename
+    
+    # Customer folder organization
+    folder_notes = db.Column(db.Text)  # General notes about the customer
+    preferred_contact_method = db.Column(db.String(20))  # 'phone', 'email', 'text'
+    
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def get_vehicle_info(self):
+        """Get formatted vehicle information"""
+        if self.vehicle_year and self.vehicle_make and self.vehicle_model:
+            vehicle_info = f"{self.vehicle_year} {self.vehicle_make} {self.vehicle_model}"
+            if self.vehicle_color:
+                vehicle_info += f" ({self.vehicle_color})"
+            return vehicle_info
+        return "No vehicle information"
     
     def __repr__(self):
         return f'<Contact {self.name}>'
