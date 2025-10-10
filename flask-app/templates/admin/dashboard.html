@@ -7,6 +7,12 @@
 
 {% block header_actions %}
 <div class="flex items-center space-x-4">
+    <a href="/" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <span>Customer Portal</span>
+    </a>
     <div class="text-sm text-metallic-600">
         <span class="font-medium">Admin Mode</span>
         <div class="inline-block w-2 h-2 bg-green-500 rounded-full ml-2 animate-pulse"></div>
@@ -229,6 +235,39 @@
                     </svg>
                 </div>
                 <span class="text-sm font-medium text-emerald-900">Live Chat</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Workflow Management Section -->
+    <div class="mt-8">
+        <h3 class="text-lg font-semibold text-metallic-900 mb-6">Workflow Management</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="{{ url_for('quality_checklists') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 7h8m-8 4h8m-5-4h.01M12 16h.01"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-indigo-900">Quality Checklists</span>
+            </a>
+            
+            <a href="{{ url_for('warranty_tracking') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.5 0a11 11 0 11-22 0 11 11 0 0122 0z"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-amber-900">Warranty Tracking</span>
+            </a>
+            
+            <a href="{{ url_for('technician_dashboard') }}" class="flex flex-col items-center p-4 bg-gradient-to-br from-rose-50 to-rose-100 rounded-lg hover:shadow-lg transition-all duration-300 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-rose-900">Time Tracking</span>
             </a>
         </div>
     </div>

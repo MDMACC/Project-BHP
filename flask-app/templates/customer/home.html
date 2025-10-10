@@ -45,6 +45,98 @@
         
         body {
             font-family: 'Inter', system-ui, sans-serif;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        /* Page Transition Animations */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-transition-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .page-transition-overlay.swipe-right {
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-transition-overlay.swipe-right.active {
+            transform: translateX(0);
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page fade animations */
+        .page-fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .page-fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Swipe transition effects */
+        .swipe-left {
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .swipe-right {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Enhanced navigation link animations */
+        .nav-link-transition {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link-transition::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-link-transition:hover::before {
+            left: 100%;
         }
         
         .hero-gradient {
@@ -910,10 +1002,51 @@
         .showcase-carousel {
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .showcase-carousel:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(79, 70, 229, 0.2);
         }
         
         .showcase-slide {
-            transition: opacity 1s ease-in-out;
+            transition: all 1s ease-in-out;
+            position: relative;
+        }
+        
+        .showcase-slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%) rotate(45deg);
+            transition: transform 0.8s ease;
+            pointer-events: none;
+        }
+        
+        .showcase-carousel:hover .showcase-slide::before {
+            transform: translateX(100%) rotate(45deg);
+        }
+        
+        .showcase-slide img {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .showcase-carousel:hover .showcase-slide img {
+            transform: scale(1.05);
+            filter: brightness(1.1) contrast(1.1);
+        }
+        
+        .showcase-slide .absolute.bottom-6 {
+            transition: all 0.3s ease;
+        }
+        
+        .showcase-carousel:hover .showcase-slide .absolute.bottom-6 {
+            transform: translateY(-8px);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
         
         .showcase-dot {
@@ -925,18 +1058,374 @@
             transform: scale(1.2);
         }
         
+        .showcase-dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.1);
+        }
+        
         .showcase-carousel:hover .floating-element {
             animation-play-state: paused;
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        
+        /* Shimmer effect on hover */
+        .showcase-carousel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.8s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .showcase-carousel:hover::after {
+            left: 100%;
+        }
+        
+        /* Enhanced CTA Button Animations */
+        .cta-primary {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            color: #1e1b4b;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .cta-primary:hover::before {
+            left: 100%;
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-4px) scale(1.05) rotateX(5deg);
+            box-shadow: 
+                0 20px 40px rgba(79, 70, 229, 0.2),
+                0 0 0 1px rgba(79, 70, 229, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            color: #4f46e5;
+        }
+        
+        .cta-primary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .cta-secondary {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-secondary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+        
+        .cta-secondary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-secondary:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-secondary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        /* Icon animations within buttons */
+        .cta-icon {
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .cta-primary:hover .cta-icon {
+            transform: rotate(10deg) scale(1.2);
+        }
+        
+        .cta-secondary:hover .cta-icon {
+            transform: rotate(-10deg) scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+        
+        /* Pulse animation for urgency */
+        .cta-pulse {
+            animation: ctaPulse 2s infinite;
+        }
+        
+        @keyframes ctaPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+        }
+        
+        /* Floating animation for call button */
+        .cta-float {
+            animation: ctaFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes ctaFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            33% { 
+                transform: translateY(-3px) rotate(1deg); 
+            }
+            66% { 
+                transform: translateY(-1px) rotate(-1deg); 
+            }
+        }
+        
+        /* Address and Map Enhancements */
+        .address-block {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .address-text {
+            position: relative;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        
+        .address-text::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #4f46e5, #6366f1);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .address-block:hover .address-text::after {
+            width: 100%;
+        }
+        
+        .address-block:hover .address-text {
+            color: #4f46e5;
+            transform: translateY(-1px);
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Map Modal Styles */
+        .map-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .map-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .map-modal-content {
+            width: 62.5%;
+            height: 62.5%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .map-modal.active .map-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        .map-modal-header {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            padding: 20px;
+            display: flex;
+            items-center: center;
+            justify-content: space-between;
+        }
+        
+        .map-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .map-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .map-iframe {
+            width: 100%;
+            height: calc(100% - 80px);
+            border: none;
+        }
+        
+        /* Enhanced Navigation Link Animations */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #4f46e5, #6366f1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::before {
+            width: 100%;
+        }
+        
+        .nav-link.active::before {
+            width: 100%;
+            background: linear-gradient(to right, #6366f1, #4f46e5);
+        }
+        
+        .nav-link:hover {
+            color: #4f46e5;
+            text-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+        }
+        
+        /* Smooth scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-indicator.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(79, 70, 229, 0.3);
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .scroll-indicator-dot.active {
+            background: #4f46e5;
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        }
+        
+        .scroll-indicator-dot:hover {
+            background: #6366f1;
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-metallic-50 to-bluez-50">
+    <!-- Page Transition Overlay -->
+    <div id="pageTransitionOverlay" class="page-transition-overlay">
+        <div class="text-center text-white">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-lg font-semibold">Loading...</p>
+            <p class="text-sm opacity-80">Preparing your experience</p>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-metallic-200/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <a href="#" onclick="scrollToTop()" class="logo-container flex items-center">
+                <a href="#" onclick="scrollToTop(event)" class="logo-container flex items-center transition-all duration-300 hover:-translate-y-1 hover:scale-105 cursor-pointer">
                     <div class="logo-image w-20 h-16 mr-3">
                         <!-- Professional Bluez PowerHouse Logo -->
                         <img src="{{ url_for('static', filename='images/bluez-powerhouse-logo.png') }}" 
@@ -957,9 +1446,9 @@
                 
                 <!-- Navigation -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="#services" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Services</a>
-                    <a href="#about" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">About</a>
-                    <a href="#contact" class="text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Contact</a>
+                    <a href="#services" onclick="smoothScrollTo('services', event)" class="nav-link text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Services</a>
+                    <a href="#about" onclick="smoothScrollTo('about', event)" class="nav-link text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">About</a>
+                    <a href="#contact" onclick="smoothScrollTo('contact', event)" class="nav-link text-metallic-700 hover:text-bluez-600 font-medium transition-all duration-300 hover:-translate-y-1 hover:scale-105">Contact</a>
                 </nav>
                 
                 <!-- CTA Button -->
@@ -989,10 +1478,16 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="/schedule-appointment" class="bg-white text-bluez-900 px-8 py-4 rounded-lg font-semibold hover:bg-bluez-50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg text-center">
+                        <a href="/schedule-appointment" onclick="handleLinkClick(event, '/schedule-appointment', 'swipe')" data-transition="swipe" class="cta-primary cta-pulse px-8 py-4 rounded-lg font-semibold text-center group nav-link-transition">
+                            <svg class="cta-icon w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
                             Schedule Service
                         </a>
-                        <a href="tel:(747) 474-9193" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-bluez-900 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg text-center">
+                        <a href="tel:(747) 474-9193" class="cta-secondary cta-float px-8 py-4 rounded-lg font-semibold text-center group">
+                            <svg class="cta-icon w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
                             Call Now
                         </a>
                     </div>
@@ -1046,58 +1541,25 @@
                 
                 <div class="relative">
                     <div class="showcase-carousel relative w-full h-96 rounded-2xl overflow-hidden">
-                        <!-- Image 1 - Lamborghini Rear View with BPH License Plate -->
-                        <div class="showcase-slide absolute inset-0 opacity-100 transition-opacity duration-1000">
-                            <img src="{{ url_for('static', filename='images/showcase/lamborghini-rear-bph.jpg') }}" 
-                                 alt="BPH Automotive - Lamborghini with BPH License Plate" 
-                                 class="w-full h-full object-cover"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <!-- Fallback for Lamborghini rear image -->
-                            <div class="w-full h-full bg-gradient-to-br from-blue-900/80 to-purple-900/80 flex items-center justify-center" style="display: none;">
-                                <div class="text-center text-white">
-                                    <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                                    </svg>
-                                    <p class="text-lg font-semibold">BPH License Plate</p>
-                                    <p class="text-sm opacity-80">Tuning & Customization Experts</p>
+                        <!-- Dynamic slides will be loaded here by JavaScript -->
+                        <div id="carousel-slides-container">
+                            <!-- Default fallback slide if no images are found -->
+                            <div class="showcase-slide absolute inset-0 opacity-100 transition-opacity duration-1000">
+                                <div class="w-full h-full bg-gradient-to-br from-blue-900/80 to-purple-900/80 flex items-center justify-center">
+                                    <div class="text-center text-white">
+                                        <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                                        </svg>
+                                        <p class="text-lg font-semibold">BPH Performance</p>
+                                        <p class="text-sm opacity-80">Add images to Cfrontpageimages folder</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Overlay with BPH branding -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <h3 class="text-2xl font-bold mb-1">BPH Performance</h3>
-                                <p class="text-sm opacity-90">Tuning & Customization Experts</p>
                             </div>
                         </div>
                         
-                        <!-- Image 2 - Lamborghini Side/Front View -->
-                        <div class="showcase-slide absolute inset-0 opacity-0 transition-opacity duration-1000">
-                            <img src="{{ url_for('static', filename='images/showcase/lamborghini-side-bph.jpg') }}" 
-                                 alt="BPH Automotive - Lamborghini Side View" 
-                                 class="w-full h-full object-cover"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <!-- Fallback for Lamborghini side image -->
-                            <div class="w-full h-full bg-gradient-to-br from-gray-900/80 to-blue-900/80 flex items-center justify-center">
-                                <div class="text-center text-white">
-                                    <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                                    </svg>
-                                    <p class="text-lg font-semibold">Exotic Vehicle Specialists</p>
-                                    <p class="text-sm opacity-80">High-Performance Modifications</p>
-                                </div>
-                            </div>
-                            <!-- Overlay with BPH branding -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <h3 class="text-2xl font-bold mb-1">Exotic Specialists</h3>
-                                <p class="text-sm opacity-90">High-Performance Vehicle Experts</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Navigation Dots -->
-                        <div class="absolute bottom-4 right-6 flex space-x-2">
-                            <button onclick="goToShowcaseSlide(0)" class="showcase-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-200 active"></button>
-                            <button onclick="goToShowcaseSlide(1)" class="showcase-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-200"></button>
+                        <!-- Navigation Dots (will be dynamically generated) -->
+                        <div id="carousel-dots" class="absolute bottom-4 right-6 flex space-x-2">
+                            <!-- Dots will be generated by JavaScript -->
                         </div>
                         
                         <!-- Floating elements -->
@@ -1676,20 +2138,22 @@
             <div class="grid lg:grid-cols-3 gap-8">
                 <!-- Contact Info -->
                 <div class="lg:col-span-1 space-y-8">
-                    <div class="card-glass rounded-xl p-6 contact-card hover-bounce hover-glow cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-bluez-500 rounded-lg flex items-center justify-center hover-rotate">
-                                <svg class="w-6 h-6 text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-metallic-900">Phone</h3>
-                                <p class="text-bluez-600 font-semibold">(747) 474-9193</p>
-                                <p class="text-metallic-600 text-sm">Call us today!</p>
+                    <a href="tel:(747) 474-9193" class="block">
+                        <div class="card-glass rounded-xl p-6 contact-card hover-bounce hover-glow cursor-pointer">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-bluez-500 rounded-lg flex items-center justify-center hover-rotate">
+                                    <svg class="w-6 h-6 text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-metallic-900">Phone</h3>
+                                    <p class="text-bluez-600 font-semibold hover:text-bluez-800 transition-all duration-300">(747) 474-9193</p>
+                                    <p class="text-metallic-600 text-sm">Call us today!</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                     
                     <div class="card-glass rounded-xl p-6 contact-card hover-bounce hover-glow cursor-pointer">
                         <div class="flex items-center space-x-4">
@@ -1701,8 +2165,10 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-metallic-900">Address</h3>
-                                <p class="text-metallic-600">8033 Remmet Ave</p>
-                                <p class="text-metallic-600">Canoga Park, CA 91304</p>
+                                <div class="address-block" onclick="copyFullAddress()">
+                                    <p class="address-text text-metallic-600">8033 Remmet Ave</p>
+                                    <p class="address-text text-metallic-600">Canoga Park, CA 91304</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1716,9 +2182,9 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-metallic-900">Hours</h3>
-                                <p class="text-metallic-600 text-sm">Mon-Sat: 11AM-7PM</p>
-                                <p class="text-metallic-600 text-sm">Sunday: Closed</p>
-                                <p class="text-metallic-600 text-sm">DM for bookings</p>
+                                <p class="text-metallic-600 text-sm">Mon-Fri: 11AM-7PM</p>
+                                <p class="text-metallic-600 text-sm">Sat-Sun: Closed</p>
+                                <p class="text-bluez-600 text-sm font-medium">Schedule now</p>
                             </div>
                         </div>
                     </div>
@@ -1744,30 +2210,36 @@
                                 <p class="text-metallic-500 text-xs mb-4">
                                     Interactive map - zoom and explore our location
                                 </p>
-                                <a href="https://www.google.com/maps/search/?api=1&query=8033+Remmet+Ave,+Canoga+Park,+CA+91304" 
-                                   target="_blank" 
-                                   class="inline-flex items-center text-bluez-600 hover:text-bluez-800 font-medium text-sm transition-colors">
+                                <button onclick="openMapModal()" class="inline-flex items-center text-bluez-600 hover:text-bluez-800 font-medium text-sm transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
-                                    Get Directions
-                                </a>
+                                    View Larger Map
+                                </button>
                             </div>
                             
                             <!-- Right side: Larger Square Map Widget -->
                             <div class="flex-shrink-0">
-                                <div class="relative w-48 h-48 rounded-lg overflow-hidden border border-metallic-200 shadow-lg">
+                                <div class="relative w-48 h-48 rounded-lg overflow-hidden border border-metallic-200 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300" onclick="openMapModal()">
                                     <!-- Clean Google Maps Embed with hidden controls -->
                                     <iframe 
                                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3298.123456789012!2d-118.60123456789012!3d34.20123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29abc123def45%3A0x123456789abcdef0!2s8033%20Remmet%20Ave%2C%20Canoga%20Park%2C%20CA%2091304%2C%20USA!5e0!3m2!1sen!2sus!4v1695123456789!5m2!1sen!2sus&disableDefaultUI=true&zoomControl=false&mapTypeControl=false&scaleControl=false&streetViewControl=false&rotateControl=false&fullscreenControl=false"
                                         width="100%" 
                                         height="100%" 
-                                        style="border:0;" 
+                                        style="border:0; pointer-events: none;" 
                                         loading="lazy" 
                                         referrerpolicy="no-referrer-when-downgrade"
                                         class="rounded-lg"
                                         onload="this.style.display='block';">
                                     </iframe>
+                                    
+                                    <!-- Click overlay -->
+                                    <div class="absolute inset-0 bg-transparent hover:bg-bluez-500/10 transition-colors duration-300 flex items-center justify-center">
+                                        <div class="opacity-0 hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
+                                            <span class="text-sm font-medium text-bluez-800">Click to expand</span>
+                                        </div>
+                                    </div>
                                     
                                     <!-- Transparent overlay - no blocking elements -->
                                     <div class="absolute inset-0 pointer-events-none">
@@ -1821,21 +2293,21 @@
                                 Whether you need routine maintenance, performance upgrades, collision repair, or custom modifications - schedule your appointment online. We specialize in high-performance and exotic vehicles with expert technicians ready to serve you.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                                <a href="/schedule-appointment" class="btn-primary text-white px-10 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <a href="/schedule-appointment" onclick="handleLinkClick(event, '/schedule-appointment', 'swipe')" data-transition="swipe" class="btn-primary cta-pulse px-10 py-4 rounded-lg font-semibold text-lg text-center group nav-link-transition">
+                                    <svg class="cta-icon w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                     Book Online Now
                                 </a>
-                                <a href="tel:(747) 474-9193" class="bg-white text-bluez-900 border-2 border-bluez-200 px-10 py-4 rounded-lg font-semibold text-lg hover:bg-bluez-50 hover:border-bluez-300 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <a href="tel:(747) 474-9193" class="bg-white text-bluez-900 border-2 border-bluez-200 px-10 py-4 rounded-lg font-semibold text-lg hover:bg-bluez-50 hover:border-bluez-300 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 text-center group cta-float">
+                                    <svg class="cta-icon w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
                                     Call (747) 474-9193
                                 </a>
                             </div>
                             <p class="text-sm text-metallic-500 mt-6">
-                                Prefer to call? Our team is available Monday-Saturday, 11AM-7PM. DM us for bookings anytime!
+                                Prefer to call? Our team is available Monday-Friday, 11AM-7PM. Closed weekends. Schedule online anytime!
                             </p>
                         </div>
                     </div>
@@ -1901,21 +2373,19 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Contact</h4>
                     <div class="space-y-2 text-metallic-400">
-                        <!-- Clickable Address - Opens Google Maps -->
-                        <a href="https://www.google.com/maps/search/?api=1&query=8033+Remmet+Ave,+Canoga+Park,+CA+91304" 
-                           target="_blank" 
-                           class="block hover:text-white transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
+                        <!-- Clickable Address - Copy to Clipboard -->
+                        <div class="address-block block hover:text-white transition-all duration-300 hover:-translate-y-1 cursor-pointer group" onclick="copyFullAddress()">
                             <div class="flex items-center space-x-2">
                                 <svg class="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                                 <div>
-                                    <p class="group-hover:underline">8033 Remmet Ave</p>
-                                    <p class="group-hover:underline">Canoga Park, CA 91304</p>
+                                    <p class="address-text">8033 Remmet Ave</p>
+                                    <p class="address-text">Canoga Park, CA 91304</p>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                         
                         <!-- Clickable Phone Number -->
                         <a href="tel:(747) 474-9193" 
@@ -1944,6 +2414,45 @@
             </svg>
         </a>
     </footer>
+
+    <!-- Copy Notification -->
+    <div id="copyNotification" class="copy-notification">
+        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Address copied to clipboard!
+    </div>
+
+    <!-- Map Modal -->
+    <div id="mapModal" class="map-modal">
+        <div class="map-modal-content">
+            <div class="map-modal-header">
+                <div>
+                    <h3 class="text-xl font-semibold">Bluez PowerHouse Auto Repair</h3>
+                    <p class="text-sm opacity-90">8033 Remmet Ave, Canoga Park, CA 91304</p>
+                </div>
+                <button class="map-modal-close" onclick="closeMapModal()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <iframe 
+                id="mapModalIframe"
+                class="map-iframe"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3298.123456789012!2d-118.60123456789012!3d34.20123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29abc123def45%3A0x123456789abcdef0!2s8033%20Remmet%20Ave%2C%20Canoga%20Park%2C%20CA%2091304%2C%20USA!5e0!3m2!1sen!2sus!4v1695123456789!5m2!1sen!2sus&zoom=15"
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-indicator-dot" onclick="smoothScrollTo('services')" data-section="services"></div>
+        <div class="scroll-indicator-dot" onclick="smoothScrollTo('about')" data-section="about"></div>
+        <div class="scroll-indicator-dot" onclick="smoothScrollTo('contact')" data-section="contact"></div>
+    </div>
 
     <!-- Chat Widget -->
     <div class="chat-widget">
@@ -2155,11 +2664,195 @@
             setInterval(checkForNewMessages, 5000);
         });
 
-        // Scroll to top function for logo click
-        function scrollToTop() {
+        // Scroll to top function for logo click with enhanced animation
+        function scrollToTop(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            // Add scroll animation class to body for consistent styling
+            document.body.classList.add('scrolling');
+            
+            // Smooth scroll to top with same behavior as other nav items
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
+            });
+            
+            // Clear any active nav links since we're going to top
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Remove scrolling class after animation completes
+            setTimeout(() => {
+                document.body.classList.remove('scrolling');
+            }, 1000);
+        }
+
+        // Address copy functionality
+        function copyAddress(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showCopyNotification();
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyNotification();
+            });
+        }
+
+        function copyFullAddress() {
+            const fullAddress = '8033 Remmet Ave, Canoga Park, CA 91304';
+            navigator.clipboard.writeText(fullAddress).then(function() {
+                showCopyNotification();
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = fullAddress;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyNotification();
+            });
+        }
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Map modal functionality
+        function openMapModal() {
+            const modal = document.getElementById('mapModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeMapModal() {
+            const modal = document.getElementById('mapModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('mapModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeMapModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeMapModal();
+                }
+            });
+            
+            // Initialize scroll indicator and section tracking
+            initScrollIndicator();
+        });
+
+        // Smooth scrolling functionality
+        function smoothScrollTo(sectionId, event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            const section = document.getElementById(sectionId);
+            if (section) {
+                // Add scroll animation class to body
+                document.body.classList.add('scrolling');
+                
+                // Calculate offset for sticky header
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const sectionTop = section.offsetTop - headerHeight - 20; // 20px extra padding
+                
+                // Smooth scroll with easing
+                window.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+                
+                // Update active nav link
+                updateActiveNavLink(sectionId);
+                
+                // Remove scrolling class after animation
+                setTimeout(() => {
+                    document.body.classList.remove('scrolling');
+                }, 1000);
+            }
+        }
+
+        function updateActiveNavLink(activeSection) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to current section link
+            const activeLink = document.querySelector(`a[href="#${activeSection}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Update scroll indicator
+            updateScrollIndicator(activeSection);
+        }
+
+        function updateScrollIndicator(activeSection) {
+            document.querySelectorAll('.scroll-indicator-dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            const activeDot = document.querySelector(`[data-section="${activeSection}"]`);
+            if (activeDot) {
+                activeDot.classList.add('active');
+            }
+        }
+
+        function initScrollIndicator() {
+            const indicator = document.getElementById('scrollIndicator');
+            const sections = ['services', 'about', 'contact'];
+            
+            // Show indicator after scrolling past hero
+            window.addEventListener('scroll', function() {
+                const scrollY = window.scrollY;
+                const heroHeight = window.innerHeight;
+                
+                if (scrollY > heroHeight / 2) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+                
+                // Update active section based on scroll position
+                let currentSection = '';
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        const sectionTop = section.offsetTop - 200; // Offset for early activation
+                        const sectionBottom = sectionTop + section.offsetHeight;
+                        
+                        if (scrollY >= sectionTop && scrollY < sectionBottom) {
+                            currentSection = sectionId;
+                        }
+                    }
+                });
+                
+                if (currentSection) {
+                    updateActiveNavLink(currentSection);
+                }
             });
         }
 
@@ -2183,14 +2876,88 @@
         // Showcase Carousel Functionality
         let currentShowcaseSlide = 0;
         let showcaseInterval;
+        let totalSlides = 0;
+        
+        function loadCarouselImages() {
+            // Fetch images from the API
+            fetch('/api/carousel-images')
+                .then(response => response.json())
+                .then(data => {
+                    const images = data.images || [];
+                    const slidesContainer = document.getElementById('carousel-slides-container');
+                    const dotsContainer = document.getElementById('carousel-dots');
+                    
+                    if (images.length > 0) {
+                        // Clear existing content
+                        slidesContainer.innerHTML = '';
+                        dotsContainer.innerHTML = '';
+                        
+                        // Create slides for each image
+                        images.forEach((image, index) => {
+                            // Create slide
+                            const slide = document.createElement('div');
+                            slide.className = `showcase-slide absolute inset-0 ${index === 0 ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`;
+                            
+                            slide.innerHTML = `
+                                <img src="${image.url}" 
+                                     alt="BPH Automotive Showcase - ${image.filename}" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <!-- Fallback if image fails to load -->
+                                <div class="w-full h-full bg-gradient-to-br from-blue-900/80 to-purple-900/80 flex items-center justify-center" style="display: none;">
+                                    <div class="text-center text-white">
+                                        <svg class="w-24 h-24 mx-auto mb-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                                        </svg>
+                                        <p class="text-lg font-semibold">BPH Performance</p>
+                                        <p class="text-sm opacity-80">Tuning & Customization Experts</p>
+                                    </div>
+                                </div>
+                                <!-- Overlay with BPH branding -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 text-white">
+                                    <h3 class="text-2xl font-bold mb-1">BPH Performance</h3>
+                                    <p class="text-sm opacity-90">Tuning & Customization Experts</p>
+                                </div>
+                            `;
+                            
+                            slidesContainer.appendChild(slide);
+                            
+                            // Create navigation dot
+                            const dot = document.createElement('button');
+                            dot.className = `showcase-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-200 ${index === 0 ? 'active' : ''}`;
+                            dot.onclick = () => goToShowcaseSlide(index);
+                            dotsContainer.appendChild(dot);
+                        });
+                        
+                        totalSlides = images.length;
+                        currentShowcaseSlide = 0;
+                        
+                        // Initialize carousel functionality
+                        initShowcaseCarousel();
+                    } else {
+                        // No images found, keep the default fallback
+                        totalSlides = 1;
+                        currentShowcaseSlide = 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading carousel images:', error);
+                    // Keep the default fallback slide
+                    totalSlides = 1;
+                    currentShowcaseSlide = 0;
+                });
+        }
         
         function initShowcaseCarousel() {
-            startShowcaseAutoSlide();
-            
-            // Pause on hover
-            const carousel = document.querySelector('.showcase-carousel');
-            carousel.addEventListener('mouseenter', stopShowcaseAutoSlide);
-            carousel.addEventListener('mouseleave', startShowcaseAutoSlide);
+            if (totalSlides > 1) {
+                startShowcaseAutoSlide();
+                
+                // Pause on hover
+                const carousel = document.querySelector('.showcase-carousel');
+                carousel.addEventListener('mouseenter', stopShowcaseAutoSlide);
+                carousel.addEventListener('mouseleave', startShowcaseAutoSlide);
+            }
         }
         
         function goToShowcaseSlide(slideIndex) {
@@ -2201,7 +2968,9 @@
             slides.forEach(slide => slide.style.opacity = '0');
             
             // Show selected slide
-            slides[slideIndex].style.opacity = '1';
+            if (slides[slideIndex]) {
+                slides[slideIndex].style.opacity = '1';
+            }
             
             // Update dots
             dots.forEach((dot, index) => {
@@ -2212,13 +2981,17 @@
         }
         
         function nextShowcaseSlide() {
-            const nextSlide = (currentShowcaseSlide + 1) % 2; // 2 images for now
-            goToShowcaseSlide(nextSlide);
+            if (totalSlides > 1) {
+                const nextSlide = (currentShowcaseSlide + 1) % totalSlides;
+                goToShowcaseSlide(nextSlide);
+            }
         }
         
         function startShowcaseAutoSlide() {
-            stopShowcaseAutoSlide();
-            showcaseInterval = setInterval(nextShowcaseSlide, 5000); // Change every 5 seconds
+            if (totalSlides > 1) {
+                stopShowcaseAutoSlide();
+                showcaseInterval = setInterval(nextShowcaseSlide, 5000); // Change every 5 seconds
+            }
         }
         
         function stopShowcaseAutoSlide() {
@@ -2236,8 +3009,8 @@
             // Initialize reviews carousel
             initReviewsCarousel();
             
-            // Initialize showcase carousel
-            initShowcaseCarousel();
+            // Load and initialize showcase carousel
+            loadCarouselImages();
         });
 
         function checkForNewMessages() {
@@ -2253,6 +3026,79 @@
                     .catch(error => console.error('Error checking messages:', error));
             }
         }
+
+        // Page Transition Functions
+        function showPageTransition(type = 'fade') {
+            const overlay = document.getElementById('pageTransitionOverlay');
+            if (overlay) {
+                // Add transition type class
+                if (type === 'swipe') {
+                    overlay.classList.add('swipe-right');
+                }
+                
+                // Show overlay
+                overlay.classList.add('active');
+                
+                // Add fade out effect to current page
+                document.body.classList.add('page-fade-out');
+            }
+        }
+
+        function hidePageTransition() {
+            const overlay = document.getElementById('pageTransitionOverlay');
+            if (overlay) {
+                overlay.classList.remove('active', 'swipe-right');
+                document.body.classList.remove('page-fade-out');
+                document.body.classList.add('page-fade-in');
+                
+                // Remove fade-in class after animation
+                setTimeout(() => {
+                    document.body.classList.remove('page-fade-in');
+                }, 300);
+            }
+        }
+
+        function navigateWithTransition(url, transitionType = 'fade') {
+            // Show transition overlay
+            showPageTransition(transitionType);
+            
+            // Navigate after a short delay to show the animation
+            setTimeout(() => {
+                window.location.href = url;
+            }, 400);
+        }
+
+        // Enhanced link click handler for smooth transitions
+        function handleLinkClick(event, url, transitionType = 'fade') {
+            event.preventDefault();
+            navigateWithTransition(url, transitionType);
+        }
+
+        // Initialize page transitions on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide transition overlay when page loads
+            setTimeout(() => {
+                hidePageTransition();
+            }, 100);
+            
+            // Add transition effects to external navigation links
+            const externalLinks = document.querySelectorAll('a[href*="/schedule"], a[href*="/admin"], a[href*="/login"]');
+            externalLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('href');
+                    const transitionType = this.dataset.transition || 'fade';
+                    navigateWithTransition(url, transitionType);
+                });
+            });
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hidePageTransition();
+            }
+        });
     </script>
 </body>
 </html>

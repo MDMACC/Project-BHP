@@ -1620,6 +1620,167 @@ def complete_quality_check(work_order_id):
         db.session.rollback()
         return jsonify({'error': 'Failed to complete quality check'}), 500
 
+# Time Tracking API Routes
+@app.route('/api/time-entries/active', methods=['GET'])
+@login_required
+def get_active_time_entry():
+    """Get active time entry for current user"""
+    try:
+        user_id = session.get('user', {}).get('id')
+        active_entry = TimeEntry.query.filter_by(
+            technician_id=user_id,
+            clock_out=None
+        ).first()
+        
+        if active_entry:
+            return jsonify({
+                'active': True,
+                'time_entry': active_entry.to_dict(),
+                'work_order_number': active_entry.work_order.work_order_number if active_entry.work_order else None
+            })
+        else:
+            return jsonify({'active': False})
+            
+    except Exception as e:
+        logger.error(f"Get active time entry error: {e}")
+        return jsonify({'error': 'Failed to get active time entry'}), 500
+
+@app.route('/api/technician/dashboard')
+@login_required
+def technician_dashboard():
+    """Technician dashboard with assigned work orders and time tracking"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        user_id = user.get('id')
+        
+        # Get assigned work orders
+        assigned_orders = WorkOrder.query.filter_by(assigned_technician_id=user_id)\
+                                        .filter(WorkOrder.status.in_(['assigned', 'in-progress']))\
+                                        .order_by(WorkOrder.priority.desc(), WorkOrder.scheduled_start)\
+                                        .all()
+        
+        # Get active time entry
+        active_time_entry = TimeEntry.query.filter_by(
+            technician_id=user_id,
+            clock_out=None
+        ).first()
+        
+        # Get today's completed work orders
+        today = datetime.now().date()
+        completed_today = WorkOrder.query.filter_by(assigned_technician_id=user_id)\
+                                        .filter(WorkOrder.status == 'completed')\
+                                        .filter(db.func.date(WorkOrder.actual_completion) == today)\
+                                        .count()
+        
+        # Get today's total hours
+        today_entries = TimeEntry.query.filter_by(technician_id=user_id)\
+                                      .filter(db.func.date(TimeEntry.clock_in) == today)\
+                                      .filter(TimeEntry.clock_out.isnot(None))\
+                                      .all()
+        
+        total_hours_today = sum([entry.total_minutes / 60 for entry in today_entries if entry.total_minutes])
+        
+        return render_template('admin/technician_dashboard.html',
+                             assigned_orders=assigned_orders,
+                             active_time_entry=active_time_entry,
+                             completed_today=completed_today,
+                             total_hours_today=round(total_hours_today, 2))
+        
+    except Exception as e:
+        logger.error(f"Technician dashboard error: {e}")
+        flash('Error loading dashboard', 'error')
+        return render_template('admin/technician_dashboard.html',
+                             assigned_orders=[],
+                             active_time_entry=None,
+                             completed_today=0,
+                             total_hours_today=0)
+
+# Quality Control Routes
+@app.route('/quality-checklists')
+@login_required
+def quality_checklists():
+    """Quality checklists management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager']:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        checklists = QualityChecklist.query.filter_by(is_active=True).all()
+        return render_template('admin/quality_checklists.html', checklists=checklists)
+    except Exception as e:
+        logger.error(f"Quality checklists page error: {e}")
+        flash('Error loading quality checklists', 'error')
+        return render_template('admin/quality_checklists.html', checklists=[])
+
+@app.route('/api/quality-checklists', methods=['POST'])
+@login_required
+def create_quality_checklist():
+    """Create new quality checklist template"""
+    try:
+        data = request.get_json()
+        
+        checklist = QualityChecklist(
+            name=data.get('name'),
+            service_type=data.get('service_type'),
+            service_category=data.get('service_category'),
+            created_by=session.get('user', {}).get('id')
+        )
+        
+        # Set checklist items
+        if data.get('checklist_items'):
+            checklist.set_checklist_items(data['checklist_items'])
+        
+        # Set required photos
+        if data.get('required_photos'):
+            checklist.set_required_photos(data['required_photos'])
+        
+        db.session.add(checklist)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'checklist_id': checklist.id
+        })
+        
+    except Exception as e:
+        logger.error(f"Create quality checklist error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create quality checklist'}), 500
+
+# Warranty Tracking Routes
+@app.route('/warranty-tracking')
+@login_required
+def warranty_tracking():
+    """Warranty tracking page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get all warranties
+        warranties = WarrantyItem.query.order_by(WarrantyItem.expiration_date.asc()).all()
+        
+        # Get expiring warranties (within 30 days)
+        from datetime import timedelta
+        expiring_soon = WarrantyItem.query.filter(
+            WarrantyItem.expiration_date <= datetime.now().date() + timedelta(days=30),
+            WarrantyItem.status == 'active'
+        ).all()
+        
+        return render_template('admin/warranty_tracking.html', 
+                             warranties=warranties,
+                             expiring_soon=expiring_soon)
+    except Exception as e:
+        logger.error(f"Warranty tracking page error: {e}")
+        flash('Error loading warranty tracking', 'error')
+        return render_template('admin/warranty_tracking.html', warranties=[], expiring_soon=[])
+
 # Initialize database and create demo data
 def init_database():
     """Initialize database with demo data"""
@@ -1698,7 +1859,7 @@ def init_database():
             state='CA',
             zip_code='91304',
             phone='(747) 474-9193',
-            business_hours='Monday-Saturday: 11AM-7PM, Sunday: Closed',
+            business_hours='Monday-Friday: 11AM-7PM, Saturday-Sunday: Closed',
             services_offered='Full-service automotive shop: Maintenance & Repairs, Performance Upgrades, Collision Repair, Body Kits & Modifications, Engine Tuning, New & Used Auto Sales. Specializing in high-performance and exotic vehicles.'
         )
         db.session.add(shop)
@@ -1709,6 +1870,38 @@ def init_database():
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error initializing database: {e}")
+
+@app.route('/api/carousel-images')
+def get_carousel_images():
+    """Get images from the Cfrontpageimages folder following 'image Nc.jpeg' naming pattern"""
+    try:
+        import re
+        
+        images_dir = os.path.join(app.static_folder, 'images', 'Cfrontpageimages')
+        if not os.path.exists(images_dir):
+            return jsonify({'images': []})
+        
+        # Pattern to match 'imageNc.jpeg' where N is a number (no spaces)
+        pattern = re.compile(r'^image(\d+)c\.jpeg$', re.IGNORECASE)
+        images = []
+        
+        for filename in os.listdir(images_dir):
+            match = pattern.match(filename)
+            if match:
+                number = int(match.group(1))  # Extract the number for sorting
+                images.append({
+                    'filename': filename,
+                    'url': url_for('static', filename=f'images/Cfrontpageimages/{filename}'),
+                    'order': number
+                })
+        
+        # Sort images by the number in their filename
+        images.sort(key=lambda x: x['order'])
+        
+        return jsonify({'images': images})
+    except Exception as e:
+        logger.error(f"Error getting carousel images: {e}")
+        return jsonify({'images': []})
 
 def open_browser():
     """Open the default browser to the application URL"""

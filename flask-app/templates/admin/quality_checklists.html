@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}Quality Checklists - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Quality Control Checklists{% endblock %}
+{% block page_description %}Manage quality control templates and standards{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="openCreateChecklistModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        <span>New Checklist</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Checklist Categories -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+    <div class="card rounded-xl p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+        </div>
+        <div class="text-2xl font-bold text-metallic-900">{{ checklists|selectattr('service_type', 'equalto', 'service')|list|length }}</div>
+        <div class="text-sm text-metallic-600">Service</div>
+    </div>
+    
+    <div class="card rounded-xl p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+        </div>
+        <div class="text-2xl font-bold text-metallic-900">{{ checklists|selectattr('service_type', 'equalto', 'modification')|list|length }}</div>
+        <div class="text-sm text-metallic-600">Modifications</div>
+    </div>
+    
+    <div class="card rounded-xl p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+        </div>
+        <div class="text-2xl font-bold text-metallic-900">{{ checklists|selectattr('service_type', 'equalto', 'tune')|list|length }}</div>
+        <div class="text-sm text-metallic-600">Tunes</div>
+    </div>
+    
+    <div class="card rounded-xl p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <div class="text-2xl font-bold text-metallic-900">{{ checklists|selectattr('service_type', 'equalto', 'repair')|list|length }}</div>
+        <div class="text-sm text-metallic-600">Repairs</div>
+    </div>
+    
+    <div class="card rounded-xl p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+        </div>
+        <div class="text-2xl font-bold text-metallic-900">{{ checklists|selectattr('service_type', 'equalto', 'collision')|list|length }}</div>
+        <div class="text-sm text-metallic-600">Collision</div>
+    </div>
+</div>
+
+<!-- Quality Checklists Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for checklist in checklists %}
+    <div class="card rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <!-- Checklist Header -->
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ checklist.name }}</h3>
+                <div class="flex items-center space-x-2">
+                    {% if checklist.service_type == 'service' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Service
+                    </span>
+                    {% elif checklist.service_type == 'modification' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        Modification
+                    </span>
+                    {% elif checklist.service_type == 'tune' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                        Tune
+                    </span>
+                    {% elif checklist.service_type == 'repair' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        Repair
+                    </span>
+                    {% elif checklist.service_type == 'collision' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Collision
+                    </span>
+                    {% endif %}
+                    
+                    {% if checklist.service_category %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-metallic-100 text-metallic-800">
+                        {{ checklist.service_category.title() }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="flex space-x-1">
+                <button onclick="editChecklist({{ checklist.id }})" class="p-1 text-metallic-400 hover:text-bluez-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </button>
+                <button onclick="duplicateChecklist({{ checklist.id }})" class="p-1 text-metallic-400 hover:text-green-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Checklist Items Preview -->
+        <div class="mb-4">
+            <h4 class="text-sm font-medium text-metallic-700 mb-2">Checklist Items ({{ checklist.get_checklist_items()|length }})</h4>
+            <div class="space-y-1">
+                {% for item in checklist.get_checklist_items()[:3] %}
+                <div class="flex items-center text-sm text-metallic-600">
+                    <svg class="w-3 h-3 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {{ item.get('text', item) if item is mapping else item }}
+                </div>
+                {% endfor %}
+                {% if checklist.get_checklist_items()|length > 3 %}
+                <div class="text-xs text-metallic-500">
+                    +{{ checklist.get_checklist_items()|length - 3 }} more items
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Required Photos -->
+        {% if checklist.get_required_photos() %}
+        <div class="mb-4">
+            <h4 class="text-sm font-medium text-metallic-700 mb-2">Required Photos</h4>
+            <div class="flex flex-wrap gap-1">
+                {% for photo_type in checklist.get_required_photos() %}
+                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
+                    📷 {{ photo_type }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Usage Stats -->
+        <div class="text-xs text-metallic-500 mb-4">
+            Created: {{ checklist.created_at.strftime('%m/%d/%Y') if checklist.created_at }}
+            <br>
+            Used: {{ checklist.entries|length }} times
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex space-x-2">
+            <button onclick="previewChecklist({{ checklist.id }})" class="flex-1 bg-bluez-50 text-bluez-700 px-3 py-2 rounded-lg hover:bg-bluez-100 transition-colors text-sm font-medium">
+                Preview
+            </button>
+            <button onclick="useChecklist({{ checklist.id }})" class="flex-1 bg-green-50 text-green-700 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                Use Now
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Empty State -->
+{% if not checklists %}
+<div class="text-center py-12">
+    <svg class="w-16 h-16 mx-auto text-metallic-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 7h8m-8 4h8m-5-4h.01M12 16h.01"/>
+    </svg>
+    <h3 class="text-lg font-medium text-metallic-900 mb-2">No quality checklists found</h3>
+    <p class="text-metallic-600 mb-6">Create your first quality control checklist.</p>
+    <button onclick="openCreateChecklistModal()" class="bg-bluez-600 text-white px-6 py-3 rounded-lg hover:bg-bluez-700 transition-colors">
+        Create First Checklist
+    </button>
+</div>
+{% endif %}
+
+<!-- Create/Edit Checklist Modal -->
+<div id="checklistModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-metallic-900" id="checklistModalTitle">Create Quality Checklist</h3>
+                    <button onclick="closeChecklistModal()" class="text-metallic-400 hover:text-metallic-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="checklistForm" class="p-6 space-y-6">
+                <input type="hidden" id="checklistId">
+                
+                <!-- Basic Info -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Checklist Name *</label>
+                        <input type="text" id="checklistName" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Service Type *</label>
+                        <select id="checklistServiceType" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                            <option value="">Select Type</option>
+                            <option value="service">Service</option>
+                            <option value="modification">Modification</option>
+                            <option value="tune">Tune</option>
+                            <option value="repair">Repair</option>
+                            <option value="collision">Collision</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-metallic-700 mb-2">Service Category</label>
+                    <select id="checklistServiceCategory" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        <option value="">Select Category</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="performance">Performance</option>
+                        <option value="body">Body Work</option>
+                        <option value="electrical">Electrical</option>
+                        <option value="engine">Engine</option>
+                        <option value="suspension">Suspension</option>
+                    </select>
+                </div>
+                
+                <!-- Checklist Items -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-sm font-medium text-metallic-700">Checklist Items *</label>
+                        <button type="button" onclick="addChecklistItem()" class="bg-bluez-600 text-white px-3 py-1 rounded text-sm hover:bg-bluez-700 transition-colors">
+                            Add Item
+                        </button>
+                    </div>
+                    <div id="checklistItems" class="space-y-2">
+                        <!-- Items will be added dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Required Photos -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-sm font-medium text-metallic-700">Required Photos</label>
+                        <button type="button" onclick="addPhotoRequirement()" class="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700 transition-colors">
+                            Add Photo
+                        </button>
+                    </div>
+                    <div id="photoRequirements" class="space-y-2">
+                        <!-- Photo requirements will be added dynamically -->
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button type="button" onclick="closeChecklistModal()" class="px-6 py-2 border border-metallic-300 text-metallic-700 rounded-lg hover:bg-metallic-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-bluez-600 text-white px-6 py-2 rounded-lg hover:bg-bluez-700 transition-colors">
+                        Save Checklist
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let checklistItemCount = 0;
+    let photoRequirementCount = 0;
+    
+    function openCreateChecklistModal() {
+        document.getElementById('checklistModalTitle').textContent = 'Create Quality Checklist';
+        document.getElementById('checklistForm').reset();
+        document.getElementById('checklistId').value = '';
+        document.getElementById('checklistItems').innerHTML = '';
+        document.getElementById('photoRequirements').innerHTML = '';
+        checklistItemCount = 0;
+        photoRequirementCount = 0;
+        
+        // Add initial checklist item
+        addChecklistItem();
+        
+        document.getElementById('checklistModal').classList.remove('hidden');
+    }
+    
+    function closeChecklistModal() {
+        document.getElementById('checklistModal').classList.add('hidden');
+    }
+    
+    function addChecklistItem() {
+        const container = document.getElementById('checklistItems');
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'flex items-center space-x-2';
+        itemDiv.innerHTML = `
+            <input type="text" placeholder="Enter checklist item..." class="flex-1 px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent checklist-item-input">
+            <button type="button" onclick="removeChecklistItem(this)" class="text-red-600 hover:text-red-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+            </button>
+        `;
+        container.appendChild(itemDiv);
+        checklistItemCount++;
+    }
+    
+    function removeChecklistItem(button) {
+        button.parentElement.remove();
+    }
+    
+    function addPhotoRequirement() {
+        const container = document.getElementById('photoRequirements');
+        const photoDiv = document.createElement('div');
+        photoDiv.className = 'flex items-center space-x-2';
+        photoDiv.innerHTML = `
+            <input type="text" placeholder="e.g., Before work, After completion, Parts installed..." class="flex-1 px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent photo-requirement-input">
+            <button type="button" onclick="removePhotoRequirement(this)" class="text-red-600 hover:text-red-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+            </button>
+        `;
+        container.appendChild(photoDiv);
+        photoRequirementCount++;
+    }
+    
+    function removePhotoRequirement(button) {
+        button.parentElement.remove();
+    }
+    
+    function editChecklist(checklistId) {
+        document.getElementById('checklistModalTitle').textContent = 'Edit Quality Checklist';
+        document.getElementById('checklistId').value = checklistId;
+        document.getElementById('checklistModal').classList.remove('hidden');
+    }
+    
+    function duplicateChecklist(checklistId) {
+        if (confirm('Duplicate this checklist?')) {
+            console.log('Duplicating checklist:', checklistId);
+        }
+    }
+    
+    function previewChecklist(checklistId) {
+        alert(`Preview checklist ${checklistId} - This would show a read-only preview of the checklist`);
+    }
+    
+    function useChecklist(checklistId) {
+        alert(`Use checklist ${checklistId} - This would apply the checklist to a work order`);
+    }
+    
+    // Form submission
+    document.getElementById('checklistForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Collect checklist items
+        const itemInputs = document.querySelectorAll('.checklist-item-input');
+        const items = Array.from(itemInputs).map(input => input.value.trim()).filter(item => item);
+        
+        // Collect photo requirements
+        const photoInputs = document.querySelectorAll('.photo-requirement-input');
+        const photos = Array.from(photoInputs).map(input => input.value.trim()).filter(photo => photo);
+        
+        if (items.length === 0) {
+            alert('Please add at least one checklist item');
+            return;
+        }
+        
+        const formData = {
+            name: document.getElementById('checklistName').value,
+            service_type: document.getElementById('checklistServiceType').value,
+            service_category: document.getElementById('checklistServiceCategory').value,
+            checklist_items: items,
+            required_photos: photos
+        };
+        
+        const checklistId = document.getElementById('checklistId').value;
+        const url = checklistId ? `/api/quality-checklists/${checklistId}` : '/api/quality-checklists';
+        const method = checklistId ? 'PUT' : 'POST';
+        
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`✓ Quality checklist ${checklistId ? 'updated' : 'created'} successfully!`);
+                closeChecklistModal();
+                location.reload();
+            } else {
+                alert('✗ Error saving checklist: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            alert('✗ Error saving checklist');
+        });
+    });
+    
+    // Close modal on outside click
+    document.getElementById('checklistModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeChecklistModal();
+        }
+    });
+</script>
+{% endblock %}

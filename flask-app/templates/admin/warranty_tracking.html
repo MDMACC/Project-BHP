@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+
+{% block title %}Warranty Tracking - Bluez PowerHouse Management System{% endblock %}
+
+{% block page_title %}Warranty Tracking{% endblock %}
+{% block page_description %}Monitor warranties and expiration alerts{% endblock %}
+
+{% block header_actions %}
+<div class="flex items-center space-x-4">
+    <button onclick="createWarrantyAlert()" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <span>Send Alerts</span>
+    </button>
+    <div class="text-right">
+        <p class="text-sm font-medium text-metallic-900">{{ session.user.username if session.user else 'Admin' }}</p>
+        <p class="text-xs text-metallic-600">{{ session.user.role.title() if session.user else 'Administrator' }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Warranty Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Active Warranties</p>
+                <p class="text-2xl font-bold text-metallic-900">{{ warranties|selectattr('status', 'equalto', 'active')|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.5 0a11 11 0 11-22 0 11 11 0 0122 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Expiring Soon</p>
+                <p class="text-2xl font-bold text-yellow-600">{{ expiring_soon|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Expired</p>
+                <p class="text-2xl font-bold text-red-600">{{ warranties|selectattr('status', 'equalto', 'expired')|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Claims</p>
+                <p class="text-2xl font-bold text-purple-600">{{ warranties|sum(attribute='claim_count') }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Expiring Soon Alert -->
+{% if expiring_soon %}
+<div class="card rounded-xl p-6 mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-yellow-900">Warranties Expiring Soon</h3>
+                <p class="text-yellow-700">{{ expiring_soon|length }} warranties expire within 30 days</p>
+            </div>
+        </div>
+        <button onclick="viewExpiringWarranties()" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+            View Details
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<!-- Warranty Status Tabs -->
+<div class="mb-8">
+    <div class="flex space-x-1 bg-metallic-100 rounded-lg p-1">
+        <button onclick="switchWarrantyTab('all')" id="allWarrantiesTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white text-metallic-900 shadow-sm">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 7a2 2 0 012-2h10a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                <span>All</span>
+                <span class="bg-metallic-500 text-white text-xs px-2 py-1 rounded-full">{{ warranties|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWarrantyTab('active')" id="activeTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Active</span>
+                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">{{ warranties|selectattr('status', 'equalto', 'active')|list|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWarrantyTab('expiring')" id="expiringTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span>Expiring</span>
+                <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{ expiring_soon|length }}</span>
+            </span>
+        </button>
+        <button onclick="switchWarrantyTab('expired')" id="expiredTab" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors text-metallic-600 hover:text-metallic-900">
+            <span class="flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Expired</span>
+                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ warranties|selectattr('status', 'equalto', 'expired')|list|length }}</span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- Warranties Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="warrantiesGrid">
+    {% for warranty in warranties %}
+    <div class="warranty-card card rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" 
+         data-status="{{ warranty.status }}"
+         data-expiring="{{ 'true' if warranty.days_until_expiration() and warranty.days_until_expiration() <= 30 else 'false' }}">
+        
+        <!-- Warranty Header -->
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ warranty.warranty_description or warranty.warranty_type.title() + ' Warranty' }}</h3>
+                <p class="text-sm text-metallic-600">{{ warranty.customer_name }}</p>
+            </div>
+            
+            <div class="flex flex-col items-end space-y-2">
+                <!-- Warranty Type Badge -->
+                {% if warranty.warranty_type == 'labor' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    Labor
+                </span>
+                {% elif warranty.warranty_type == 'parts' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Parts
+                </span>
+                {% elif warranty.warranty_type == 'comprehensive' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    Comprehensive
+                </span>
+                {% endif %}
+                
+                <!-- Status Badge -->
+                {% if warranty.status == 'active' %}
+                    {% if warranty.days_until_expiration() and warranty.days_until_expiration() <= 7 %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse">
+                        ⚠️ Expires Soon
+                    </span>
+                    {% elif warranty.days_until_expiration() and warranty.days_until_expiration() <= 30 %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        ⏰ Expiring
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        ✓ Active
+                    </span>
+                    {% endif %}
+                {% elif warranty.status == 'expired' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    ❌ Expired
+                </span>
+                {% elif warranty.status == 'claimed' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    📋 Claimed
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Vehicle and Service Info -->
+        <div class="space-y-2 text-sm text-metallic-600 mb-4">
+            {% if warranty.vehicle_info %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                {{ warranty.vehicle_info }}
+            </div>
+            {% endif %}
+            
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Started: {{ warranty.start_date.strftime('%m/%d/%Y') if warranty.start_date }}
+            </div>
+            
+            {% if warranty.expiration_date %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Expires: {{ warranty.expiration_date.strftime('%m/%d/%Y') }}
+                {% if warranty.days_until_expiration() %}
+                    {% if warranty.days_until_expiration() > 0 %}
+                    <span class="ml-2 text-xs text-yellow-600">({{ warranty.days_until_expiration() }} days)</span>
+                    {% else %}
+                    <span class="ml-2 text-xs text-red-600">(Expired)</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            {% if warranty.warranty_months or warranty.warranty_miles %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Coverage: 
+                {% if warranty.warranty_months %}{{ warranty.warranty_months }} months{% endif %}
+                {% if warranty.warranty_months and warranty.warranty_miles %} / {% endif %}
+                {% if warranty.warranty_miles %}{{ "{:,}".format(warranty.warranty_miles) }} miles{% endif %}
+            </div>
+            {% endif %}
+            
+            {% if warranty.claim_count > 0 %}
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Claims: {{ warranty.claim_count }}
+                {% if warranty.last_claim_date %}
+                (Last: {{ warranty.last_claim_date.strftime('%m/%d/%Y') }})
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex space-x-2">
+            {% if warranty.status == 'active' %}
+            <button onclick="createWarrantyClaim({{ warranty.id }})" class="flex-1 bg-orange-50 text-orange-700 px-3 py-2 rounded-lg hover:bg-orange-100 transition-colors text-sm font-medium">
+                New Claim
+            </button>
+            {% endif %}
+            
+            <button onclick="viewWarrantyDetails({{ warranty.id }})" class="flex-1 bg-bluez-50 text-bluez-700 px-3 py-2 rounded-lg hover:bg-bluez-100 transition-colors text-sm font-medium">
+                View Details
+            </button>
+            
+            <button onclick="editWarranty({{ warranty.id }})" class="flex-1 bg-metallic-50 text-metallic-700 px-3 py-2 rounded-lg hover:bg-metallic-100 transition-colors text-sm font-medium">
+                Edit
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Empty State -->
+{% if not warranties %}
+<div class="text-center py-12">
+    <svg class="w-16 h-16 mx-auto text-metallic-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.5 0a11 11 0 11-22 0 11 11 0 0122 0z"/>
+    </svg>
+    <h3 class="text-lg font-medium text-metallic-900 mb-2">No warranties found</h3>
+    <p class="text-metallic-600 mb-6">Warranties will appear here as services are completed.</p>
+</div>
+{% endif %}
+
+<script>
+    let currentWarrantyTab = 'all';
+    
+    function switchWarrantyTab(tab) {
+        currentWarrantyTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('[id$="Tab"]').forEach(btn => {
+            btn.classList.remove('bg-white', 'text-metallic-900', 'shadow-sm');
+            btn.classList.add('text-metallic-600', 'hover:text-metallic-900');
+        });
+        
+        const tabButton = document.getElementById(tab === 'all' ? 'allWarrantiesTab' : tab + 'Tab');
+        if (tabButton) {
+            tabButton.classList.add('bg-white', 'text-metallic-900', 'shadow-sm');
+            tabButton.classList.remove('text-metallic-600', 'hover:text-metallic-900');
+        }
+        
+        filterWarranties();
+    }
+    
+    function filterWarranties() {
+        const warrantyCards = document.querySelectorAll('.warranty-card');
+        
+        warrantyCards.forEach(card => {
+            const status = card.dataset.status;
+            const isExpiring = card.dataset.expiring === 'true';
+            let showCard = false;
+            
+            if (currentWarrantyTab === 'all') {
+                showCard = true;
+            } else if (currentWarrantyTab === 'active') {
+                showCard = status === 'active';
+            } else if (currentWarrantyTab === 'expiring') {
+                showCard = status === 'active' && isExpiring;
+            } else if (currentWarrantyTab === 'expired') {
+                showCard = status === 'expired';
+            }
+            
+            card.style.display = showCard ? 'block' : 'none';
+        });
+    }
+    
+    function createWarrantyAlert() {
+        if (confirm('Send warranty expiration alerts to customers with warranties expiring within 30 days?')) {
+            alert(`✓ Warranty alerts sent to {{ expiring_soon|length }} customers!`);
+        }
+    }
+    
+    function viewExpiringWarranties() {
+        switchWarrantyTab('expiring');
+    }
+    
+    function createWarrantyClaim(warrantyId) {
+        alert(`Create warranty claim for warranty ${warrantyId} - This would open a claim form`);
+    }
+    
+    function viewWarrantyDetails(warrantyId) {
+        alert(`View warranty details for ${warrantyId} - This would show complete warranty information`);
+    }
+    
+    function editWarranty(warrantyId) {
+        alert(`Edit warranty ${warrantyId} - This would open an edit form`);
+    }
+</script>
+{% endblock %}
