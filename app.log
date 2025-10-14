@@ -19231,3 +19231,365 @@ WHERE parts.is_active = 1 ORDER BY parts.name]
 2025-10-10 14:57:49,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:49] "GET /api/chat/check HTTP/1.1" 200 -
 2025-10-10 14:57:54,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:54] "GET /api/chat/check HTTP/1.1" 200 -
 2025-10-10 14:57:54,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:59,887 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:57:59,892 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:57:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:04,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:04,889 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:09,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:09,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:09] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:14,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:14,896 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:14] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:19,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:19,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:19] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:24,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:24,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:24] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:29,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:29,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:29] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:34,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:34,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:39,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:39,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:44,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:44,891 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:49,886 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:49,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:54,885 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:58:54,890 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:58:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:27,427 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:59:27,429 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:59:27,448 - __main__ - INFO - Database already initialized
+2025-10-10 14:59:27,448 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:59:27,460 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.10.3:5001
+2025-10-10 14:59:27,460 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-10-10 14:59:27,460 - werkzeug - INFO -  * Restarting with stat
+2025-10-10 14:59:27,641 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-10 14:59:27,643 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 14:59:27,663 - __main__ - INFO - Database already initialized
+2025-10-10 14:59:27,663 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-10 14:59:27,666 - werkzeug - WARNING -  * Debugger is active!
+2025-10-10 14:59:27,676 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-10 14:59:29,152 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET / HTTP/1.1" 200 -
+2025-10-10 14:59:29,167 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,168 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,287 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET / HTTP/1.1" 200 -
+2025-10-10 14:59:29,297 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,298 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,374 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,506 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,510 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:59:29,510 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:59:29,524 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,524 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,614 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 14:59:29,615 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 14:59:29,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:59:29,627 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:29] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 14:59:34,615 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:34,619 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:34] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:39,613 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:39,615 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:39] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:44,611 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:44,614 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:44] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:49,615 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:49,618 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:49] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:54,614 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:54,618 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:54] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:59,613 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 14:59:59,616 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 14:59:59] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 15:00:04,615 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 15:00:04,622 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:04] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 15:00:05,661 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "GET / HTTP/1.1" 200 -
+2025-10-10 15:00:05,683 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:05,683 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:05,747 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:05,822 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-10 15:00:05,823 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-10 15:00:05,826 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 15:00:05,827 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:05] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-10 15:00:10,821 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 15:00:10,825 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:10] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-10 15:00:12,292 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:12] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-10 15:00:12,302 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:12,329 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:12] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-10 15:00:12,347 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:12] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:15,257 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:15,282 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:15] "GET /parts HTTP/1.1" 200 -
+2025-10-10 15:00:15,282 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:15,283 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:15] "GET /parts HTTP/1.1" 200 -
+2025-10-10 15:00:15,295 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:15] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:18,429 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:18,453 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:18] "GET /customer-management HTTP/1.1" 200 -
+2025-10-10 15:00:18,466 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:18] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:19,882 - __main__ - ERROR - Contacts page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.is_active = 1 ORDER BY contacts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:19,899 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:19] "GET /contacts HTTP/1.1" 200 -
+2025-10-10 15:00:19,912 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:19] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:22,394 - __main__ - ERROR - Schedule page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:22,411 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:22] "GET /schedule HTTP/1.1" 200 -
+2025-10-10 15:00:22,411 - __main__ - ERROR - Schedule page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:22,412 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:22] "GET /schedule HTTP/1.1" 200 -
+2025-10-10 15:00:22,430 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:22] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:23,808 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:23] "GET /shipping HTTP/1.1" 200 -
+2025-10-10 15:00:23,818 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:23] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:24,960 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-10 15:00:24,961 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:24] "GET /customer-management HTTP/1.1" 200 -
+2025-10-10 15:00:24,979 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:24] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-10 15:00:27,082 - werkzeug - INFO - 127.0.0.1 - - [10/Oct/2025 15:00:27] "GET /api/test-auth HTTP/1.1" 200 -
+2025-10-13 08:21:08,127 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:21:08,135 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:21:08] "GET /customer-management HTTP/1.1" 200 -
+2025-10-13 08:21:08,181 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:21:08] "GET /static/images/bluez-powerhouse-logo.png HTTP/1.1" 200 -
+2025-10-13 08:22:57,421 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "GET / HTTP/1.1" 200 -
+2025-10-13 08:22:57,488 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:22:57,489 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:22:57,700 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "GET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1" 200 -
+2025-10-13 08:22:57,870 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-13 08:22:57,888 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-13 08:22:57,888 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:22:57,888 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:22:57] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:23:02,070 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:02] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-13 08:23:02,089 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:23:02,093 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:02] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-13 08:23:02,116 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:02] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:04,807 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:23:04,847 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:04] "GET /customer-management HTTP/1.1" 200 -
+2025-10-13 08:23:04,863 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:04] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:13,923 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:23:13,925 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:13] "GET /customer-management HTTP/1.1" 200 -
+2025-10-13 08:23:13,950 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:13] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:18,381 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:23:18,385 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:18] "GET /customer-management HTTP/1.1" 200 -
+2025-10-13 08:23:18,402 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:18] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:49,976 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:23:50,109 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:23:50,441 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:23:50,445 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:23:50,467 - __main__ - INFO - Database already initialized
+2025-10-13 08:23:50,468 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:23:50,475 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:23:50,488 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:23:52,217 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "GET / HTTP/1.1" 200 -
+2025-10-13 08:23:52,259 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:52,260 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:52,457 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-13 08:23:52,606 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-13 08:23:52,633 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-13 08:23:52,634 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:23:52,634 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:23:52] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:24:00,580 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:24:00,697 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:24:00,952 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:24:00,954 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:00,973 - __main__ - INFO - Database already initialized
+2025-10-13 08:24:00,973 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:24:00,977 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:24:00,987 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:24:02,664 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:02] "GET / HTTP/1.1" 200 -
+2025-10-13 08:24:02,681 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:02] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:02,681 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:02] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:02,892 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:02] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:03,021 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:03] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-13 08:24:03,021 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:03] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-13 08:24:03,030 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:03] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:24:03,032 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:03] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:24:33,335 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:24:33,416 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:24:33,644 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:24:33,646 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:33,664 - __main__ - INFO - Database already initialized
+2025-10-13 08:24:33,664 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:24:33,669 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:24:33,679 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:24:35,439 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "GET / HTTP/1.1" 200 -
+2025-10-13 08:24:35,453 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:35,454 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:35,655 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:35,800 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-13 08:24:35,811 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-13 08:24:35,815 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:24:35,816 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:35] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:24:40,775 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:40] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-13 08:24:40,781 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:40] "GET /api/chat/check HTTP/1.1" 200 -
+2025-10-13 08:24:45,678 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:45] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-13 08:24:45,687 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:45,712 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:45] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-13 08:24:45,729 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:45] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:48,776 - __main__ - ERROR - Customer management page error: (sqlite3.OperationalError) no such column: contacts.vehicle_year
+[SQL: SELECT contacts.id AS contacts_id, contacts.name AS contacts_name, contacts.company AS contacts_company, contacts.type AS contacts_type, contacts.email AS contacts_email, contacts.phone AS contacts_phone, contacts.street AS contacts_street, contacts.city AS contacts_city, contacts.state AS contacts_state, contacts.zip_code AS contacts_zip_code, contacts.vehicle_year AS contacts_vehicle_year, contacts.vehicle_make AS contacts_vehicle_make, contacts.vehicle_model AS contacts_vehicle_model, contacts.vehicle_color AS contacts_vehicle_color, contacts.vehicle_vin AS contacts_vehicle_vin, contacts.vehicle_license_plate AS contacts_vehicle_license_plate, contacts.vehicle_mileage AS contacts_vehicle_mileage, contacts.vehicle_photo_url AS contacts_vehicle_photo_url, contacts.vehicle_photo_filename AS contacts_vehicle_photo_filename, contacts.folder_notes AS contacts_folder_notes, contacts.preferred_contact_method AS contacts_preferred_contact_method, contacts.is_active AS contacts_is_active, contacts.created_at AS contacts_created_at, contacts.updated_at AS contacts_updated_at 
+FROM contacts 
+WHERE contacts.type = ? AND contacts.is_active = 1 ORDER BY contacts.name]
+[parameters: ('customer',)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:48,797 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:48] "GET /customer-management HTTP/1.1" 200 -
+2025-10-13 08:24:48,813 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:48] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:24:49,844 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:49,874 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:49] "GET /parts HTTP/1.1" 200 -
+2025-10-13 08:24:49,874 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:24:49,874 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:49] "GET /parts HTTP/1.1" 200 -
+2025-10-13 08:24:49,885 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:24:49] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:27:15,304 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:27:15,410 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:27:15,671 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:27:15,673 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:27:15,692 - __main__ - INFO - Database already initialized
+2025-10-13 08:27:15,693 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:27:15,697 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:27:15,709 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:27:17,520 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "GET / HTTP/1.1" 200 -
+2025-10-13 08:27:17,541 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "[36mGET /static/images/TiktokLogo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:27:17,542 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:27:17,744 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "[36mGET /static/images/BluezPowerhouseLogoFooter.png HTTP/1.1[0m" 304 -
+2025-10-13 08:27:17,899 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "GET /api/carousel-images HTTP/1.1" 200 -
+2025-10-13 08:27:17,900 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "GET /api/chat/messages HTTP/1.1" 200 -
+2025-10-13 08:27:17,909 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "[36mGET /static/images/Cfrontpageimages/image2c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:27:17,910 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:17] "[36mGET /static/images/Cfrontpageimages/image1c.jpeg HTTP/1.1[0m" 304 -
+2025-10-13 08:27:20,806 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:27:20,894 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:27:21,203 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:27:21,205 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:27:21,228 - __main__ - INFO - Database already initialized
+2025-10-13 08:27:21,229 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:27:21,234 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:27:21,245 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:27:21,326 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:21] "[32mGET /admin HTTP/1.1[0m" 302 -
+2025-10-13 08:27:21,333 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:27:21,346 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:21] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-13 08:27:21,367 - werkzeug - INFO - 127.0.0.1 - - [13/Oct/2025 08:27:21] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-13 08:27:41,504 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:27:41,575 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:27:41,792 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:27:41,793 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:27:41,813 - __main__ - INFO - Database already initialized
+2025-10-13 08:27:41,813 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:27:41,817 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:27:41,826 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-13 08:29:05,716 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-13 08:29:05,842 - werkzeug - INFO -  * Restarting with stat
+2025-10-13 08:29:06,260 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-13 08:29:06,262 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-13 08:29:06,282 - __main__ - INFO - Database already initialized
+2025-10-13 08:29:06,282 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-13 08:29:06,287 - werkzeug - WARNING -  * Debugger is active!
+2025-10-13 08:29:06,294 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-14 09:21:07,435 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-14 09:21:07,466 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:07] "GET /parts HTTP/1.1" 200 -
+2025-10-14 09:21:07,508 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:07] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-14 09:21:10,138 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:10] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+2025-10-14 09:21:10,153 - __main__ - ERROR - Admin dashboard error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-14 09:21:10,165 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:10] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-10-14 09:21:10,183 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:10] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-14 09:21:11,992 - __main__ - ERROR - Parts page error: (sqlite3.OperationalError) no such column: parts.supplier_id
+[SQL: SELECT parts.id AS parts_id, parts.part_number AS parts_part_number, parts.name AS parts_name, parts.description AS parts_description, parts.category AS parts_category, parts.price AS parts_price, parts.cost AS parts_cost, parts.quantity_in_stock AS parts_quantity_in_stock, parts.minimum_stock_level AS parts_minimum_stock_level, parts.location AS parts_location, parts.supplier_id AS parts_supplier_id, parts.supplier_part_number AS parts_supplier_part_number, parts.supplier_url AS parts_supplier_url, parts.last_order_date AS parts_last_order_date, parts.last_order_cost AS parts_last_order_cost, parts.image_url AS parts_image_url, parts.image_filename AS parts_image_filename, parts.is_active AS parts_is_active, parts.created_at AS parts_created_at, parts.updated_at AS parts_updated_at 
+FROM parts 
+WHERE parts.is_active = 1 ORDER BY parts.name]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-14 09:21:11,998 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:11] "GET /parts HTTP/1.1" 200 -
+2025-10-14 09:21:12,033 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:12] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -

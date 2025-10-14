@@ -83,7 +83,11 @@ def verify_webhook_signature(provider, payload, signature, secret):
 def save_package_photo(photo_url, tracking_number):
     """Download and save package photo locally"""
     try:
-        import requests
+        try:
+            import requests
+        except ImportError:
+            logger.warning("requests module not available, skipping photo download")
+            return None
         from urllib.parse import urlparse
         
         # Create upload directory if it doesn't exist
@@ -3014,7 +3018,7 @@ def get_carousel_images():
 
 def open_browser():
     """Open the default browser to the application URL"""
-    webbrowser.open('http://localhost:5001')
+    webbrowser.open('http://localhost:5002')
 
 if __name__ == '__main__':
     init_database()
@@ -3024,4 +3028,4 @@ if __name__ == '__main__':
     if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
         threading.Timer(1.5, open_browser).start()
     
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)
