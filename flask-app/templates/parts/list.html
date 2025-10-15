@@ -1,7 +1,36 @@
 {% extends "base.html" %}
 
-{% block page_title %}Parts{% endblock %}
-{% block page_description %}Manage your inventory parts and stock levels{% endblock %}
+{% block title %}Inventory Management - Bluez PowerHouse{% endblock %}
+{% block page_title %}Inventory Management{% endblock %}
+{% block page_description %}Manage parts inventory, suppliers, pricing, and stock levels{% endblock %}
+
+{% block extra_head %}
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .part-card {
+        transition: all 0.3s ease;
+    }
+    
+    .part-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .feature-icon {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+    }
+    
+    .stock-badge {
+        backdrop-filter: blur(4px);
+    }
+</style>
+{% endblock %}
 
 {% block header_actions %}
 <button onclick="openAddPartModal()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
@@ -13,6 +42,65 @@
 {% endblock %}
 
 {% block content %}
+<!-- Inventory Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Total Parts</p>
+                <p class="text-2xl font-bold text-metallic-900">{{ parts|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-bluez-500 to-bluez-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Out of Stock</p>
+                <p class="text-2xl font-bold text-red-600">{{ parts|selectattr('quantity_in_stock', 'equalto', 0)|list|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Low Stock</p>
+                <p class="text-2xl font-bold text-yellow-600">{% set low_stock_parts = [] %}{% for part in parts %}{% if part.quantity_in_stock > 0 and part.quantity_in_stock <= (part.minimum_stock_level or 0) %}{% set _ = low_stock_parts.append(part) %}{% endif %}{% endfor %}{{ low_stock_parts|length }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-metallic-600">Total Value</p>
+                <p class="text-2xl font-bold text-green-600">{% set total_value = 0 %}{% for part in parts %}{% set total_value = total_value + ((part.price or 0) * (part.quantity_in_stock or 0)) %}{% endfor %}&dollar;{{ "{:,.0f}".format(total_value) }}</p>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Search and Filters -->
 <div class="card mb-6">
     <div class="px-6 py-4">
@@ -48,8 +136,171 @@
     </div>
 </div>
 
-<!-- Parts Table -->
-<div class="card">
+<!-- View Toggle -->
+<div class="flex justify-between items-center mb-6">
+    <div class="flex space-x-2">
+        <button onclick="switchView('grid')" id="gridViewBtn" class="px-4 py-2 bg-bluez-600 text-white rounded-lg hover:bg-bluez-700 transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+            <span>Grid View</span>
+        </button>
+        <button onclick="switchView('table')" id="tableViewBtn" class="px-4 py-2 bg-metallic-200 text-metallic-700 rounded-lg hover:bg-metallic-300 transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+            <span>Table View</span>
+        </button>
+    </div>
+    
+    <div class="flex space-x-2">
+        <button onclick="bulkStockUpdate()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+            </svg>
+            <span>Bulk Update</span>
+        </button>
+        <button onclick="generateReport()" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700 transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span>Report</span>
+        </button>
+    </div>
+</div>
+
+<!-- Parts Grid View -->
+<div id="partsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+    {% for part in parts %}
+    <div class="part-card card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" 
+         data-category="{{ part.category or '' }}"
+         data-supplier="{{ part.supplier.name if part.supplier else '' }}"
+         data-stock-level="{% if part.quantity_in_stock == 0 %}out-of-stock{% elif part.quantity_in_stock <= (part.minimum_stock_level or 0) %}low-stock{% else %}in-stock{% endif %}"
+         data-search="{{ (part.name + ' ' + part.part_number + ' ' + (part.description or '')).lower() }}">
+        
+        <!-- Part Image -->
+        <div class="relative h-48 bg-metallic-100">
+            {% if part.image_url %}
+            <img src="{{ part.image_url }}" alt="{{ part.name }}" class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-metallic-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+            </div>
+            {% endif %}
+            
+            <!-- Stock Status Badge -->
+            <div class="absolute top-3 right-3">
+                {% if part.quantity_in_stock == 0 %}
+                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">Out of Stock</span>
+                {% elif part.quantity_in_stock <= (part.minimum_stock_level or 0) %}
+                <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-medium">Low Stock</span>
+                {% else %}
+                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">In Stock</span>
+                {% endif %}
+            </div>
+            
+            <!-- Image Upload Button -->
+            <div class="absolute bottom-3 right-3">
+                <button onclick="uploadPartImage({{ part.id }})" class="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all" title="Upload Image">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Part Details -->
+        <div class="p-6">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold text-metallic-900 mb-1">{{ part.name }}</h3>
+                <p class="text-sm text-metallic-600">{{ part.part_number }}</p>
+                {% if part.category %}
+                <span class="inline-block bg-metallic-100 text-metallic-700 text-xs px-2 py-1 rounded-full mt-2">{{ part.category }}</span>
+                {% endif %}
+            </div>
+            
+            {% if part.description %}
+            <p class="text-sm text-metallic-600 mb-4 line-clamp-2">{{ part.description }}</p>
+            {% endif %}
+            
+            <!-- Supplier Info -->
+            {% if part.supplier %}
+            <div class="mb-4 p-3 bg-metallic-50 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-metallic-900">{{ part.supplier.name }}</p>
+                        {% if part.supplier_part_number %}
+                        <p class="text-xs text-metallic-600">P/N: {{ part.supplier_part_number }}</p>
+                        {% endif %}
+                    </div>
+                    {% if part.supplier_url %}
+                    <a href="{{ part.supplier_url }}" target="_blank" class="text-bluez-600 hover:text-bluez-800 text-xs">
+                        View →
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Stock Info -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-metallic-600">Stock:</span>
+                    <span class="font-semibold text-metallic-900">{{ part.quantity_in_stock or 0 }}</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-metallic-600">Min Level:</span>
+                    <span class="text-metallic-700">{{ part.minimum_stock_level or 0 }}</span>
+                </div>
+                {% if part.location %}
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-metallic-600">Location:</span>
+                    <span class="text-metallic-700">{{ part.location }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Pricing Info -->
+            <div class="mb-4 p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                        <span class="text-metallic-600">Cost:</span>
+                        <span class="font-medium text-red-600">${{ "{:,.2f}".format(part.cost or 0) }}</span>
+                    </div>
+                    <div>
+                        <span class="text-metallic-600">Price:</span>
+                        <span class="font-medium text-green-600">${{ "{:,.2f}".format(part.price or 0) }}</span>
+                    </div>
+                    {% if part.cost and part.cost > 0 %}
+                    <div class="col-span-2 text-center pt-2 border-t">
+                        <span class="text-xs text-metallic-600">Profit Margin:</span>
+                        <span class="font-bold text-bluez-600">{{ part.get_profit_margin() }}%</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex space-x-2">
+                <button onclick="editPart({{ part.id }})" class="flex-1 bg-bluez-50 text-bluez-700 px-3 py-2 rounded-lg hover:bg-bluez-100 transition-colors text-sm font-medium">
+                    Edit
+                </button>
+                <button onclick="viewStockHistory({{ part.id }})" class="flex-1 bg-metallic-50 text-metallic-700 px-3 py-2 rounded-lg hover:bg-metallic-100 transition-colors text-sm font-medium">
+                    History
+                </button>
+                <button onclick="restockPart({{ part.id }})" class="flex-1 bg-green-50 text-green-700 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                    Restock
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Parts Table View (Hidden by default) -->
+<div id="partsTable" class="card hidden">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -296,6 +547,23 @@ function openAddPartModal() {
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                     <textarea name="description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
                 </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Part Image</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="file" id="partImageInput" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('partImageInput').click()" class="bg-metallic-100 border-2 border-dashed border-metallic-300 rounded-lg px-4 py-8 text-center hover:border-metallic-400 transition-colors w-full">
+                            <svg class="w-8 h-8 mx-auto text-metallic-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="text-sm text-metallic-600">Click to upload part image</p>
+                            <p class="text-xs text-metallic-500">PNG, JPG, GIF up to 16MB</p>
+                        </button>
+                    </div>
+                    <div id="imagePreview" class="mt-4 hidden">
+                        <img id="previewImg" class="w-32 h-32 object-cover rounded-lg border">
+                        <button type="button" onclick="removeImagePreview()" class="mt-2 text-red-600 text-sm hover:text-red-800">Remove Image</button>
+                    </div>
+                </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
                     <button type="submit" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700">Add Part</button>
@@ -341,9 +609,15 @@ function addPart(partData) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('✅ Part added successfully!');
-            closeModal();
-            window.location.reload();
+            // If there's an image to upload, upload it after part creation
+            const imageInput = document.getElementById('partImageInput');
+            if (imageInput.files.length > 0) {
+                uploadImageForNewPart(data.part_id, imageInput.files[0]);
+            } else {
+                alert('✅ Part added successfully!');
+                closeModal();
+                window.location.reload();
+            }
         } else {
             alert(`❌ Error: ${data.error}`);
         }
@@ -354,29 +628,842 @@ function addPart(partData) {
     });
 }
 
+function uploadImageForNewPart(partId, file) {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    fetch(`/api/parts/${partId}/image`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Part and image added successfully!');
+        } else {
+            alert('✅ Part added successfully, but image upload failed: ' + data.error);
+        }
+        closeModal();
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error uploading image:', error);
+        alert('✅ Part added successfully, but image upload failed.');
+        closeModal();
+        window.location.reload();
+    });
+}
+
+function removeImagePreview() {
+    document.getElementById('imagePreview').classList.add('hidden');
+    document.getElementById('partImageInput').value = '';
+}
+
+// Add image preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('partImageInput');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+
+let currentView = 'grid';
+
+function switchView(view) {
+    currentView = view;
+    const gridView = document.getElementById('partsGrid');
+    const tableView = document.getElementById('partsTable');
+    const gridBtn = document.getElementById('gridViewBtn');
+    const tableBtn = document.getElementById('tableViewBtn');
+    
+    if (view === 'grid') {
+        gridView.classList.remove('hidden');
+        tableView.classList.add('hidden');
+        gridBtn.classList.add('bg-bluez-600', 'text-white');
+        gridBtn.classList.remove('bg-metallic-200', 'text-metallic-700');
+        tableBtn.classList.add('bg-metallic-200', 'text-metallic-700');
+        tableBtn.classList.remove('bg-bluez-600', 'text-white');
+    } else {
+        gridView.classList.add('hidden');
+        tableView.classList.remove('hidden');
+        tableBtn.classList.add('bg-bluez-600', 'text-white');
+        tableBtn.classList.remove('bg-metallic-200', 'text-metallic-700');
+        gridBtn.classList.add('bg-metallic-200', 'text-metallic-700');
+        gridBtn.classList.remove('bg-bluez-600', 'text-white');
+    }
+}
+
+function filterParts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const stockFilter = document.getElementById('stockFilter').value;
+    const supplierFilter = document.getElementById('supplierFilter').value;
+    
+    const partCards = document.querySelectorAll('.part-card');
+    
+    partCards.forEach(card => {
+        const searchText = card.dataset.search;
+        const category = card.dataset.category;
+        const stockLevel = card.dataset.stockLevel;
+        const supplier = card.dataset.supplier;
+        
+        let showCard = true;
+        
+        // Search filter
+        if (searchTerm && !searchText.includes(searchTerm)) {
+            showCard = false;
+        }
+        
+        // Category filter
+        if (categoryFilter && category !== categoryFilter) {
+            showCard = false;
+        }
+        
+        // Stock filter
+        if (stockFilter && stockLevel !== stockFilter) {
+            showCard = false;
+        }
+        
+        // Supplier filter
+        if (supplierFilter && supplier !== supplierFilter) {
+            showCard = false;
+        }
+        
+        card.style.display = showCard ? 'block' : 'none';
+    });
+}
+
+function uploadPartImage(partId) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            fetch(`/api/parts/${partId}/image`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Image uploaded successfully!');
+                    window.location.reload();
+                } else {
+                    alert(`❌ Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+                alert('❌ Network Error: Unable to upload image.');
+            });
+        }
+    };
+    input.click();
+}
+
+function viewStockHistory(partId) {
+    fetch(`/api/parts/${partId}/history`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.history) {
+                showStockHistoryModal(data.history);
+            } else {
+                alert('No stock history found for this part.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading stock history:', error);
+            alert('❌ Error loading stock history.');
+        });
+}
+
+function showStockHistoryModal(history) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">Stock History</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Before</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">After</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reason</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${history.map(entry => `
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">${new Date(entry.created_at).toLocaleDateString()}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${entry.adjustment_type === 'add' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                        ${entry.adjustment_type}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-900">${entry.quantity_before}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">${entry.quantity_after}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">${entry.reason || 'N/A'}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">${entry.user_name || 'System'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+function bulkStockUpdate() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 class="text-lg font-semibold mb-4">Bulk Stock Update</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Update Type</label>
+                <select id="bulkUpdateType" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="add">Add to Stock</option>
+                    <option value="remove">Remove from Stock</option>
+                    <option value="set">Set Stock Level</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Parts</label>
+                <select id="bulkFilterCategory" class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-2">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <select id="bulkFilterStock" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="">All Stock Levels</option>
+                    <option value="out-of-stock">Out of Stock Only</option>
+                    <option value="low-stock">Low Stock Only</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                <input type="number" id="bulkQuantity" min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter quantity">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Reason</label>
+                <select id="bulkReason" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="bulk_restock">Bulk Restock</option>
+                    <option value="bulk_adjustment">Bulk Adjustment</option>
+                    <option value="inventory_count">Inventory Count</option>
+                    <option value="damaged">Damaged Items</option>
+                    <option value="returned">Returned Items</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                <textarea id="bulkNotes" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Optional notes for this bulk update"></textarea>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button onclick="executeBulkUpdate()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Execute Bulk Update</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+function executeBulkUpdate() {
+    const updateType = document.getElementById('bulkUpdateType').value;
+    const filterCategory = document.getElementById('bulkFilterCategory').value;
+    const filterStock = document.getElementById('bulkFilterStock').value;
+    const quantity = parseInt(document.getElementById('bulkQuantity').value);
+    const reason = document.getElementById('bulkReason').value;
+    const notes = document.getElementById('bulkNotes').value;
+    
+    if (!quantity || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+    
+    if (!confirm(`Are you sure you want to ${updateType} ${quantity} units for filtered parts?`)) {
+        return;
+    }
+    
+    // Get filtered parts
+    const filteredParts = [];
+    document.querySelectorAll('.part-card').forEach(card => {
+        const category = card.dataset.category;
+        const stockLevel = card.dataset.stockLevel;
+        
+        let includeCard = true;
+        
+        if (filterCategory && category !== filterCategory) {
+            includeCard = false;
+        }
+        
+        if (filterStock && stockLevel !== filterStock) {
+            includeCard = false;
+        }
+        
+        if (includeCard && card.style.display !== 'none') {
+            const partId = card.querySelector('[onclick*=\"editPart\"]').getAttribute('onclick').match(/\\d+/)[0];
+            filteredParts.push(partId);
+        }
+    });
+    
+    if (filteredParts.length === 0) {
+        alert('No parts match the selected filters');
+        return;
+    }
+    
+    // Execute bulk update
+    const promises = filteredParts.map(partId => {
+        const adjustmentQuantity = updateType === 'remove' ? -quantity : quantity;
+        return fetch(`/api/parts/${partId}/stock`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                adjustment_type: updateType,
+                quantity: adjustmentQuantity,
+                reason: reason,
+                notes: notes
+            })
+        });
+    });
+    
+    Promise.all(promises)
+        .then(responses => Promise.all(responses.map(r => r.json())))
+        .then(results => {
+            const successful = results.filter(r => r.success).length;
+            const failed = results.length - successful;
+            
+            if (failed === 0) {
+                alert(`✅ Bulk update completed successfully!\\n${successful} parts updated.`);
+            } else {
+                alert(`⚠️ Bulk update completed with some errors:\\n${successful} parts updated successfully\\n${failed} parts failed to update`);
+            }
+            
+            closeModal();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Bulk update error:', error);
+            alert('❌ Bulk update failed');
+        });
+}
+
+function generateReport() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 class="text-lg font-semibold mb-4">Inventory Report</h3>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
+                    <select id="reportType" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option value="stock_levels">Stock Levels Report</option>
+                        <option value="low_stock">Low Stock Alert</option>
+                        <option value="profit_analysis">Profit Analysis</option>
+                        <option value="supplier_summary">Supplier Summary</option>
+                        <option value="inventory_value">Inventory Valuation</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                    <select id="reportFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option value="html">View in Browser</option>
+                        <option value="csv">Download CSV</option>
+                        <option value="pdf">Download PDF</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Include Categories</label>
+                <div class="grid grid-cols-3 gap-2">
+                    {% for cat in categories %}
+                    <label class="flex items-center">
+                        <input type="checkbox" class="report-category mr-2" value="{{ cat }}" checked>
+                        <span class="text-sm">{{ cat }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button onclick="generateInventoryReport()" class="bg-metallic-600 text-white px-4 py-2 rounded-lg hover:bg-metallic-700">Generate Report</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+function generateInventoryReport() {
+    const reportType = document.getElementById('reportType').value;
+    const reportFormat = document.getElementById('reportFormat').value;
+    const selectedCategories = Array.from(document.querySelectorAll('.report-category:checked')).map(cb => cb.value);
+    
+    // For now, show a summary report in the browser
+    if (reportFormat === 'html') {
+        showInventoryReportModal(reportType, selectedCategories);
+    } else {
+        alert(`${reportType} report in ${reportFormat} format - Download functionality coming soon!`);
+    }
+}
+
+function showInventoryReportModal(reportType, categories) {
+    // Generate report data
+    const parts = Array.from(document.querySelectorAll('.part-card')).filter(card => {
+        const category = card.dataset.category;
+        return categories.length === 0 || categories.includes(category);
+    });
+    
+    let reportContent = '';
+    
+    if (reportType === 'stock_levels') {
+        reportContent = generateStockLevelsReport(parts);
+    } else if (reportType === 'low_stock') {
+        reportContent = generateLowStockReport(parts);
+    } else if (reportType === 'profit_analysis') {
+        reportContent = generateProfitAnalysisReport(parts);
+    } else {
+        reportContent = `<p>Report type "${reportType}" - Full implementation coming soon!</p>`;
+    }
+    
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-6xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">Inventory Report - ${reportType.replace('_', ' ').toUpperCase()}</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="report-content">
+                ${reportContent}
+            </div>
+            <div class="flex justify-end mt-6">
+                <button onclick="window.print()" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700 mr-3">Print Report</button>
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Close</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+function generateStockLevelsReport(parts) {
+    return `
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Part</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current Stock</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Min Level</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    ${Array.from(parts).map(card => {
+                        const name = card.querySelector('h3').textContent;
+                        const partNumber = card.querySelector('p').textContent;
+                        const stockText = card.querySelector('.font-semibold').textContent;
+                        const status = card.dataset.stockLevel;
+                        const priceText = card.querySelector('.text-green-600').textContent;
+                        
+                        return `
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-medium">${name}</div>
+                                    <div class="text-sm text-gray-500">${partNumber}</div>
+                                </td>
+                                <td class="px-6 py-4 text-sm">${stockText}</td>
+                                <td class="px-6 py-4 text-sm">-</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                        status === 'out-of-stock' ? 'bg-red-100 text-red-800' :
+                                        status === 'low-stock' ? 'bg-yellow-100 text-yellow-800' :
+                                        'bg-green-100 text-green-800'
+                                    }">
+                                        ${status.replace('-', ' ').toUpperCase()}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm">${priceText}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function generateLowStockReport(parts) {
+    const lowStockParts = Array.from(parts).filter(card => 
+        card.dataset.stockLevel === 'low-stock' || card.dataset.stockLevel === 'out-of-stock'
+    );
+    
+    return `
+        <div class="mb-4">
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                <h4 class="font-medium text-yellow-800">⚠️ Stock Alert Summary</h4>
+                <p class="text-yellow-700">Found ${lowStockParts.length} parts that need attention</p>
+            </div>
+        </div>
+        ${generateStockLevelsReport(lowStockParts)}
+    `;
+}
+
+function generateProfitAnalysisReport(parts) {
+    return `
+        <div class="mb-4">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <h4 class="font-medium text-green-800">💰 Profit Analysis</h4>
+                <p class="text-green-700">Profit margin analysis for inventory items</p>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Part</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Margin</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock Value</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    ${Array.from(parts).map(card => {
+                        const name = card.querySelector('h3').textContent;
+                        const costText = card.querySelector('.text-red-600').textContent;
+                        const priceText = card.querySelector('.text-green-600').textContent;
+                        const marginText = card.querySelector('.text-bluez-600') ? card.querySelector('.text-bluez-600').textContent : '0%';
+                        const stockText = card.querySelector('.font-semibold').textContent;
+                        
+                        return `
+                            <tr>
+                                <td class="px-6 py-4 font-medium">${name}</td>
+                                <td class="px-6 py-4 text-sm text-red-600">${costText}</td>
+                                <td class="px-6 py-4 text-sm text-green-600">${priceText}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-bluez-600">${marginText}</td>
+                                <td class="px-6 py-4 text-sm">Stock: ${stockText}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function exportInventory() {
+    // Create CSV export
+    const parts = Array.from(document.querySelectorAll('.part-card'));
+    let csvContent = 'Part Name,Part Number,Category,Supplier,Stock,Min Level,Cost,Price,Profit Margin\\n';
+    
+    parts.forEach(card => {
+        const name = card.querySelector('h3').textContent;
+        const partNumber = card.querySelector('p').textContent;
+        const category = card.dataset.category;
+        const supplier = card.dataset.supplier;
+        const stock = card.querySelector('.font-semibold').textContent;
+        const cost = card.querySelector('.text-red-600').textContent.replace('$', '');
+        const price = card.querySelector('.text-green-600').textContent.replace('$', '');
+        const margin = card.querySelector('.text-bluez-600') ? card.querySelector('.text-bluez-600').textContent : '0%';
+        
+        csvContent += `"${name}","${partNumber}","${category}","${supplier}","${stock}","","${cost}","${price}","${margin}"\\n`;
+    });
+    
+    // Download CSV
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventory_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    
+    alert('✅ Inventory exported to CSV file!');
+}
+
 function editPart(partId) {
-    // For now, just show an alert - could implement edit modal later
-    alert('Edit part functionality coming soon!');
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-lg font-semibold mb-4">Edit Part</h3>
+            <form id="editPartForm">
+                <input type="hidden" id="editPartId" value="${partId}">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Part Number *</label>
+                        <input type="text" id="editPartNumber" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Part Name *</label>
+                        <input type="text" id="editPartName" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select id="editCategory" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <option value="">Select Category</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+                        <select id="editSupplier" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <option value="">Select Supplier</option>
+                            {% for supplier in suppliers %}
+                            <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cost (What we pay) *</label>
+                        <input type="number" id="editCost" step="0.01" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Selling Price *</label>
+                        <input type="number" id="editPrice" step="0.01" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Minimum Stock Level</label>
+                        <input type="number" id="editMinStock" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                        <input type="text" id="editLocation" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="e.g., Shelf A-1">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Supplier Part Number</label>
+                    <input type="text" id="editSupplierPartNumber" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Supplier Product URL</label>
+                    <input type="url" id="editSupplierUrl" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="https://...">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="editDescription" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="bg-bluez-600 text-white px-4 py-2 rounded-lg hover:bg-bluez-700">Update Part</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Load current part data
+    fetch(`/api/parts/${partId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const part = data.part;
+                document.getElementById('editPartNumber').value = part.part_number || '';
+                document.getElementById('editPartName').value = part.name || '';
+                document.getElementById('editCategory').value = part.category || '';
+                document.getElementById('editSupplier').value = part.supplier_id || '';
+                document.getElementById('editCost').value = part.cost || '';
+                document.getElementById('editPrice').value = part.price || '';
+                document.getElementById('editMinStock').value = part.minimum_stock_level || '';
+                document.getElementById('editLocation').value = part.location || '';
+                document.getElementById('editSupplierPartNumber').value = part.supplier_part_number || '';
+                document.getElementById('editSupplierUrl').value = part.supplier_url || '';
+                document.getElementById('editDescription').value = part.description || '';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading part data:', error);
+            alert('❌ Error loading part data');
+        });
+    
+    // Handle form submission
+    document.getElementById('editPartForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        updatePart(partId);
+    });
+    
+    // Close modal on outside click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+function updatePart(partId) {
+    const formData = {
+        part_number: document.getElementById('editPartNumber').value,
+        name: document.getElementById('editPartName').value,
+        category: document.getElementById('editCategory').value,
+        supplier_id: document.getElementById('editSupplier').value || null,
+        cost: parseFloat(document.getElementById('editCost').value) || 0,
+        price: parseFloat(document.getElementById('editPrice').value) || 0,
+        minimum_stock_level: parseInt(document.getElementById('editMinStock').value) || 0,
+        location: document.getElementById('editLocation').value,
+        supplier_part_number: document.getElementById('editSupplierPartNumber').value,
+        supplier_url: document.getElementById('editSupplierUrl').value,
+        description: document.getElementById('editDescription').value
+    };
+    
+    fetch(`/api/parts/${partId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Part updated successfully!');
+            closeModal();
+            window.location.reload();
+        } else {
+            alert(`❌ Error: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating part:', error);
+        alert('❌ Network Error: Unable to update part.');
+    });
 }
 
 function restockPart(partId) {
-    const quantity = prompt('Enter quantity to add to stock:');
-    if (quantity && !isNaN(quantity) && parseInt(quantity) > 0) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-semibold mb-4">Restock Part</h3>
+            <form id="restockForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Adjustment Type</label>
+                    <select id="restockType" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option value="add">Add to Stock</option>
+                        <option value="remove">Remove from Stock</option>
+                        <option value="set">Set Stock Level</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Quantity *</label>
+                    <input type="number" id="restockQuantity" min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter quantity" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+                    <select id="restockReason" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option value="restock">Restock</option>
+                        <option value="sale">Sale</option>
+                        <option value="damaged">Damaged</option>
+                        <option value="returned">Returned</option>
+                        <option value="adjustment">Adjustment</option>
+                        <option value="inventory_count">Inventory Count</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea id="restockNotes" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Optional notes for this adjustment"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Update Stock</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    document.getElementById('restockForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const adjustmentType = document.getElementById('restockType').value;
+        const quantity = parseInt(document.getElementById('restockQuantity').value);
+        const reason = document.getElementById('restockReason').value;
+        const notes = document.getElementById('restockNotes').value;
+        
+        if (!quantity || quantity <= 0) {
+            alert('Please enter a valid quantity');
+            return;
+        }
+        
+        const adjustmentQuantity = adjustmentType === 'remove' ? -quantity : quantity;
+        
         fetch(`/api/parts/${partId}/stock`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                adjustment_type: 'add',
-                quantity: parseInt(quantity),
-                reason: 'restock'
+                adjustment_type: adjustmentType,
+                quantity: adjustmentQuantity,
+                reason: reason,
+                notes: notes
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('✅ Stock updated successfully!');
+                alert(`✅ Stock ${adjustmentType === 'add' ? 'increased' : adjustmentType === 'remove' ? 'decreased' : 'updated'} successfully!`);
+                closeModal();
                 window.location.reload();
             } else {
                 alert(`❌ Error: ${data.error}`);
@@ -386,7 +1473,14 @@ function restockPart(partId) {
             console.error('Error updating stock:', error);
             alert('❌ Network Error: Unable to update stock.');
         });
-    }
+    });
+    
+    // Close modal on outside click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
 }
 
 function closeModal() {

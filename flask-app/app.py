@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autoshop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-from models import db, User, Part, Contact, Vehicle, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory, ServiceRecord, ServicePart, WorkOrder, TimeEntry, QualityChecklist, QualityChecklistEntry, WarrantyItem
+from models import db, User, Part, Contact, Vehicle, Order, Schedule, Shop, ShippingAccount, ShippingOrder, TrackingEvent, WebhookLog, ChatMessage, ChatSession, StockHistory, ServiceRecord, ServicePart, WorkOrder, TimeEntry, QualityChecklist, QualityChecklistEntry, WarrantyItem, Invoice, InvoiceLineItem
 db.init_app(app)
 
 # Configure file upload
@@ -1548,6 +1548,68 @@ def create_part():
         db.session.rollback()
         return jsonify({'error': 'Failed to create part'}), 500
 
+@app.route('/api/parts/<int:part_id>', methods=['GET', 'PUT'])
+@login_required
+def manage_part(part_id):
+    """Get or update a specific part"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    part = Part.query.get_or_404(part_id)
+    
+    if request.method == 'GET':
+        return jsonify({
+            'success': True,
+            'part': {
+                'id': part.id,
+                'part_number': part.part_number,
+                'name': part.name,
+                'description': part.description,
+                'category': part.category,
+                'price': part.price,
+                'cost': part.cost,
+                'quantity_in_stock': part.quantity_in_stock,
+                'minimum_stock_level': part.minimum_stock_level,
+                'location': part.location,
+                'supplier_id': part.supplier_id,
+                'supplier_part_number': part.supplier_part_number,
+                'supplier_url': part.supplier_url,
+                'image_url': part.image_url,
+                'is_active': part.is_active
+            }
+        })
+    
+    elif request.method == 'PUT':
+        try:
+            data = request.get_json()
+            
+            # Update part fields
+            part.part_number = data.get('part_number', part.part_number)
+            part.name = data.get('name', part.name)
+            part.description = data.get('description', part.description)
+            part.category = data.get('category', part.category)
+            part.price = data.get('price', part.price)
+            part.cost = data.get('cost', part.cost)
+            part.minimum_stock_level = data.get('minimum_stock_level', part.minimum_stock_level)
+            part.location = data.get('location', part.location)
+            part.supplier_id = data.get('supplier_id') if data.get('supplier_id') else None
+            part.supplier_part_number = data.get('supplier_part_number', part.supplier_part_number)
+            part.supplier_url = data.get('supplier_url', part.supplier_url)
+            part.updated_at = datetime.utcnow()
+            
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'message': 'Part updated successfully!'
+            })
+            
+        except Exception as e:
+            logger.error(f"Update part error: {e}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to update part'}), 500
+
 @app.route('/add-part', methods=['GET', 'POST'])
 @login_required
 def add_part():
@@ -2896,6 +2958,229 @@ def warranty_tracking():
         flash('Error loading warranty tracking', 'error')
         return render_template('admin/warranty_tracking.html', warranties=[], expiring_soon=[])
 
+# Invoice Management Routes
+@app.route('/invoices')
+@login_required
+def invoices():
+    """Invoice management page"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        flash('Access denied.', 'error')
+        return redirect(url_for('home'))
+    
+    try:
+        # Get all invoices
+        invoices = Invoice.query.order_by(Invoice.created_at.desc()).all()
+        
+        # Get customers for dropdown
+        customers = Contact.query.filter_by(type='customer', is_active=True).all()
+        
+        # Get service records for linking
+        service_records = ServiceRecord.query.filter_by(status='completed').all()
+        
+        # Calculate statistics
+        total_invoices = len(invoices)
+        draft_invoices = len([i for i in invoices if i.status == 'draft'])
+        sent_invoices = len([i for i in invoices if i.status == 'sent'])
+        paid_invoices = len([i for i in invoices if i.status == 'paid'])
+        overdue_invoices = len([i for i in invoices if i.is_overdue()])
+        
+        total_revenue = sum(i.total_amount for i in invoices if i.status == 'paid')
+        outstanding_balance = sum(i.balance_due for i in invoices if i.status in ['sent', 'overdue'])
+        
+        stats = {
+            'total_invoices': total_invoices,
+            'draft_invoices': draft_invoices,
+            'sent_invoices': sent_invoices,
+            'paid_invoices': paid_invoices,
+            'overdue_invoices': overdue_invoices,
+            'total_revenue': total_revenue,
+            'outstanding_balance': outstanding_balance
+        }
+        
+        return render_template('admin/invoices.html', 
+                             invoices=invoices,
+                             customers=customers,
+                             service_records=service_records,
+                             stats=stats)
+    except Exception as e:
+        logger.error(f"Invoices page error: {e}")
+        flash('Error loading invoices', 'error')
+        return render_template('admin/invoices.html', 
+                             invoices=[], customers=[], service_records=[], stats={})
+
+@app.route('/api/invoices', methods=['POST'])
+@login_required
+def create_invoice():
+    """Create new invoice"""
+    try:
+        data = request.get_json()
+        
+        # Generate invoice number
+        import uuid
+        invoice_number = f"INV-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+        
+        # Calculate due date (default 30 days)
+        invoice_date = datetime.strptime(data.get('invoice_date'), '%Y-%m-%d').date()
+        due_date = invoice_date + timedelta(days=30)
+        
+        # Create invoice
+        invoice = Invoice(
+            invoice_number=invoice_number,
+            customer_id=data.get('customer_id'),
+            service_record_id=data.get('service_record_id'),
+            invoice_date=invoice_date,
+            due_date=due_date,
+            customer_name=data.get('customer_name'),
+            customer_email=data.get('customer_email'),
+            customer_phone=data.get('customer_phone'),
+            billing_address=data.get('billing_address'),
+            vehicle_year=data.get('vehicle_year'),
+            vehicle_make=data.get('vehicle_make'),
+            vehicle_model=data.get('vehicle_model'),
+            vehicle_vin=data.get('vehicle_vin'),
+            vehicle_license_plate=data.get('vehicle_license_plate'),
+            tax_rate=data.get('tax_rate', 0.0875),
+            discount_amount=data.get('discount_amount', 0),
+            notes=data.get('notes'),
+            terms=data.get('terms', 'Payment due within 30 days. Late payments subject to 1.5% monthly service charge.'),
+            created_by=session.get('user', {}).get('id')
+        )
+        
+        db.session.add(invoice)
+        db.session.flush()  # Get the invoice ID
+        
+        # Add line items
+        line_items_data = data.get('line_items', [])
+        for item_data in line_items_data:
+            line_item = InvoiceLineItem(
+                invoice_id=invoice.id,
+                item_type=item_data.get('item_type', 'service'),
+                description=item_data.get('description'),
+                part_id=item_data.get('part_id'),
+                quantity=item_data.get('quantity', 1.0),
+                unit_price=item_data.get('unit_price', 0.0),
+                total_amount=item_data.get('total_amount', 0.0),
+                notes=item_data.get('notes')
+            )
+            db.session.add(line_item)
+        
+        # Calculate totals
+        invoice.calculate_totals()
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'invoice_number': invoice_number,
+            'invoice_id': invoice.id,
+            'invoice': invoice.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Create invoice error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create invoice'}), 500
+
+@app.route('/api/invoices/<int:invoice_id>', methods=['GET', 'PUT'])
+@login_required
+def manage_invoice(invoice_id):
+    """Get or update invoice"""
+    user = session.get('user', {})
+    if user.get('role') not in ['admin', 'manager', 'employee']:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    invoice = Invoice.query.get_or_404(invoice_id)
+    
+    if request.method == 'GET':
+        return jsonify({
+            'success': True,
+            'invoice': invoice.to_dict(),
+            'line_items': [{
+                'id': item.id,
+                'item_type': item.item_type,
+                'description': item.description,
+                'quantity': item.quantity,
+                'unit_price': item.unit_price,
+                'total_amount': item.total_amount,
+                'notes': item.notes
+            } for item in invoice.line_items]
+        })
+    
+    elif request.method == 'PUT':
+        try:
+            data = request.get_json()
+            
+            # Update invoice fields
+            for field in ['customer_name', 'customer_email', 'customer_phone', 'billing_address',
+                         'vehicle_year', 'vehicle_make', 'vehicle_model', 'vehicle_vin', 'vehicle_license_plate',
+                         'tax_rate', 'discount_amount', 'notes', 'terms', 'status', 'payment_status']:
+                if field in data:
+                    setattr(invoice, field, data[field])
+            
+            if 'due_date' in data:
+                invoice.due_date = datetime.strptime(data['due_date'], '%Y-%m-%d').date()
+            
+            if 'amount_paid' in data:
+                invoice.amount_paid = float(data['amount_paid'])
+                # Update payment status based on amount paid
+                if invoice.amount_paid >= invoice.total_amount:
+                    invoice.payment_status = 'paid'
+                    invoice.status = 'paid'
+                    invoice.paid_at = datetime.utcnow()
+                elif invoice.amount_paid > 0:
+                    invoice.payment_status = 'partial'
+                else:
+                    invoice.payment_status = 'pending'
+            
+            # Recalculate totals
+            invoice.calculate_totals()
+            invoice.updated_at = datetime.utcnow()
+            
+            db.session.commit()
+            
+            return jsonify({
+                'success': True,
+                'invoice': invoice.to_dict()
+            })
+            
+        except Exception as e:
+            logger.error(f"Update invoice error: {e}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to update invoice'}), 500
+
+@app.route('/api/invoices/<int:invoice_id>/send', methods=['POST'])
+@login_required
+def send_invoice(invoice_id):
+    """Mark invoice as sent"""
+    try:
+        invoice = Invoice.query.get_or_404(invoice_id)
+        invoice.status = 'sent'
+        invoice.sent_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Invoice marked as sent'
+        })
+        
+    except Exception as e:
+        logger.error(f"Send invoice error: {e}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to send invoice'}), 500
+
+@app.route('/invoices/<int:invoice_id>/pdf')
+@login_required
+def invoice_pdf(invoice_id):
+    """Generate PDF invoice"""
+    try:
+        invoice = Invoice.query.get_or_404(invoice_id)
+        return render_template('admin/invoice_pdf.html', invoice=invoice)
+    except Exception as e:
+        logger.error(f"Invoice PDF error: {e}")
+        flash('Error generating invoice PDF', 'error')
+        return redirect(url_for('invoices'))
+
 # Initialize database and create demo data
 def init_database():
     """Initialize database with demo data"""
@@ -2973,7 +3258,7 @@ def init_database():
             zip_code='91304',
             phone='(747) 474-9193',
             business_hours='Monday-Friday: 11AM-7PM, Saturday-Sunday: Closed',
-            services_offered='Full-service automotive shop: Maintenance & Repairs, Performance Upgrades, Collision Repair, Body Kits & Modifications, Engine Tuning, New & Used Auto Sales. Specializing in high-performance and exotic vehicles.'
+            services_offered='Full-service automotive shop: Maintenance & Repairs, Performance Upgrades, Collision Repair, Body Kits & Modifications, Engine Tuning. Specializing in high-performance and exotic vehicles.'
         )
         db.session.add(shop)
         

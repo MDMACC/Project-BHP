@@ -19593,3 +19593,103 @@ WHERE parts.is_active = 1 ORDER BY parts.name]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 2025-10-14 09:21:11,998 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:11] "GET /parts HTTP/1.1" 200 -
 2025-10-14 09:21:12,033 - werkzeug - INFO - 127.0.0.1 - - [14/Oct/2025 09:21:12] "[36mGET /static/images/bluez-powerhouse-logo.png HTTP/1.1[0m" 304 -
+2025-10-15 16:14:22,172 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/models.py', reloading
+2025-10-15 16:14:22,417 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:14:23,119 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:14:23,120 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:14:23,142 - __main__ - INFO - Database already initialized
+2025-10-15 16:14:23,142 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:14:23,156 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:14:23,169 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:14:32,268 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:14:32,407 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:14:32,722 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:14:32,722 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:14:32,749 - __main__ - INFO - Database already initialized
+2025-10-15 16:14:32,749 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:14:32,756 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:14:32,771 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:14:59,017 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:14:59,118 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:14:59,374 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:14:59,374 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:14:59,396 - __main__ - INFO - Database already initialized
+2025-10-15 16:14:59,397 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:14:59,401 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:14:59,411 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:17:20,595 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:17:20,710 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:17:20,950 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:17:20,950 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:17:20,973 - __main__ - INFO - Database already initialized
+2025-10-15 16:17:20,973 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:17:20,978 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:17:20,987 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:19:24,264 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:19:24,313 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:19:24,540 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:19:24,540 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:19:24,566 - __main__ - INFO - Database already initialized
+2025-10-15 16:19:24,567 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:19:24,575 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:19:24,587 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:19:44,820 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:19:44,865 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:19:45,088 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:19:45,088 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:19:45,109 - __main__ - INFO - Database already initialized
+2025-10-15 16:19:45,109 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:19:45,114 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:19:45,123 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:19:48,168 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:19:48,306 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:19:48,598 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:19:48,599 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:19:48,622 - __main__ - INFO - Database already initialized
+2025-10-15 16:19:48,622 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:19:48,626 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:19:48,638 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:30:24,981 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:30:25,083 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:30:25,314 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:30:25,314 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:30:25,336 - __main__ - INFO - Database already initialized
+2025-10-15 16:30:25,337 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:30:25,341 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:30:25,349 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:42:55,147 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:42:55,195 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:42:55,416 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:42:55,416 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:42:55,437 - __main__ - INFO - Database already initialized
+2025-10-15 16:42:55,437 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:42:55,442 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:42:55,449 - werkzeug - INFO -  * Debugger PIN: 105-279-868
+2025-10-15 16:44:02,021 - werkzeug - INFO -  * Detected change in '/Users/dylanmcnamara/Documents/GitHub/Project-BHP/flask-app/app.py', reloading
+2025-10-15 16:44:02,126 - werkzeug - INFO -  * Restarting with stat
+2025-10-15 16:44:02,358 - __main__ - INFO - Adding new columns to tracking_events table...
+2025-10-15 16:44:02,359 - __main__ - ERROR - Error adding columns to tracking_events: (sqlite3.OperationalError) duplicate column name: photo_url
+[SQL: ALTER TABLE tracking_events ADD COLUMN photo_url VARCHAR(500)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-10-15 16:44:02,381 - __main__ - INFO - Database already initialized
+2025-10-15 16:44:02,381 - __main__ - INFO - Starting Bluez PowerHouse Management System
+2025-10-15 16:44:02,386 - werkzeug - WARNING -  * Debugger is active!
+2025-10-15 16:44:02,394 - werkzeug - INFO -  * Debugger PIN: 105-279-868

@@ -351,8 +351,8 @@ function filterServices() {
 }
 
 function openAddServiceModal() {
-    // Navigate to create service record for this customer
-    window.location.href = `/service-records/add?customer_id={{ customer.id }}`;
+    // Navigate to service records page and open modal with pre-filled customer info
+    window.location.href = `/service-records?customer_id={{ customer.id }}&action=add`;
 }
 
 function viewServiceDetails(serviceId) {

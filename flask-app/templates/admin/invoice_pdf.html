@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice {{ invoice.invoice_number }} - Bluez PowerHouse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: white;
+        }
+        
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+        }
+        
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4f46e5;
+        }
+        
+        .company-info {
+            flex: 1;
+        }
+        
+        .company-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+        
+        .company-details {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .invoice-title {
+            text-align: right;
+        }
+        
+        .invoice-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .invoice-dates {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .bill-to, .service-info {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .customer-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .customer-details {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .line-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .line-items-table th {
+            background: #4f46e5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .line-items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .line-items-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .totals-section {
+            margin-left: auto;
+            width: 300px;
+        }
+        
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .totals-row.total {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1f2937;
+            border-bottom: 3px solid #4f46e5;
+            padding-top: 12px;
+        }
+        
+        .payment-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 30px 0;
+        }
+        
+        .payment-info.paid {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .payment-info.overdue {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        
+        .notes-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .notes-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .notes-content {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        
+        @media print {
+            .invoice-container {
+                padding: 20px;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .print-button:hover {
+            background: #4338ca;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.print()" class="print-button no-print">Print Invoice</button>
+    
+    <div class="invoice-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <div class="company-info">
+                <div class="company-logo">Bluez PowerHouse</div>
+                <div class="company-details">
+                    <strong>BPH Automotive</strong><br>
+                    8033 Remmet Ave<br>
+                    Canoga Park, CA 91304<br>
+                    Phone: (747) 474-9193<br>
+                    Email: info@bluezpowerhouse.com
+                </div>
+            </div>
+            <div class="invoice-title">
+                <div class="invoice-number">INVOICE</div>
+                <div class="invoice-dates">
+                    <strong>Invoice #:</strong> {{ invoice.invoice_number }}<br>
+                    <strong>Date:</strong> {{ invoice.invoice_date.strftime('%B %d, %Y') if invoice.invoice_date }}<br>
+                    <strong>Due:</strong> {{ invoice.due_date.strftime('%B %d, %Y') if invoice.due_date }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+            <div class="bill-to">
+                <div class="section-title">Bill To:</div>
+                <div class="customer-name">{{ invoice.customer_name }}</div>
+                <div class="customer-details">
+                    {% if invoice.customer_phone %}Phone: {{ invoice.customer_phone }}<br>{% endif %}
+                    {% if invoice.customer_email %}Email: {{ invoice.customer_email }}<br>{% endif %}
+                    {% if invoice.billing_address %}{{ invoice.billing_address|replace('\n', '<br>')|safe }}{% endif %}
+                </div>
+            </div>
+            
+            {% if invoice.vehicle_year or invoice.vehicle_make or invoice.vehicle_model %}
+            <div class="service-info">
+                <div class="section-title">Vehicle Information:</div>
+                <div class="customer-details">
+                    {% if invoice.vehicle_year or invoice.vehicle_make or invoice.vehicle_model %}
+                    <strong>Vehicle:</strong> {{ invoice.vehicle_year }} {{ invoice.vehicle_make }} {{ invoice.vehicle_model }}<br>
+                    {% endif %}
+                    {% if invoice.vehicle_vin %}
+                    <strong>VIN:</strong> {{ invoice.vehicle_vin }}<br>
+                    {% endif %}
+                    {% if invoice.vehicle_license_plate %}
+                    <strong>License:</strong> {{ invoice.vehicle_license_plate }}<br>
+                    {% endif %}
+                    {% if invoice.service_record %}
+                    <strong>Service:</strong> {{ invoice.service_record.service_title }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Line Items Table -->
+        <table class="line-items-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th class="text-right">Qty</th>
+                    <th class="text-right">Unit Price</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.line_items %}
+                <tr>
+                    <td>
+                        <strong>{{ item.description }}</strong>
+                        {% if item.notes %}
+                        <br><small style="color: #6b7280;">{{ item.notes }}</small>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.item_type.title() }}</td>
+                    <td class="text-right">{{ item.quantity }}</td>
+                    <td class="text-right">${{ "{:,.2f}".format(item.unit_price) }}</td>
+                    <td class="text-right">${{ "{:,.2f}".format(item.total_amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Totals -->
+        <div class="totals-section">
+            <div class="totals-row">
+                <span>Subtotal:</span>
+                <span>${{ "{:,.2f}".format(invoice.subtotal) }}</span>
+            </div>
+            {% if invoice.discount_amount > 0 %}
+            <div class="totals-row">
+                <span>Discount:</span>
+                <span>-${{ "{:,.2f}".format(invoice.discount_amount) }}</span>
+            </div>
+            {% endif %}
+            <div class="totals-row">
+                <span>Tax ({{ "{:.1f}".format(invoice.tax_rate * 100) }}%):</span>
+                <span>${{ "{:,.2f}".format(invoice.tax_amount) }}</span>
+            </div>
+            <div class="totals-row total">
+                <span>Total Amount:</span>
+                <span>${{ "{:,.2f}".format(invoice.total_amount) }}</span>
+            </div>
+            {% if invoice.amount_paid > 0 %}
+            <div class="totals-row">
+                <span>Amount Paid:</span>
+                <span style="color: #10b981;">-${{ "{:,.2f}".format(invoice.amount_paid) }}</span>
+            </div>
+            <div class="totals-row total">
+                <span>Balance Due:</span>
+                <span style="color: #ef4444;">${{ "{:,.2f}".format(invoice.balance_due) }}</span>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Payment Status -->
+        {% if invoice.status == 'paid' %}
+        <div class="payment-info paid">
+            <strong>✅ PAID IN FULL</strong><br>
+            Payment received on {{ invoice.paid_at.strftime('%B %d, %Y') if invoice.paid_at }}
+        </div>
+        {% elif invoice.is_overdue() %}
+        <div class="payment-info overdue">
+            <strong>⚠️ OVERDUE</strong><br>
+            This invoice was due on {{ invoice.due_date.strftime('%B %d, %Y') }}. Please remit payment immediately.
+        </div>
+        {% elif invoice.amount_paid > 0 %}
+        <div class="payment-info">
+            <strong>💰 PARTIAL PAYMENT</strong><br>
+            ${{ "{:,.2f}".format(invoice.amount_paid) }} received. Balance of ${{ "{:,.2f}".format(invoice.balance_due) }} remaining.
+        </div>
+        {% endif %}
+        
+        <!-- Notes -->
+        {% if invoice.notes %}
+        <div class="notes-section">
+            <div class="notes-title">Notes:</div>
+            <div class="notes-content">{{ invoice.notes|replace('\n', '<br>')|safe }}</div>
+        </div>
+        {% endif %}
+        
+        <!-- Terms -->
+        {% if invoice.terms %}
+        <div class="notes-section">
+            <div class="notes-title">Payment Terms:</div>
+            <div class="notes-content">{{ invoice.terms|replace('\n', '<br>')|safe }}</div>
+        </div>
+        {% endif %}
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Bluez PowerHouse Auto Repair</strong> - Professional Automotive Service</p>
+            <p>Specializing in high-performance and exotic vehicles</p>
+            <p>Thank you for your business!</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-print when opened in new window
+        window.addEventListener('load', function() {
+            if (window.location.search.includes('print=true')) {
+                setTimeout(() => window.print(), 500);
+            }
+        });
+    </script>
+</body>
+</html>

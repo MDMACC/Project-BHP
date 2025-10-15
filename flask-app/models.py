@@ -940,3 +940,135 @@ class WarrantyItem(db.Model):
     
     def __repr__(self):
         return f'<WarrantyItem {self.warranty_type}: {self.customer_name}>'
+
+class Invoice(db.Model):
+    """Invoice model for billing customers"""
+    __tablename__ = 'invoices'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    invoice_number = db.Column(db.String(50), unique=True, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('contacts.id'))
+    service_record_id = db.Column(db.Integer, db.ForeignKey('service_records.id'))
+    
+    # Invoice Details
+    invoice_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
+    due_date = db.Column(db.Date)
+    
+    # Customer Information (snapshot for invoice)
+    customer_name = db.Column(db.String(200), nullable=False)
+    customer_email = db.Column(db.String(120))
+    customer_phone = db.Column(db.String(20))
+    billing_address = db.Column(db.Text)
+    
+    # Vehicle Information (if applicable)
+    vehicle_year = db.Column(db.Integer)
+    vehicle_make = db.Column(db.String(50))
+    vehicle_model = db.Column(db.String(50))
+    vehicle_vin = db.Column(db.String(17))
+    vehicle_license_plate = db.Column(db.String(20))
+    
+    # Financial Information
+    subtotal = db.Column(db.Float, default=0.0)
+    tax_rate = db.Column(db.Float, default=0.0875)  # Default CA tax rate
+    tax_amount = db.Column(db.Float, default=0.0)
+    discount_amount = db.Column(db.Float, default=0.0)
+    total_amount = db.Column(db.Float, default=0.0)
+    
+    # Payment Information
+    payment_status = db.Column(db.String(20), default='pending')  # pending, partial, paid, overdue
+    payment_method = db.Column(db.String(20))  # cash, card, check, financing
+    amount_paid = db.Column(db.Float, default=0.0)
+    balance_due = db.Column(db.Float, default=0.0)
+    
+    # Invoice Status
+    status = db.Column(db.String(20), default='draft')  # draft, sent, paid, cancelled, overdue
+    
+    # Notes and Terms
+    notes = db.Column(db.Text)  # Special notes for customer
+    terms = db.Column(db.Text)  # Payment terms and conditions
+    
+    # Metadata
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    sent_at = db.Column(db.DateTime)  # When invoice was sent to customer
+    paid_at = db.Column(db.DateTime)  # When invoice was fully paid
+    
+    # Relationships
+    customer = db.relationship('Contact', backref='invoices')
+    service_record = db.relationship('ServiceRecord', backref='invoices')
+    created_by_user = db.relationship('User', backref='invoices_created')
+    
+    def calculate_totals(self):
+        """Calculate invoice totals from line items"""
+        line_items = InvoiceLineItem.query.filter_by(invoice_id=self.id).all()
+        self.subtotal = sum(item.total_amount for item in line_items)
+        self.tax_amount = round(self.subtotal * self.tax_rate, 2)
+        self.total_amount = round(self.subtotal + self.tax_amount - self.discount_amount, 2)
+        self.balance_due = round(self.total_amount - self.amount_paid, 2)
+    
+    def get_status_color(self):
+        """Get color class for status display"""
+        status_colors = {
+            'draft': 'gray',
+            'sent': 'blue',
+            'paid': 'green',
+            'overdue': 'red',
+            'cancelled': 'red'
+        }
+        return status_colors.get(self.status, 'gray')
+    
+    def is_overdue(self):
+        """Check if invoice is overdue"""
+        if self.due_date and self.status in ['sent', 'partial']:
+            return datetime.now().date() > self.due_date
+        return False
+    
+    def to_dict(self):
+        """Convert to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'invoice_number': self.invoice_number,
+            'customer_name': self.customer_name,
+            'invoice_date': self.invoice_date.isoformat() if self.invoice_date else None,
+            'due_date': self.due_date.isoformat() if self.due_date else None,
+            'subtotal': self.subtotal,
+            'tax_amount': self.tax_amount,
+            'total_amount': self.total_amount,
+            'amount_paid': self.amount_paid,
+            'balance_due': self.balance_due,
+            'status': self.status,
+            'payment_status': self.payment_status,
+            'is_overdue': self.is_overdue(),
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<Invoice {self.invoice_number}: {self.customer_name}>'
+
+class InvoiceLineItem(db.Model):
+    """Individual line items for invoices"""
+    __tablename__ = 'invoice_line_items'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoices.id'), nullable=False)
+    
+    # Item Details
+    item_type = db.Column(db.String(20), nullable=False)  # 'labor', 'part', 'service', 'misc'
+    description = db.Column(db.String(500), nullable=False)
+    part_id = db.Column(db.Integer, db.ForeignKey('parts.id'))  # If this is a part
+    
+    # Quantity and Pricing
+    quantity = db.Column(db.Float, default=1.0)
+    unit_price = db.Column(db.Float, nullable=False)
+    total_amount = db.Column(db.Float, nullable=False)
+    
+    # Additional Info
+    notes = db.Column(db.Text)
+    
+    # Relationships
+    invoice = db.relationship('Invoice', backref='line_items')
+    part = db.relationship('Part', backref='invoice_line_items')
+    
+    def __repr__(self):
+        return f'<InvoiceLineItem {self.description}: ${self.total_amount}>'

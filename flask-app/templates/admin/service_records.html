@@ -437,18 +437,42 @@
                 </div>
                 
                 <!-- Customer Information -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Select Customer *</label>
+                        <select id="customerSelect" onchange="loadCustomerInfo()" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                            <option value="">Choose a customer...</option>
+                            {% for customer in customers %}
+                            <option value="{{ customer.id }}" 
+                                    data-name="{{ customer.name }}" 
+                                    data-phone="{{ customer.phone or '' }}" 
+                                    data-email="{{ customer.email or '' }}">
+                                {{ customer.name }}{% if customer.phone %} - {{ customer.phone }}{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-metallic-700 mb-2">Select Vehicle</label>
+                        <select id="vehicleSelect" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent" disabled>
+                            <option value="">Select customer first...</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Customer Details (Auto-filled) -->
                 <div class="grid md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-metallic-700 mb-2">Customer Name *</label>
-                        <input type="text" id="customerName" required class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        <input type="text" id="customerName" required readonly class="w-full px-3 py-2 border border-metallic-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-metallic-700 mb-2">Phone</label>
-                        <input type="tel" id="customerPhone" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        <input type="tel" id="customerPhone" readonly class="w-full px-3 py-2 border border-metallic-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-metallic-700 mb-2">Email</label>
-                        <input type="email" id="customerEmail" class="w-full px-3 py-2 border border-metallic-300 rounded-lg focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
+                        <input type="email" id="customerEmail" readonly class="w-full px-3 py-2 border border-metallic-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-bluez-500 focus:border-transparent">
                     </div>
                 </div>
                 
@@ -641,12 +665,124 @@
         }
     }
     
+    function loadCustomerInfo() {
+        const customerSelect = document.getElementById('customerSelect');
+        const vehicleSelect = document.getElementById('vehicleSelect');
+        const selectedOption = customerSelect.options[customerSelect.selectedIndex];
+        
+        if (selectedOption.value) {
+            // Auto-fill customer details
+            document.getElementById('customerName').value = selectedOption.dataset.name;
+            document.getElementById('customerPhone').value = selectedOption.dataset.phone;
+            document.getElementById('customerEmail').value = selectedOption.dataset.email;
+            
+            // Load customer vehicles
+            vehicleSelect.innerHTML = '<option value="">Loading vehicles...</option>';
+            vehicleSelect.disabled = true;
+            
+            fetch(`/api/customers/${selectedOption.value}/vehicles`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.vehicles) {
+                        vehicleSelect.innerHTML = '<option value="">No specific vehicle</option>';
+                        
+                        data.vehicles.forEach(vehicle => {
+                            const option = document.createElement('option');
+                            option.value = vehicle.id;
+                            option.textContent = vehicle.display_name;
+                            option.dataset.year = vehicle.year || '';
+                            option.dataset.make = vehicle.make || '';
+                            option.dataset.model = vehicle.model || '';
+                            option.dataset.vin = vehicle.vin || '';
+                            option.dataset.mileage = vehicle.mileage || '';
+                            option.dataset.license = vehicle.license_plate || '';
+                            vehicleSelect.appendChild(option);
+                        });
+                        
+                        vehicleSelect.disabled = false;
+                        vehicleSelect.onchange = loadVehicleInfo;
+                    } else {
+                        vehicleSelect.innerHTML = '<option value="">No vehicles found</option>';
+                        vehicleSelect.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading vehicles:', error);
+                    vehicleSelect.innerHTML = '<option value="">Error loading vehicles</option>';
+                });
+        } else {
+            // Clear fields
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerEmail').value = '';
+            vehicleSelect.innerHTML = '<option value="">Select customer first...</option>';
+            vehicleSelect.disabled = true;
+            clearVehicleInfo();
+        }
+    }
+    
+    function loadVehicleInfo() {
+        const vehicleSelect = document.getElementById('vehicleSelect');
+        const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
+        
+        if (selectedOption.value && selectedOption.dataset) {
+            document.getElementById('vehicleYear').value = selectedOption.dataset.year;
+            document.getElementById('vehicleMake').value = selectedOption.dataset.make;
+            document.getElementById('vehicleModel').value = selectedOption.dataset.model;
+            document.getElementById('vehicleVin').value = selectedOption.dataset.vin;
+            document.getElementById('vehicleMileage').value = selectedOption.dataset.mileage;
+            document.getElementById('vehicleLicense').value = selectedOption.dataset.license;
+        } else {
+            clearVehicleInfo();
+        }
+    }
+    
+    function clearVehicleInfo() {
+        document.getElementById('vehicleYear').value = '';
+        document.getElementById('vehicleMake').value = '';
+        document.getElementById('vehicleModel').value = '';
+        document.getElementById('vehicleVin').value = '';
+        document.getElementById('vehicleMileage').value = '';
+        document.getElementById('vehicleLicense').value = '';
+    }
+    
+    function createServiceRecord(formData) {
+        fetch('/api/service-records', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`✅ Service record created successfully!\\nService Number: ${data.service_number}`);
+                closeServiceModal();
+                location.reload();
+            } else {
+                alert('❌ Error creating service record: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Service record error:', error);
+            alert('❌ Error creating service record');
+        });
+    }
+
     function openAddServiceModal() {
         document.getElementById('serviceModalTitle').textContent = 'New Service Record';
         document.getElementById('serviceForm').reset();
         document.getElementById('serviceId').value = '';
         document.getElementById('serviceDate').value = new Date().toISOString().split('T')[0];
         setServiceType('service');
+        
+        // Reset customer/vehicle selects
+        document.getElementById('customerSelect').value = '';
+        document.getElementById('vehicleSelect').innerHTML = '<option value="">Select customer first...</option>';
+        document.getElementById('vehicleSelect').disabled = true;
+        clearVehicleInfo();
+        
         document.getElementById('serviceModal').classList.remove('hidden');
     }
     
@@ -694,6 +830,20 @@
         
         laborCost.addEventListener('input', calculateTotal);
         partsCost.addEventListener('input', calculateTotal);
+        
+        // Check for URL parameters to pre-fill customer info
+        const urlParams = new URLSearchParams(window.location.search);
+        const customerId = urlParams.get('customer_id');
+        const action = urlParams.get('action');
+        
+        if (customerId && action === 'add') {
+            // Auto-open modal and pre-select customer
+            setTimeout(() => {
+                openAddServiceModal();
+                document.getElementById('customerSelect').value = customerId;
+                loadCustomerInfo();
+            }, 500);
+        }
     });
     
     // Form submission
@@ -701,25 +851,32 @@
         e.preventDefault();
         
         const formData = {
+            customer_id: document.getElementById('customerSelect').value,
             service_type: currentServiceType,
+            service_category: 'maintenance', // Default category
             service_title: document.getElementById('serviceTitle').value,
             service_date: document.getElementById('serviceDate').value,
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: document.getElementById('customerEmail').value,
-            vehicle_year: document.getElementById('vehicleYear').value,
+            vehicle_year: document.getElementById('vehicleYear').value ? parseInt(document.getElementById('vehicleYear').value) : null,
             vehicle_make: document.getElementById('vehicleMake').value,
             vehicle_model: document.getElementById('vehicleModel').value,
-            vehicle_mileage: document.getElementById('vehicleMileage').value,
+            vehicle_vin: document.getElementById('vehicleVin').value,
+            vehicle_mileage: document.getElementById('vehicleMileage').value ? parseInt(document.getElementById('vehicleMileage').value) : null,
+            vehicle_license_plate: document.getElementById('vehicleLicense').value,
             service_description: document.getElementById('serviceDescription').value,
-            technician_id: document.getElementById('technicianId').value,
-            labor_hours: document.getElementById('laborHours').value,
-            labor_cost: document.getElementById('laborCost').value,
-            parts_cost: document.getElementById('partsCost').value,
-            total_cost: document.getElementById('totalCost').value,
+            technician_id: document.getElementById('technicianId').value || null,
+            technician_name: document.getElementById('technicianId').value ? document.getElementById('technicianId').options[document.getElementById('technicianId').selectedIndex].text : '',
+            labor_hours: document.getElementById('laborHours').value ? parseFloat(document.getElementById('laborHours').value) : 0,
+            labor_cost: document.getElementById('laborCost').value ? parseFloat(document.getElementById('laborCost').value) : 0,
+            parts_cost: document.getElementById('partsCost').value ? parseFloat(document.getElementById('partsCost').value) : 0,
+            total_cost: document.getElementById('totalCost').value ? parseFloat(document.getElementById('totalCost').value) : 0,
             notes: document.getElementById('serviceNotes').value,
             internal_notes: document.getElementById('internalNotes').value
         };
+        
+        createServiceRecord(formData);
         
         const recordId = document.getElementById('serviceId').value;
         const url = recordId ? `/api/service-records/${recordId}` : '/api/service-records';
